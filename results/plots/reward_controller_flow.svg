@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1540 1120" width="1540" height="1120">
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L12,6 L0,12 z" fill="#25587a" />
+  </marker>
+</defs>
+<rect x="0" y="0" width="1540" height="1120" fill="#fbfcfe" />
+<text x="36" y="48" font-size="26" font-weight="700" fill="#102030" font-family="DejaVu Sans, Arial, sans-serif">Reward Controller Logic</text>
+<rect x="350" y="92" width="840" height="86" rx="14.0" ry="14.0" fill="#eef4fb" stroke="#6d8494" stroke-width="2.0" />
+<text x="770.0" y="123.75" text-anchor="middle" font-size="18" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="770.0" dy="0">Inputs: checkpoint metrics + prior reward_weights + history + RewardGateConfig</tspan>
+<tspan x="770.0" dy="22.5">thresholds</tspan>
+</text>
+<rect x="480" y="230" width="580" height="78" rx="14.0" ry="14.0" fill="#fff8e8" stroke="#8d7c4d" stroke-width="2.0" />
+<text x="770.0" y="258.375" text-anchor="middle" font-size="17" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="770.0" dy="0">Append numeric metrics to history and copy the current</tspan>
+<tspan x="770.0" dy="21.25">weights</tspan>
+</text>
+<rect x="400" y="360" width="740" height="96" rx="14.0" ry="14.0" fill="#ebf7e9" stroke="#5e8b5b" stroke-width="2.0" />
+<text x="770.0" y="386.75" text-anchor="middle" font-size="17" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="770.0" dy="0">Derive signals from metrics:</tspan>
+<tspan x="770.0" dy="21.25">parseable, solution tags, reasoning tags, malformed, truncation, avg</tspan>
+<tspan x="770.0" dy="21.25">tokens, exact match</tspan>
+</text>
+<rect x="400" y="508" width="740" height="100" rx="14.0" ry="14.0" fill="#eef1ff" stroke="#637ab0" stroke-width="2.0" />
+<text x="770.0" y="536.75" text-anchor="middle" font-size="17" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="770.0" dy="0">Compute helper conditions:</tspan>
+<tspan x="770.0" dy="21.25">stable_structure, stable_window_ready, previous_exact, exact_delta,</tspan>
+<tspan x="770.0" dy="21.25">correctness_plateau</tspan>
+</text>
+<rect x="70" y="690" width="300" height="126" rx="14.0" ry="14.0" fill="#edf8ee" stroke="#5e8b5b" stroke-width="2.0" />
+<text x="220.0" y="715.5" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="220.0" dy="0">Parseable guard</tspan>
+<tspan x="220.0" dy="18.75">if parseable_answer_rate &lt;</tspan>
+<tspan x="220.0" dy="18.75">parseable_floor_threshold:</tspan>
+<tspan x="220.0" dy="18.75">lift parseable_reward to</tspan>
+<tspan x="220.0" dy="18.75">parseable_guard_weight</tspan>
+</text>
+<rect x="420" y="690" width="300" height="126" rx="14.0" ry="14.0" fill="#fff8e8" stroke="#8d7c4d" stroke-width="2.0" />
+<text x="570.0" y="715.5" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="570.0" dy="0">Format guard</tspan>
+<tspan x="570.0" dy="18.75">if bad tags or</tspan>
+<tspan x="570.0" dy="18.75">malformed_answer_rate is high:</tspan>
+<tspan x="570.0" dy="18.75">lift format_reward to</tspan>
+<tspan x="570.0" dy="18.75">formatting_guard_weight</tspan>
+</text>
+<rect x="770" y="690" width="300" height="126" rx="14.0" ry="14.0" fill="#fff1eb" stroke="#a77062" stroke-width="2.0" />
+<text x="920.0" y="715.5" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="920.0" dy="0">Finish guard</tspan>
+<tspan x="920.0" dy="18.75">if truncation_rate is high or</tspan>
+<tspan x="920.0" dy="18.75">outputs run long:</tspan>
+<tspan x="920.0" dy="18.75">add finish_step to</tspan>
+<tspan x="920.0" dy="18.75">finished_reward</tspan>
+</text>
+<rect x="1120" y="690" width="350" height="126" rx="14.0" ry="14.0" fill="#edf2ff" stroke="#637ab0" stroke-width="2.0" />
+<text x="1295.0" y="715.5" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1295.0" dy="0">Correctness escalation</tspan>
+<tspan x="1295.0" dy="18.75">if stable structure + enough history</tspan>
+<tspan x="1295.0" dy="18.75">+ exact-match plateau:</tspan>
+<tspan x="1295.0" dy="18.75">add correctness_step to</tspan>
+<tspan x="1295.0" dy="18.75">correctness_reward</tspan>
+</text>
+<rect x="400" y="876" width="740" height="92" rx="14.0" ry="14.0" fill="#f8fbff" stroke="#7c92a3" stroke-width="2.0" />
+<text x="770.0" y="892.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="770.0" dy="0">Apply floors and bounds:</tspan>
+<tspan x="770.0" dy="20.0">format_reward &gt;= format_floor, parseable_reward &gt;= parseable_floor,</tspan>
+<tspan x="770.0" dy="20.0">finished_reward &gt;= finish_floor, then clamp every component to its min/max</tspan>
+<tspan x="770.0" dy="20.0">range</tspan>
+</text>
+<rect x="430" y="1016" width="680" height="66" rx="14.0" ry="14.0" fill="#e8f0fb" stroke="#6d8494" stroke-width="2.0" />
+<text x="770.0" y="1039.0" text-anchor="middle" font-size="16" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="770.0" dy="0">Persist last_decision, append decision_history, replace</tspan>
+<tspan x="770.0" dy="20.0">reward_weights, return updated weights</tspan>
+</text>
+<rect x="1160" y="232" width="300" height="126" rx="14.0" ry="14.0" fill="#f9fbff" stroke="#9cb4c7" stroke-width="2.0" />
+<text x="1310.0" y="257.5" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1310.0" dy="0">Threshold source:</tspan>
+<tspan x="1310.0" dy="18.75">staged_rl/config.py::RewardGateConfig</tspan>
+<tspan x="1310.0" dy="18.75"></tspan>
+<tspan x="1310.0" dy="18.75">Update logic:</tspan>
+<tspan x="1310.0" dy="18.75">staged_rl/controller.py::RewardController.update_from_metrics</tspan>
+</text>
+<line x1="770.0" y1="178" x2="770.0" y2="230" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770.0" y1="308" x2="770.0" y2="360" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770.0" y1="456" x2="770.0" y2="508" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770.0" y1="608" x2="220.0" y2="690" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="220.0" y1="816" x2="770.0" y2="876" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770.0" y1="608" x2="570.0" y2="690" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="570.0" y1="816" x2="770.0" y2="876" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770.0" y1="608" x2="920.0" y2="690" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="920.0" y1="816" x2="770.0" y2="876" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770.0" y1="608" x2="1295.0" y2="690" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="1295.0" y1="816" x2="770.0" y2="876" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770.0" y1="968" x2="770.0" y2="1016" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="1160" y1="295.0" x2="1156" y2="558.0" stroke="#7c92a3" stroke-width="1.8" fill="none" stroke-dasharray="6 6" />
+</svg>

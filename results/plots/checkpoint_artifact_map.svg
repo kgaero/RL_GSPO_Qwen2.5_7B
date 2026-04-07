@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1820 1220" width="1820" height="1220">
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L12,6 L0,12 z" fill="#25587a" />
+  </marker>
+</defs>
+<rect x="0" y="0" width="1820" height="1220" fill="#fbfcfe" />
+<text x="36" y="48" font-size="26" font-weight="700" fill="#102030" font-family="DejaVu Sans, Arial, sans-serif">Checkpoint Artifact Map</text>
+<rect x="70" y="130" width="270" height="92" rx="14.0" ry="14.0" fill="#fff1eb" stroke="#a77062" stroke-width="2.0" />
+<text x="205.0" y="144.125" text-anchor="middle" font-size="17" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="205.0" dy="0">evaluate_checkpoint()</tspan>
+<tspan x="205.0" dy="21.25">returns metrics,</tspan>
+<tspan x="205.0" dy="21.25">subset_metrics,</tspan>
+<tspan x="205.0" dy="21.25">subset_results</tspan>
+</text>
+<rect x="70" y="266" width="270" height="76" rx="14.0" ry="14.0" fill="#edf8ee" stroke="#5e8b5b" stroke-width="2.0" />
+<text x="205.0" y="304.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="205.0" dy="0">reward_controller.current_weights()</tspan>
+</text>
+<rect x="70" y="378" width="270" height="76" rx="14.0" ry="14.0" fill="#edf8ee" stroke="#5e8b5b" stroke-width="2.0" />
+<text x="205.0" y="416.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="205.0" dy="0">reward_controller.to_dict()</tspan>
+</text>
+<rect x="70" y="490" width="270" height="90" rx="14.0" ry="14.0" fill="#fff8e8" stroke="#8d7c4d" stroke-width="2.0" />
+<text x="205.0" y="505.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="205.0" dy="0">checkpoint_info</tspan>
+<tspan x="205.0" dy="20.0">checkpoint_path</tspan>
+<tspan x="205.0" dy="20.0">global_step</tspan>
+<tspan x="205.0" dy="20.0">phase_name</tspan>
+</text>
+<rect x="430" y="286" width="330" height="116" rx="14.0" ry="14.0" fill="#eef4fb" stroke="#6d8494" stroke-width="2.0" />
+<text x="595.0" y="320.25" text-anchor="middle" font-size="19" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="595.0" dy="0">write_checkpoint_artifacts()</tspan>
+<tspan x="595.0" dy="23.75">compute_checkpoint_scores()</tspan>
+<tspan x="595.0" dy="23.75">return registry entry</tspan>
+</text>
+<rect x="860" y="94" width="880" height="700" rx="18" ry="18" fill="#fbfcfe" stroke="#9cb4c7" stroke-width="2.0" />
+<text x="880" y="116.0" text-anchor="start" font-size="21" font-weight="700" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="880" dy="0">Inside checkpoint-N/</tspan>
+</text>
+<rect x="890" y="144" width="820" height="46" rx="14.0" ry="14.0" fill="#eef4fb" stroke="#c9d9e6" stroke-width="2.0" />
+<text x="1300.0" y="167.0" text-anchor="middle" font-size="16" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1300.0" dy="0">Written before controller update</tspan>
+</text>
+<rect x="900" y="216" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="990.0" y="253.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="990.0" dy="0">eval_metrics.json</tspan>
+</text>
+<rect x="1100" y="216" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1190.0" y="253.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1190.0" dy="0">subset_metrics.json</tspan>
+</text>
+<rect x="1300" y="216" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1390.0" y="253.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1390.0" dy="0">per_prompt_records.json</tspan>
+</text>
+<rect x="1500" y="216" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1590.0" y="253.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1590.0" dy="0">per_sample_records.jsonl</tspan>
+</text>
+<rect x="900" y="318" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="990.0" y="355.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="990.0" dy="0">checkpoint_info.json</tspan>
+</text>
+<rect x="1100" y="318" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1190.0" y="355.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1190.0" dy="0">summary.txt</tspan>
+</text>
+<rect x="1300" y="318" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1390.0" y="345.625" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1390.0" dy="0">reward_weights.json</tspan>
+<tspan x="1390.0" dy="18.75">initial write</tspan>
+</text>
+<rect x="1500" y="318" width="180" height="74" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1590.0" y="345.625" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1590.0" dy="0">controller_state.json</tspan>
+<tspan x="1590.0" dy="18.75">initial write</tspan>
+</text>
+<rect x="890" y="448" width="820" height="46" rx="14.0" ry="14.0" fill="#fff1eb" stroke="#eed0c6" stroke-width="2.0" />
+<text x="1300.0" y="471.0" text-anchor="middle" font-size="16" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1300.0" dy="0">Written after controller.update_from_metrics()</tspan>
+</text>
+<rect x="930" y="522" width="220" height="86" rx="14.0" ry="14.0" fill="#fffaf8" stroke="#dcb8ab" stroke-width="2.0" />
+<text x="1040.0" y="565.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1040.0" dy="0">controller_decision.json</tspan>
+</text>
+<rect x="1185" y="522" width="220" height="86" rx="14.0" ry="14.0" fill="#fffaf8" stroke="#dcb8ab" stroke-width="2.0" />
+<text x="1295.0" y="546.25" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1295.0" dy="0">reward_weights.json</tspan>
+<tspan x="1295.0" dy="18.75">overwritten with</tspan>
+<tspan x="1295.0" dy="18.75">updated weights</tspan>
+</text>
+<rect x="1440" y="522" width="220" height="86" rx="14.0" ry="14.0" fill="#fffaf8" stroke="#dcb8ab" stroke-width="2.0" />
+<text x="1550.0" y="536.875" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1550.0" dy="0">controller_state.json</tspan>
+<tspan x="1550.0" dy="18.75">overwritten with</tspan>
+<tspan x="1550.0" dy="18.75">updated history +</tspan>
+<tspan x="1550.0" dy="18.75">decision</tspan>
+</text>
+<rect x="420" y="708" width="350" height="100" rx="14.0" ry="14.0" fill="#fff8e8" stroke="#8d7c4d" stroke-width="2.0" />
+<text x="595.0" y="713.0" text-anchor="middle" font-size="18" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="595.0" dy="0">CheckpointRegistry.register(entry)</tspan>
+<tspan x="595.0" dy="22.5">refresh latest / best_structure</tspan>
+<tspan x="595.0" dy="22.5">/</tspan>
+<tspan x="595.0" dy="22.5">best_correctness /</tspan>
+<tspan x="595.0" dy="22.5">best_composite</tspan>
+</text>
+<rect x="420" y="864" width="350" height="108" rx="14.0" ry="14.0" fill="#edf8ee" stroke="#5e8b5b" stroke-width="2.0" />
+<text x="595.0" y="884.25" text-anchor="middle" font-size="18" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="595.0" dy="0">RewardController.update_from_metrics()</tspan>
+<tspan x="595.0" dy="22.5">then</tspan>
+<tspan x="595.0" dy="22.5">apply_reward_weights(trainer,</tspan>
+<tspan x="595.0" dy="22.5">updated_weights)</tspan>
+</text>
+<rect x="860" y="850" width="880" height="276" rx="18" ry="18" fill="#fbfcfe" stroke="#9cb4c7" stroke-width="2.0" />
+<text x="880" y="872.0" text-anchor="start" font-size="21" font-weight="700" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="880" dy="0">Inside phase output dir/</tspan>
+</text>
+<rect x="905" y="922" width="240" height="90" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1025.0" y="947.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1025.0" dy="0">checkpoint_registry.json</tspan>
+<tspan x="1025.0" dy="20.0">ordered checkpoint</tspan>
+<tspan x="1025.0" dy="20.0">entries</tspan>
+</text>
+<rect x="1180" y="922" width="240" height="90" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1300.0" y="957.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1300.0" dy="0">aliases/latest.json</tspan>
+<tspan x="1300.0" dy="20.0">aliases/best_structure.json</tspan>
+</text>
+<rect x="1455" y="922" width="240" height="90" rx="14.0" ry="14.0" fill="#ffffff" stroke="#c8d5de" stroke-width="2.0" />
+<text x="1575.0" y="957.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1575.0" dy="0">aliases/best_correctness.json</tspan>
+<tspan x="1575.0" dy="20.0">aliases/best_composite.json</tspan>
+</text>
+<line x1="340" y1="176.0" x2="430" y2="344.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="340" y1="304.0" x2="430" y2="344.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="340" y1="416.0" x2="430" y2="344.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="340" y1="535.0" x2="430" y2="344.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="760" y1="344.0" x2="860" y2="344.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<text x="812" y="322.0" text-anchor="middle" font-size="14" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="812" dy="0">pre-update artifact write</tspan>
+</text>
+<line x1="595.0" y1="402" x2="595.0" y2="708" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770" y1="758.0" x2="860" y2="758.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<text x="804" y="738.0" text-anchor="middle" font-size="14" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="804" dy="0">registry + aliases</tspan>
+</text>
+<line x1="1300" y1="794" x2="1300" y2="864" stroke="#25587a" stroke-width="1.8" fill="none" stroke-dasharray="6 6" />
+<line x1="595.0" y1="808" x2="595.0" y2="864" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<line x1="770" y1="918.0" x2="860" y2="565" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<text x="804" y="796.0" text-anchor="middle" font-size="14" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="804" dy="0">controller decision path</tspan>
+</text>
+<text x="800" y="566.0" text-anchor="middle" font-size="14" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="800" dy="0">post-update checkpoint files</tspan>
+</text>
+<rect x="60" y="1144" width="1700" height="48" rx="16" ry="16" fill="#f3f7fb" stroke="#d3e0ea" stroke-width="1.6" />
+<text x="78" y="1158.625" text-anchor="start" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="78" dy="0">Important nuance: reward_weights.json and controller_state.json are written twice per checkpoint. The first write captures pre-update state inside write_checkpoint_artifacts(); the later</tspan>
+<tspan x="78" dy="18.75">write stores the post-controller state.</tspan>
+</text>
+</svg>

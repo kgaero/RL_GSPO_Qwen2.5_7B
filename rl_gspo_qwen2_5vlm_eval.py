@@ -84,6 +84,18 @@ def parse_args() -> argparse.Namespace:
         help="Single-target override for the generation/evaluation completion budget.",
     )
     parser.add_argument(
+        "--case-pack",
+        default=None,
+        choices=("kaggle_validation",),
+        help="Optional curated evaluation case pack built from the selected split.",
+    )
+    parser.add_argument(
+        "--cases-per-group",
+        type=int,
+        default=2,
+        help="Number of examples per curated case-pack group.",
+    )
+    parser.add_argument(
         "--reward-weights-json",
         default=None,
         help="Single-target override for a reward_weights.json path.",
@@ -129,6 +141,9 @@ def apply_cli_overrides(run_config, args: argparse.Namespace):
         run_config.eval_split = args.eval_split
     if args.max_eval_examples_per_subset is not None:
         run_config.eval.max_eval_examples_per_subset = args.max_eval_examples_per_subset
+    elif args.full_split:
+        # Full-split reevaluation should not inherit the small-GPU sample cap.
+        run_config.eval.max_eval_examples_per_subset = None
     run_config.eval.save_full_completion_text = args.save_full_completion_text
 
     for stage_name in args.disable_stage:
@@ -190,6 +205,58 @@ def load_targets(args: argparse.Namespace) -> list[dict[str, Any]]:
     return normalized_targets
 
 
+def _load_adapter_config(checkpoint_path: str) -> dict[str, Any]:
+    """Best-effort load of PEFT adapter metadata for runtime compatibility checks."""
+
+    adapter_config_path = Path(checkpoint_path) / "adapter_config.json"
+    if not adapter_config_path.exists():
+        return {}
+    try:
+        payload = json.loads(adapter_config_path.read_text(encoding="utf-8"))
+    except Exception as exc:  # pragma: no cover - defensive logging for notebook runs
+        LOGGER.warning("Failed to read adapter config at %s: %s", adapter_config_path, exc)
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def apply_target_adapter_overrides(run_config, targets: list[dict[str, Any]]):
+    """Raise LoRA runtime capacity when a target adapter needs more than the profile default."""
+
+    current_rank = int(run_config.model.lora_rank)
+    current_max_rank = int(run_config.model.max_lora_rank or current_rank)
+    selected_alpha = int(run_config.model.lora_alpha)
+    selected_from = "runtime defaults"
+
+    for target in targets:
+        adapter_config = _load_adapter_config(target["checkpoint"])
+        adapter_rank = adapter_config.get("r")
+        adapter_alpha = adapter_config.get("lora_alpha")
+        if adapter_rank is None:
+            continue
+        adapter_rank = int(adapter_rank)
+        if adapter_rank > current_rank:
+            current_rank = adapter_rank
+            if adapter_alpha is not None:
+                selected_alpha = int(adapter_alpha)
+                selected_from = target["label"]
+        current_max_rank = max(current_max_rank, adapter_rank)
+
+    if current_rank != int(run_config.model.lora_rank) or current_max_rank != int(run_config.model.max_lora_rank or run_config.model.lora_rank):
+        LOGGER.info(
+            "Adjusted LoRA runtime for evaluation targets: lora_rank %s -> %s, max_lora_rank %s -> %s, lora_alpha=%s (from %s).",
+            run_config.model.lora_rank,
+            current_rank,
+            run_config.model.max_lora_rank or run_config.model.lora_rank,
+            current_max_rank,
+            selected_alpha,
+            selected_from,
+        )
+        run_config.model.lora_rank = current_rank
+        run_config.model.max_lora_rank = current_max_rank
+        run_config.model.lora_alpha = selected_alpha
+    return run_config
+
+
 def build_eval_datasets_for_mode(base_eval_dataset, run_config, tokenizer, *, overall_only: bool, full_split: bool) -> dict[str, Any]:
     """Build the evaluation subsets requested for this reevaluation run."""
 
@@ -213,6 +280,52 @@ def build_eval_datasets_for_mode(base_eval_dataset, run_config, tokenizer, *, ov
     if overall_only:
         return {"eval_overall_numeric": eval_datasets["eval_overall_numeric"]}
     return eval_datasets
+
+
+def _select_head(dataset, count: int):
+    total = min(len(dataset), max(int(count), 0))
+    return dataset.select(range(total))
+
+
+def build_case_pack_eval_datasets(base_eval_dataset, run_config, tokenizer, *, case_pack: str, cases_per_group: int) -> dict[str, Any]:
+    """Build a small curated validation set from the selected split."""
+
+    if case_pack != "kaggle_validation":
+        raise ValueError(f"Unsupported case pack '{case_pack}'.")
+
+    image_size = run_config.model.image_size
+    easy_dataset = build_stage_dataset(
+        base_eval_dataset,
+        run_config.stages["stage1_easy_numeric"],
+        tokenizer,
+        image_size=image_size,
+    )
+    stage2_dataset = build_stage_dataset(
+        base_eval_dataset,
+        run_config.stages["stage2_float_numeric"],
+        tokenizer,
+        image_size=image_size,
+    )
+    edge_dataset = stage2_dataset.filter(
+        lambda example: example.get("precision") is not None
+        or example.get("answer_type") == "float"
+        or example.get("context_family") in {"chart", "plot", "scientific figure"}
+    )
+    if len(edge_dataset) == 0:
+        edge_dataset = stage2_dataset
+
+    failure_prone_dataset = build_stage_dataset(
+        base_eval_dataset,
+        run_config.stages["stage3_hard_numeric"],
+        tokenizer,
+        image_size=image_size,
+    )
+
+    return {
+        "easy_cases": _select_head(easy_dataset, cases_per_group),
+        "edge_cases": _select_head(edge_dataset, cases_per_group),
+        "failure_prone_cases": _select_head(failure_prone_dataset, cases_per_group),
+    }
 
 
 def resolve_max_completion_length(target: dict[str, Any], run_config, phase_config) -> int:
@@ -242,6 +355,40 @@ def resolve_reward_weights(target: dict[str, Any], phase_config) -> dict[str, fl
             reward_weights.update({key: float(value) for key, value in payload.items()})
             return reward_weights
     return reward_weights
+
+
+def write_case_outputs(output_path: Path, eval_datasets: Mapping[str, Any], subset_results: Mapping[str, Mapping[str, Any]]) -> None:
+    """Write a compact, human-inspectable case log for curated validation runs."""
+
+    rows = []
+    for subset_name, dataset in eval_datasets.items():
+        subset_payload = subset_results.get(subset_name, {})
+        prompt_records = subset_payload.get("per_prompt_records", [])
+        for prompt_index, prompt_record in enumerate(prompt_records):
+            source = dataset[prompt_index]
+            first_sample = prompt_record.get("samples", [{}])[0] if prompt_record.get("samples") else {}
+            rows.append(
+                {
+                    "category": subset_name,
+                    "prompt_index": prompt_index,
+                    "pid": source.get("pid"),
+                    "question": source.get("query") or source.get("question"),
+                    "context_family": source.get("context_family"),
+                    "skills": source.get("skills"),
+                    "precision": source.get("precision"),
+                    "gold_answer": source.get("answer"),
+                    "completion": first_sample.get("completion"),
+                    "solution_text": first_sample.get("solution_text"),
+                    "parsed_answer": first_sample.get("parsed_answer"),
+                    "normalized_exact_match": first_sample.get("normalized_exact_match"),
+                    "tolerance_match": first_sample.get("tolerance_match"),
+                    "parseable_answer": first_sample.get("parseable_answer"),
+                    "truncation": first_sample.get("truncation"),
+                    "failure_mode": first_sample.get("failure_mode"),
+                    "completion_tokens": first_sample.get("completion_tokens"),
+                }
+            )
+    output_path.write_text(json.dumps(rows, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def load_checkpoint_metadata(checkpoint_path: str) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -285,16 +432,22 @@ def main() -> None:
         fatal_error_path.unlink()
 
     targets = load_targets(args)
+    run_config = apply_target_adapter_overrides(run_config, targets)
     save_json(
         {
             "default_phase": args.phase,
             "output_root": run_config.output_root,
             "eval_split": run_config.eval_split,
             "hardware_profile": run_config.hardware_profile_name,
+            "model_lora_rank": run_config.model.lora_rank,
+            "model_max_lora_rank": run_config.model.max_lora_rank,
+            "model_lora_alpha": run_config.model.lora_alpha,
             "max_eval_examples_per_subset": run_config.eval.max_eval_examples_per_subset,
             "save_full_completion_text": run_config.eval.save_full_completion_text,
             "overall_only": args.overall_only,
             "full_split": args.full_split,
+            "case_pack": args.case_pack,
+            "cases_per_group": args.cases_per_group,
             "disabled_stages": args.disable_stage,
             "enabled_stages": args.enable_stage,
             "targets": targets,
@@ -313,13 +466,23 @@ def main() -> None:
             analyze_dataset_records(dataset_to_records(eval_base), run_config.stages),
             output_root / "dataset_analysis_eval.json",
         )
-        eval_datasets = build_eval_datasets_for_mode(
-            eval_base,
-            run_config,
-            tokenizer,
-            overall_only=args.overall_only,
-            full_split=args.full_split,
-        )
+        if args.case_pack:
+            run_config.eval.max_eval_examples_per_subset = None
+            eval_datasets = build_case_pack_eval_datasets(
+                eval_base,
+                run_config,
+                tokenizer,
+                case_pack=args.case_pack,
+                cases_per_group=args.cases_per_group,
+            )
+        else:
+            eval_datasets = build_eval_datasets_for_mode(
+                eval_base,
+                run_config,
+                tokenizer,
+                overall_only=args.overall_only,
+                full_split=args.full_split,
+            )
         save_json(
             {name: len(dataset) for name, dataset in eval_datasets.items()},
             output_root / "eval_subset_sizes.json",
@@ -375,6 +538,8 @@ def main() -> None:
                 score_config=run_config.checkpoint_scores,
             )
             save_json(target, target_output_dir / "target_spec.json")
+            if args.case_pack:
+                write_case_outputs(target_output_dir / "case_outputs.json", eval_datasets, eval_results["subset_results"])
 
             metrics = registry_entry["metrics"]
             original_metrics = checkpoint_info.get("metrics", {})
@@ -415,9 +580,14 @@ def main() -> None:
                 "output_root": run_config.output_root,
                 "eval_split": run_config.eval_split,
                 "hardware_profile": run_config.hardware_profile_name,
+                "model_lora_rank": run_config.model.lora_rank,
+                "model_max_lora_rank": run_config.model.max_lora_rank,
+                "model_lora_alpha": run_config.model.lora_alpha,
                 "max_eval_examples_per_subset": run_config.eval.max_eval_examples_per_subset,
                 "overall_only": args.overall_only,
                 "full_split": args.full_split,
+                "case_pack": args.case_pack,
+                "cases_per_group": args.cases_per_group,
                 "targets": targets if "targets" in locals() else None,
             },
         )

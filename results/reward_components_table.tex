@@ -1,0 +1,80 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.8in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{hyperref}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+}
+
+\title{Reward Components}
+\author{}
+\date{April 5, 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\noindent
+This table summarizes the reward logic used in the staged RL pipeline. Values below describe the raw reward behavior before phase-specific weighting.
+
+\vspace{0.8em}
+
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.25}
+
+\begin{tabularx}{\linewidth}{L{2.4cm} L{3.0cm} Y L{4.1cm}}
+\toprule
+\textbf{Reward Type} & \textbf{What It Encourages} & \textbf{When It Gives High Reward} & \textbf{Simple Example} \\
+\midrule
+
+\textbf{Correctness}
+& Get the right answer
+& Exact normalized match with the ground truth, or the correct option letter for multiple-choice.
+& Gold = 42, model = 42.0 $\rightarrow$ high reward \\
+
+\textbf{Formatting}
+& Follow the required structure
+& Exactly one REASONING block and one SOLUTION block; malformed answers reduce the score.
+& Clean reasoning + solution blocks $\rightarrow$ high reward \\
+
+\textbf{Parseability}
+& Make the solution machine-readable
+& The solution can be parsed as a valid number or valid option letter.
+& ``42'' $\rightarrow$ parseable; ``forty-two'' $\rightarrow$ low reward \\
+
+\textbf{Finished}
+& End the response cleanly
+& The answer is complete and stays below the token limit.
+& Properly closed answer $\rightarrow$ high reward; truncated at cap $\rightarrow$ low reward \\
+
+\textbf{Tolerance}
+& Be approximately correct on numeric tasks
+& The answer is numerically close enough, but not already exact.
+& Gold = 100, model = 99.999 $\rightarrow$ high reward \\
+
+\textbf{Brevity}
+& Stay concise
+& The response is short relative to the allowed completion budget.
+& 20 tokens $\rightarrow$ high reward; very long rambling answer $\rightarrow$ low reward \\
+
+\bottomrule
+\end{tabularx}
+
+\vspace{0.8em}
+\footnotesize
+\noindent
+\textbf{Note.} The required tags in code are exactly \texttt{<REASONING>} and \texttt{<SOLUTION>}. Tolerance reward is enabled only in later phases and does not add extra reward when the answer is already exact.
+
+\end{document}

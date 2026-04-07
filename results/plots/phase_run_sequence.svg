@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1760 1120" width="1760" height="1120">
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L12,6 L0,12 z" fill="#25587a" />
+  </marker>
+</defs>
+<rect x="0" y="0" width="1760" height="1120" fill="#fbfcfe" />
+<text x="36" y="48" font-size="26" font-weight="700" fill="#102030" font-family="DejaVu Sans, Arial, sans-serif">One-Phase Run Sequence</text>
+<rect x="50" y="76" width="200" height="56" rx="14.0" ry="14.0" fill="#dceaf5" stroke="#6d8494" stroke-width="2.0" />
+<text x="150.0" y="104.0" text-anchor="middle" font-size="17" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="150.0" dy="0">CLI / main</tspan>
+</text>
+<line x1="150" y1="132" x2="150" y2="1040" stroke="#9eb4c2" stroke-width="2" fill="none" stroke-dasharray="8 8" />
+<rect x="330" y="76" width="200" height="56" rx="14.0" ry="14.0" fill="#f4e9d7" stroke="#6d8494" stroke-width="2.0" />
+<text x="430.0" y="104.0" text-anchor="middle" font-size="17" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="430.0" dy="0">Config / Resume</tspan>
+</text>
+<line x1="430" y1="132" x2="430" y2="1040" stroke="#9eb4c2" stroke-width="2" fill="none" stroke-dasharray="8 8" />
+<rect x="610" y="76" width="200" height="56" rx="14.0" ry="14.0" fill="#dfeede" stroke="#6d8494" stroke-width="2.0" />
+<text x="710.0" y="104.0" text-anchor="middle" font-size="17" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="710.0" dy="0">Model Runtime</tspan>
+</text>
+<line x1="710" y1="132" x2="710" y2="1040" stroke="#9eb4c2" stroke-width="2" fill="none" stroke-dasharray="8 8" />
+<rect x="890" y="76" width="200" height="56" rx="14.0" ry="14.0" fill="#f5efd0" stroke="#6d8494" stroke-width="2.0" />
+<text x="990.0" y="104.0" text-anchor="middle" font-size="17" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="990.0" dy="0">Data Builder</tspan>
+</text>
+<line x1="990" y1="132" x2="990" y2="1040" stroke="#9eb4c2" stroke-width="2" fill="none" stroke-dasharray="8 8" />
+<rect x="1170" y="76" width="200" height="56" rx="14.0" ry="14.0" fill="#dfe7f8" stroke="#6d8494" stroke-width="2.0" />
+<text x="1270.0" y="104.0" text-anchor="middle" font-size="17" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1270.0" dy="0">Trainer Loop</tspan>
+</text>
+<line x1="1270" y1="132" x2="1270" y2="1040" stroke="#9eb4c2" stroke-width="2" fill="none" stroke-dasharray="8 8" />
+<rect x="1450" y="76" width="200" height="56" rx="14.0" ry="14.0" fill="#f8e3de" stroke="#6d8494" stroke-width="2.0" />
+<text x="1550.0" y="104.0" text-anchor="middle" font-size="17" font-weight="600" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1550.0" dy="0">Eval + Control</tspan>
+</text>
+<line x1="1550" y1="132" x2="1550" y2="1040" stroke="#9eb4c2" stroke-width="2" fill="none" stroke-dasharray="8 8" />
+<rect x="60" y="164" width="180" height="72" rx="14.0" ry="14.0" fill="#edf5fb" stroke="#6b8798" stroke-width="2.0" />
+<text x="150.0" y="190.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="150.0" dy="0">parse_args()</tspan>
+<tspan x="150.0" dy="20.0">apply_cli_overrides()</tspan>
+</text>
+<rect x="340" y="268" width="180" height="92" rx="14.0" ry="14.0" fill="#fff8e8" stroke="#8d7c4d" stroke-width="2.0" />
+<text x="430.0" y="295.25" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="430.0" dy="0">build_default_run_config()</tspan>
+<tspan x="430.0" dy="18.75">apply_hardware_profile()</tspan>
+<tspan x="430.0" dy="18.75">build_resume_plan()</tspan>
+</text>
+<rect x="620" y="390" width="180" height="92" rx="14.0" ry="14.0" fill="#ebf7e9" stroke="#5e8b5b" stroke-width="2.0" />
+<text x="710.0" y="407.875" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="710.0" dy="0">create_model_and_tokenizer()</tspan>
+<tspan x="710.0" dy="18.75">attach LoRA</tspan>
+<tspan x="710.0" dy="18.75">optional warm</tspan>
+<tspan x="710.0" dy="18.75">start</tspan>
+</text>
+<rect x="900" y="516" width="180" height="104" rx="14.0" ry="14.0" fill="#fff9de" stroke="#958146" stroke-width="2.0" />
+<text x="990.0" y="549.25" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="990.0" dy="0">load_mathvista_split(train/eval)</tspan>
+<tspan x="990.0" dy="18.75">build_phase_train_dataset()</tspan>
+<tspan x="990.0" dy="18.75">build_eval_datasets()</tspan>
+</text>
+<rect x="1180" y="650" width="180" height="80" rx="14.0" ry="14.0" fill="#edf2ff" stroke="#637ab0" stroke-width="2.0" />
+<text x="1270.0" y="680.0" text-anchor="middle" font-size="16" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1270.0" dy="0">MetricAwareGRPOTrainer</tspan>
+<tspan x="1270.0" dy="20.0">trainer.train(...)</tspan>
+</text>
+<rect x="1180" y="930" width="180" height="84" rx="14.0" ry="14.0" fill="#edf2ff" stroke="#637ab0" stroke-width="2.0" />
+<text x="1270.0" y="953.25" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1270.0" dy="0">save_lora()</tspan>
+<tspan x="1270.0" dy="18.75">summarize logs</tspan>
+<tspan x="1270.0" dy="18.75">build diagnostics</tspan>
+</text>
+<rect x="1460" y="930" width="180" height="84" rx="14.0" ry="14.0" fill="#fff1ec" stroke="#a77062" stroke-width="2.0" />
+<text x="1550.0" y="953.25" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1550.0" dy="0">return results</tspan>
+<tspan x="1550.0" dy="18.75">output_dir</tspan>
+<tspan x="1550.0" dy="18.75">latest_eval_results</tspan>
+</text>
+<rect x="1100" y="760" width="580" height="134" rx="20" ry="20" fill="#f9fbff" stroke="#9cb4c7" stroke-width="2.0" stroke-dasharray="10 8" />
+<text x="1118" y="782.0" text-anchor="start" font-size="17" font-weight="700" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1118" dy="0">Loop: every saved checkpoint</tspan>
+</text>
+<rect x="1200" y="796" width="160" height="70" rx="14.0" ry="14.0" fill="#fff3ef" stroke="#a77062" stroke-width="2.0" />
+<text x="1280.0" y="831.0" text-anchor="middle" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1280.0" dy="0">evaluate_checkpoint()</tspan>
+</text>
+<rect x="1390" y="796" width="160" height="70" rx="14.0" ry="14.0" fill="#fff3ef" stroke="#a77062" stroke-width="2.0" />
+<text x="1470.0" y="822.25" text-anchor="middle" font-size="14" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1470.0" dy="0">write_checkpoint_artifacts()</tspan>
+<tspan x="1470.0" dy="17.5">register aliases</tspan>
+</text>
+<rect x="1580" y="796" width="80" height="70" rx="14.0" ry="14.0" fill="#ffe9e0" stroke="#a77062" stroke-width="2.0" />
+<text x="1620.0" y="822.25" text-anchor="middle" font-size="14" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1620.0" dy="0">update</tspan>
+<tspan x="1620.0" dy="17.5">weights</tspan>
+</text>
+<line x1="150.0" y1="236" x2="430.0" y2="268" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="198.0" y="216.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="290.0" y="225.875" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="290.0" dy="0">phase + profile +</tspan>
+<tspan x="290.0" dy="16.25">selectors</tspan>
+</text>
+<line x1="430.0" y1="360" x2="710.0" y2="390" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="478.0" y="339.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="570.0" y="357.0" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="570.0" dy="0">resume plan</tspan>
+</text>
+<line x1="710.0" y1="482" x2="990.0" y2="516" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="758.0" y="463.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="850.0" y="472.875" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="850.0" dy="0">model + tokenizer</tspan>
+<tspan x="850.0" dy="16.25">ready</tspan>
+</text>
+<line x1="990.0" y1="620" x2="1270.0" y2="650" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="1038.0" y="599.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="1130.0" y="608.875" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1130.0" dy="0">datasets + reward</tspan>
+<tspan x="1130.0" dy="16.25">funcs + controller</tspan>
+</text>
+<line x1="1270.0" y1="730" x2="1280.0" y2="796" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="1183.0" y="727.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="1275.0" y="745.0" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1275.0" dy="0">checkpoint-N saved</tspan>
+</text>
+<line x1="1360" y1="831.0" x2="1390" y2="831.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="1283.0" y="791.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="1375.0" y="809.0" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1375.0" dy="0">metrics + records</tspan>
+</text>
+<line x1="1550" y1="831.0" x2="1580" y2="831.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="1473.0" y="791.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="1565.0" y="809.0" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1565.0" dy="0">controller.update_from_metrics()</tspan>
+</text>
+<polyline points="1620.0,866 1620.0,884 1270,884 1270.0,730" stroke="#25587a" stroke-width="2.0" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" />
+<text x="1426" y="863.875" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1426" dy="0">apply_reward_weights()</tspan>
+<tspan x="1426" dy="16.25">continue training</tspan>
+</text>
+<line x1="1270.0" y1="730" x2="1270.0" y2="930" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="1178.0" y="794.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="1270.0" y="812.0" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1270.0" dy="0">train complete</tspan>
+</text>
+<line x1="1360" y1="972.0" x2="1460" y2="972.0" stroke="#25587a" stroke-width="2.0" fill="none" marker-end="url(#arrow)" />
+<rect x="1318.0" y="932.0" width="184" height="36" rx="9" ry="9" fill="#ffffff" stroke="#d7e2ea" stroke-width="1.2" />
+<text x="1410.0" y="950.0" text-anchor="middle" font-size="13" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="1410.0" dy="0">final payload</tspan>
+</text>
+<rect x="46" y="1038" width="1668" height="50" rx="16" ry="16" fill="#f3f7fb" stroke="#d3e0ea" stroke-width="1.6" />
+<text x="64" y="1063.0" text-anchor="start" font-size="15" font-weight="500" fill="#16202a" font-family="DejaVu Sans, Arial, sans-serif">
+<tspan x="64" dy="0">Primary code anchors: rl_gspo_qwen2_5vlm_test3.py::main -&gt; staged_rl.trainer_runtime::run_phase -&gt; MetricAwareGRPOTrainerMixin::_metric_aware_save</tspan>
+</text>
+</svg>
