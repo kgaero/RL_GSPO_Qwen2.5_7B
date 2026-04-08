@@ -22,7 +22,7 @@
 
 \iclrfinalcopy
 
-\title{A Case Study of Staged Metric-Gated GRPO for Visual Numeric Reasoning}
+\title{Staged Metric-Gated GRPO Fine-Tuning Pipeline for Visual Numeric Reasoning}
 
 % Keep the real author block in source; the ICLR style will hide it in review mode
 % until \iclrfinalcopy is restored.
@@ -43,45 +43,45 @@ West Lafayette, Indiana, USA\\
 \rhead{}
 
 \begin{abstract}
-We present a staged metric-gated GRPO framework for visual numeric reasoning. The framework combines four components: a phase-wise curriculum over filtered MathVista subsets, a strict \texttt{<REASONING>} / \texttt{<SOLUTION>} response contract, a checkpoint-metric controller that preserves structure-oriented reward floors under formatting or completion degradation and increases correctness weight after structural metrics stabilize and exact-match progress stalls, and alias-based checkpoint selection to address non-monotonic checkpoint quality. The resulting trajectory follows a consistent two-stage progression: smoke-phase runs on \texttt{testmini} stabilize parseability and output structure, and larger-split Phase C training on \texttt{test}, evaluated on \texttt{testmini}, delivers the main correctness improvement. Under the checkpoint-side evaluation protocol used for continuation, the best large Phase C checkpoint and the best dedicated Phase D checkpoint each achieve exact-match and tolerance accuracy of 0.75, compared with 0.375 for a pre-refactor baseline, while maintaining parseability 1.0 and zero truncation on the monitored subset. These results indicate that curriculum filtering, metric-gated reward adaptation, and checkpoint-aware continuation support stable structure-first RL training for multimodal numeric question answering under constrained compute.
+We study a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning. The method combines a phase-wise curriculum over filtered MathVista subsets, a strict \texttt{<REASONING>} / \texttt{<SOLUTION>} response contract, metric-gated reward adaptation based on checkpoint evaluation, and alias-based checkpoint selection for non-monotonic training trajectories. In resource-constrained runs, early small-scale phases stabilize parseability and output structure, and subsequent larger-split continuation improves correctness. Under the evaluation protocol used for continuation, the best Phase C and Phase D checkpoints reach exact-match and tolerance accuracy of 0.75, compared with 0.375 for the baseline, while maintaining parseability 1.0 and zero truncation on the monitored subset. These results suggest that curriculum staging, metric-gated reward control, and checkpoint-aware continuation can improve the stability of RL fine-tuning for multimodal numeric question answering.
 
 \textbf{Code:} \url{https://github.com/kgaero/RL_GSPO_Qwen2.5VLM}
 \end{abstract}
 
 \section{Introduction}
 
-Reinforcement-learning fine-tuning for language and vision-language models is often summarized as a direct mapping from reward design to improved accuracy. In multimodal settings, however, the optimization problem is more complex. Before correctness reward becomes informative, the policy must already emit outputs that are parseable, non-truncated, and structurally compatible with the evaluator. If those preconditions are unstable, RL updates can be difficult to interpret because an apparent correctness failure may in fact be a formatting or completion failure.
+Reinforcement-learning fine-tuning for language and vision-language models is often summarized as a direct mapping from reward design to improved accuracy. In multimodal settings, however, the optimization problem is more complex \citep{yuan2025vlcogito}. Before correctness reward becomes informative, the policy must already emit outputs that are parseable, non-truncated, and structurally compatible with the evaluator \citep{shen2025satori}. If those preconditions are unstable, RL updates can be difficult to interpret because an apparent correctness failure may in fact be a formatting or completion failure \citep{shen2025satori}.
 
-This paper investigates a staged metric-gated GRPO training pipeline for visual numeric reasoning. The framework leaves the GRPO objective unchanged and augments training with filtered curriculum stages, a strict response contract, rule-based reward adaptation keyed to checkpoint metrics, and checkpoint aliases that allow continuation from the best structural or composite checkpoint rather than always from the most recent one. We analyze how this training stack produces a structure-first and correctness-later trajectory for multimodal numeric question answering.
+This paper investigates a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning using \texttt{Qwen2.5-VL-7B-Instruct} as the base VLM. The pipeline leaves the GRPO objective unchanged and augments fine-tuning with filtered curriculum stages, a strict response contract, rule-based reward adaptation keyed to checkpoint metrics, and checkpoint aliases that allow continuation from the best structural or composite checkpoint rather than always from the most recent one. We analyze how this fine-tuning pipeline produces a structure-first and correctness-later trajectory for multimodal numeric question answering.
 
 The implementation is designed to be auditable: controller states are saved, checkpoint aliases are explicit, reward weights are persisted, and the main milestones are recoverable from checkpoint-side evaluation logs. This instrumentation is valuable in constrained-compute RL settings, where structural failures dominate early training and continuation decisions materially affect outcomes.
 
-Figure~\ref{fig:pipeline} summarizes the loop. A base VLM is prepared with LoRA adapters, trained on a stage-filtered phase mixture, evaluated checkpoint by checkpoint, and then fed back into a controller that adjusts the next segment's reward weights. Table~\ref{tab:stage-matrix} shows that the curriculum is implemented as overlapping filtered views over the same MathVista split rather than as disjoint datasets.
+Figure~\ref{fig:pipeline} summarizes the loop. A base VLM is prepared with LoRA adapters, fine-tuned on a stage-filtered phase mixture, evaluated checkpoint by checkpoint, and then fed back into a controller that updates reward weights after each checkpoint evaluation. Table~\ref{tab:stage-matrix} shows that the curriculum is implemented as overlapping filtered views over the same MathVista split rather than as disjoint datasets.
 
 \paragraph{Contributions.}
 \begin{enumerate}[leftmargin=1.2em]
-\item We document a staged GRPO training stack for visual numeric reasoning that explicitly separates structure stabilization from later correctness improvement.
+\item We document a staged GRPO fine-tuning pipeline for visual numeric reasoning that explicitly prioritizes structure stabilization before the main correctness gains.
 \item We formalize the metric-gated reward controller and checkpoint aliasing logic so they can be read as an auditable algorithm rather than as scattered implementation details.
-\item We characterize the checkpoint-side training trajectory used for continuation decisions, including the 0.75 exact-match milestone reached by the best large Phase C and dedicated Phase D checkpoints, and release the corresponding implementation artifacts.
+\item We characterize the checkpoint-side training trajectory used for continuation decisions, including the 0.75 exact-match milestone reached by the best large Phase C and dedicated Phase D checkpoints.
 \end{enumerate}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{staged_training_pipeline_better.png}
-\caption{Overview of the staged metric-gated GRPO loop. The pipeline couples phase-specific data curation, GRPO fine-tuning, checkpoint-side evaluation, reward-weight adaptation, and alias-based continuation. The method studied here is the training stack around GRPO rather than a new GRPO loss.}
+\caption{Overview of the staged metric-gated GRPO loop. The pipeline couples phase-specific data curation, GRPO fine-tuning, checkpoint-side evaluation, reward-weight adaptation, and alias-based continuation. The method studied here is the fine-tuning pipeline around GRPO rather than a new GRPO loss.}
 \label{fig:pipeline}
 \end{figure}
 
 \section{Related Work}
 
 \paragraph{RL fine-tuning and preference optimization.}
-Recent RLHF and preference-optimization work has primarily focused on new objectives or more efficient learning regimes. DeepSeekMath introduced GRPO as a group-relative alternative to PPO for mathematical reasoning \citep{deepseekmath2024}. SPPO and Asynchronous RLHF studied, respectively, self-play preference optimization and faster off-policy online RLHF \citep{wu2025sppo,noukhovitch2025async}. More recent multimodal post-training studies have adapted GRPO- or RL-style optimization to vision-language reasoning through cold-start supervision, staged reinforcement learning, and explicit reasoning incentives \citep{huang2025visionr1,wei2025coldstart,chen2025revisualr1}. Our contribution is complementary: we leave the underlying GRPO objective unchanged and study how a staged training pipeline combines GRPO with curriculum scheduling, metric-gated reward adaptation, and checkpoint-selection logic in a failure-prone multimodal setting.
+Recent RLHF and preference-optimization work has primarily focused on new objectives or more efficient learning regimes. DeepSeekMath introduced GRPO as a group-relative alternative to PPO for mathematical reasoning \citep{deepseekmath2024}. SPPO and Asynchronous RLHF studied, respectively, self-play preference optimization and faster off-policy online RLHF \citep{wu2025sppo,noukhovitch2025async}. More recent multimodal post-training studies have adapted GRPO- or RL-style optimization to vision-language reasoning through cold-start supervision, staged reinforcement learning, and explicit reasoning incentives \citep{huang2025visionr1,wei2025coldstart,chen2025revisualr1}. Our contribution is complementary: we leave the underlying GRPO objective unchanged and study how a staged fine-tuning pipeline combines GRPO with curriculum scheduling, metric-gated reward adaptation, and checkpoint-selection logic in a failure-prone multimodal setting.
 
 \paragraph{Multimodal mathematical reasoning.}
 MathVista highlights the difficulty of mathematical reasoning in visual contexts and serves as a benchmark for diagram, chart, table, and numeric question answering behavior \citep{lu2024mathvista}. Recent work has addressed this problem with larger synthetic corpora, progressive curricula, staged reinforcement learning, or more explicit visual reasoning mechanisms \citep{zhang2025mavis,qi2025cogcom,liu2025infimmr,yuan2025vlcogito}. This paper focuses on the training-system side of the problem: a standard pretrained VLM paired with staged curricula, metric-gated reward control, and checkpoint-aware continuation that prioritize structural reliability before stronger correctness pressure.
 
 \paragraph{Curriculum and adaptive reward control.}
-Our approach is closest in spirit to curriculum and adaptive-control approaches that treat training as a sequence of regimes rather than as one stationary objective. Recent multimodal reasoning work has explored phased reinforcement learning, progressive curriculum RL, and rubric-based curriculum design as mechanisms for stabilizing difficult reasoning behavior \citep{liu2025infimmr,yuan2025vlcogito,chen2026rucl}. The distinctive feature here is the granularity of adaptation: checkpoint metrics trigger reward changes directly.
+Our approach is closest in spirit to curriculum and adaptive-control approaches that treat fine-tuning as a sequence of regimes rather than as one stationary objective. Recent multimodal reasoning work has explored phased reinforcement learning, progressive curriculum RL, and rubric-based curriculum design as mechanisms for stabilizing difficult reasoning behavior \citep{liu2025infimmr,yuan2025vlcogito,chen2026rucl}. The distinctive feature here is the granularity of adaptation: checkpoint metrics trigger reward changes directly within the fine-tuning pipeline.
 
 \section{Problem Setup and Design Goals}
 
@@ -204,7 +204,7 @@ where $a_{\text{tol}}$ is tolerance accuracy. These scores back four aliases: \t
 We use the Hugging Face release of MathVista\footnote{\url{https://huggingface.co/datasets/AI4Math/MathVista}} and load \texttt{Qwen2.5-VL-7B-Instruct}\footnote{\url{https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct}} as the base VLM. For context we cite the MathVista benchmark paper \citep{lu2024mathvista} and the Qwen2.5-VL technical report \citep{bai2025qwen25vl}.
 
 \paragraph{Runtime profile.}
-The main reported runs use the conservative \texttt{kaggle\_t4} profile: 4-bit loading, LoRA rank $8$, max sequence length $1280$, image size $336$, gradient accumulation $4$, two sampled generations per prompt during RL, max prompt length $320$, and max completion length $64$ (or $96$ in Phase D). The trainer uses TRL's \texttt{GRPOTrainer} with sequence-level importance sampling and \texttt{dr\_grpo} loss.
+The main reported runs use the conservative \texttt{kaggle\_t4} profile: 4-bit loading, LoRA rank $8$, max sequence length $1280$, image size $336$, gradient accumulation $4$, two sampled generations per prompt during RL fine-tuning, max prompt length $320$, and max completion length $64$ (or $96$ in Phase D). The trainer uses TRL's \texttt{GRPOTrainer} with sequence-level importance sampling and \texttt{dr\_grpo} loss.
 
 \begin{table}[t]
 \centering
@@ -330,7 +330,7 @@ Composite Score & 40.5\% & 75.0\% & \textcolor{green!50!black}{\textbf{+85.0\%}}
 \end{tabular*}
 
 \vspace{0.3em}
-{\scriptsize\emph{Source:} Pre-Refactor Baseline (\texttt{base}) vs Large Phase C checkpoint-120 (\texttt{lgc:c:120}) from the checkpoint tables generated by the training pipeline.}
+{\scriptsize\emph{Source:} Pre-Refactor Baseline (\texttt{base}) vs Large Phase C checkpoint-120 (\texttt{lgc:c:120}) from the checkpoint tables generated by the fine-tuning pipeline.}
 \end{table}
 
 The dedicated Phase D run matches, rather than exceeds, the best Phase C score. This indicates that hard-subset specialization is a viable continuation path, while the mixed Stage 2/3 continuation remains the strongest route to the 0.75 milestone within the reported runs.
@@ -352,19 +352,19 @@ Table~\ref{tab:t4-profile} and the runtime-tuning tables show that the large con
 \section{Limitations and Reproducibility}
 
 \begin{itemize}[leftmargin=1.2em]
-\item This study was developed and run in a resource-constrained Kaggle T4 environment, and larger-scale experiments are required to determine how far the same curriculum-based RL design stabilizes under longer runs, larger evaluation budgets, and broader hardware regimes.
+\item This study was developed and run in a resource-constrained Kaggle T4 environment, and larger-scale experiments are required to determine how far the same curriculum-based RL fine-tuning pipeline stabilizes under longer runs, larger evaluation budgets, and broader hardware regimes.
 \item The monitored evaluation subset is tiny in the Kaggle profile, so the quantitative results should be interpreted within that runtime-constrained operating regime.
-\item The split protocol is phase-dependent: smoke phases use \texttt{testmini} to rapidly diagnose and stabilize structure, while the main correctness result comes from larger-split Phase C training on \texttt{test} with evaluation on \texttt{testmini}.
-\item The codebase studies one base model family and one principal hardware profile, and it does not yet include the seed sweeps or controlled ablations needed to validate each component of the training stack in isolation.
+\item The split protocol is phase-dependent: smoke phases use \texttt{testmini} to rapidly diagnose and stabilize structure, while the main correctness result comes from larger-split Phase C fine-tuning on \texttt{test} with evaluation on \texttt{testmini}.
+\item The codebase studies one base model family and one principal hardware profile, and it does not yet include the seed sweeps or controlled ablations needed to validate each component of the fine-tuning pipeline in isolation.
 \item The multi-choice branch (Phase E) and multilingual robustness stage are scaffolded but are not part of the main evidence.
-\item Even with these limits, the observed structure-first and correctness-later trajectory suggests that curriculum-based staged RL is a promising research direction for multimodal numeric reasoning and merits further scale-up.
+\item Even with these limits, the observed structure-first and correctness-later trajectory suggests that curriculum-based staged RL fine-tuning pipelines are a promising research direction for multimodal numeric reasoning and merit further scale-up.
 \end{itemize}
 
 The study remains comparatively reproducible. It logs controller decisions at every evaluated checkpoint, persists multiple checkpoint-selection aliases, saves sample-level traces, and includes unit tests for the most failure-prone logic. The supplement expands this record with explicit reward equations, evaluation formulas, controller thresholds, and transfer semantics.
 
 \section{Conclusion}
 
-We presented staged metric-gated GRPO for visual numeric reasoning in a resource-constrained setting. The checkpoint-side results indicate a consistent progression: structural validity must become reliable before correctness reward becomes consistently informative. A phase-wise curriculum, metric-gated reward controller, and alias-based checkpoint selection transform a malformed, long-output baseline into checkpoints that reach exact match 0.75 while preserving parseability 1.0 and zero truncation on the monitored subset. Smoke-phase runs stabilize structure on \texttt{testmini}, and larger-split Phase C on \texttt{test} delivers the principal correctness improvement. These findings support staged curriculum-based RL as a promising direction for multimodal numeric reasoning under practical compute constraints.
+We presented a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning in a resource-constrained setting. The checkpoint-side results indicate a consistent progression: structural validity must become reliable before correctness reward becomes consistently informative. A phase-wise curriculum, metric-gated reward controller, and alias-based checkpoint selection transform a malformed, long-output baseline into checkpoints that reach exact match 0.75 while preserving parseability 1.0 and zero truncation on the monitored subset. Smoke-phase runs stabilize structure on \texttt{testmini}, and larger-split Phase C fine-tuning on \texttt{test} delivers the principal correctness improvement. These findings support staged curriculum-based RL fine-tuning pipelines as a promising direction for multimodal numeric reasoning under practical compute constraints.
 
 \bibliographystyle{iclr2026_conference}
 \bibliography{references}
