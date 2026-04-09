@@ -25,7 +25,7 @@ from staged_rl.data import (
     analyze_dataset_records,
     build_eval_datasets,
     build_stage_dataset,
-    dataset_to_records,
+    filter_supported_answer_mode_rows,
     load_mathvista_split,
     save_dataset_analysis,
 )
@@ -147,11 +147,15 @@ def apply_cli_overrides(run_config, args: argparse.Namespace):
     run_config.eval.save_full_completion_text = args.save_full_completion_text
 
     for stage_name in args.disable_stage:
-        if stage_name in run_config.stages:
-            run_config.stages[stage_name].enabled = False
+        if stage_name not in run_config.stages:
+            available = ", ".join(sorted(run_config.stages))
+            raise ValueError(f"Unknown stage '{stage_name}'. Available stages: {available}")
+        run_config.stages[stage_name].enabled = False
     for stage_name in args.enable_stage:
-        if stage_name in run_config.stages:
-            run_config.stages[stage_name].enabled = True
+        if stage_name not in run_config.stages:
+            available = ", ".join(sorted(run_config.stages))
+            raise ValueError(f"Unknown stage '{stage_name}'. Available stages: {available}")
+        run_config.stages[stage_name].enabled = True
     return run_config
 
 
@@ -210,50 +214,42 @@ def _load_adapter_config(checkpoint_path: str) -> dict[str, Any]:
 
     adapter_config_path = Path(checkpoint_path) / "adapter_config.json"
     if not adapter_config_path.exists():
-        return {}
+        raise FileNotFoundError(f"Missing adapter_config.json in checkpoint directory: {checkpoint_path}")
     try:
         payload = json.loads(adapter_config_path.read_text(encoding="utf-8"))
     except Exception as exc:  # pragma: no cover - defensive logging for notebook runs
         LOGGER.warning("Failed to read adapter config at %s: %s", adapter_config_path, exc)
-        return {}
-    return payload if isinstance(payload, dict) else {}
+        raise RuntimeError(f"Failed to read adapter config at {adapter_config_path}: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise ValueError(f"Adapter config at {adapter_config_path} must be a JSON object.")
+    if "r" not in payload:
+        raise ValueError(f"Adapter config at {adapter_config_path} is missing required field 'r'.")
+    if "lora_alpha" not in payload:
+        raise ValueError(f"Adapter config at {adapter_config_path} is missing required field 'lora_alpha'.")
+    return payload
 
 
 def apply_target_adapter_overrides(run_config, targets: list[dict[str, Any]]):
-    """Raise LoRA runtime capacity when a target adapter needs more than the profile default."""
+    """Validate that all target adapters match the pinned runtime LoRA shape."""
 
-    current_rank = int(run_config.model.lora_rank)
-    current_max_rank = int(run_config.model.max_lora_rank or current_rank)
-    selected_alpha = int(run_config.model.lora_alpha)
-    selected_from = "runtime defaults"
+    expected_rank = int(run_config.model.lora_rank)
+    expected_alpha = int(run_config.model.lora_alpha)
 
     for target in targets:
         adapter_config = _load_adapter_config(target["checkpoint"])
         adapter_rank = adapter_config.get("r")
         adapter_alpha = adapter_config.get("lora_alpha")
-        if adapter_rank is None:
-            continue
         adapter_rank = int(adapter_rank)
-        if adapter_rank > current_rank:
-            current_rank = adapter_rank
-            if adapter_alpha is not None:
-                selected_alpha = int(adapter_alpha)
-                selected_from = target["label"]
-        current_max_rank = max(current_max_rank, adapter_rank)
+        if adapter_rank != expected_rank:
+            raise ValueError(
+                f"Target {target['label']} uses LoRA rank {adapter_rank}, but this evaluation run is pinned to rank {expected_rank}."
+            )
+        if adapter_alpha is not None and int(adapter_alpha) != expected_alpha:
+            raise ValueError(
+                f"Target {target['label']} uses LoRA alpha {int(adapter_alpha)}, but this evaluation run is pinned to alpha {expected_alpha}."
+            )
 
-    if current_rank != int(run_config.model.lora_rank) or current_max_rank != int(run_config.model.max_lora_rank or run_config.model.lora_rank):
-        LOGGER.info(
-            "Adjusted LoRA runtime for evaluation targets: lora_rank %s -> %s, max_lora_rank %s -> %s, lora_alpha=%s (from %s).",
-            run_config.model.lora_rank,
-            current_rank,
-            run_config.model.max_lora_rank or run_config.model.lora_rank,
-            current_max_rank,
-            selected_alpha,
-            selected_from,
-        )
-        run_config.model.lora_rank = current_rank
-        run_config.model.max_lora_rank = current_max_rank
-        run_config.model.lora_alpha = selected_alpha
+    LOGGER.info("Validated LoRA runtime for evaluation targets: rank=%s alpha=%s", expected_rank, expected_alpha)
     return run_config
 
 
@@ -261,6 +257,7 @@ def build_eval_datasets_for_mode(base_eval_dataset, run_config, tokenizer, *, ov
     """Build the evaluation subsets requested for this reevaluation run."""
 
     if full_split:
+        supported_eval_dataset = filter_supported_answer_mode_rows(base_eval_dataset)
         full_stage = StageSpec(
             name="eval_full_split",
             description="Full mixed evaluation split without stage filtering.",
@@ -269,7 +266,7 @@ def build_eval_datasets_for_mode(base_eval_dataset, run_config, tokenizer, *, ov
         )
         return {
             full_stage.name: build_stage_dataset(
-                base_eval_dataset,
+                supported_eval_dataset,
                 full_stage,
                 tokenizer,
                 image_size=run_config.model.image_size,
@@ -463,7 +460,7 @@ def main() -> None:
 
         eval_base = load_mathvista_split(run_config, run_config.eval_split)
         save_dataset_analysis(
-            analyze_dataset_records(dataset_to_records(eval_base), run_config.stages),
+            analyze_dataset_records(eval_base, run_config.stages),
             output_root / "dataset_analysis_eval.json",
         )
         if args.case_pack:
@@ -514,6 +511,7 @@ def main() -> None:
                 reward_funcs=reward_funcs,
                 reward_weights=reward_weights,
                 eval_config=run_config.eval,
+                phase_name=phase_name,
             )
 
             target_output_dir = output_root / label

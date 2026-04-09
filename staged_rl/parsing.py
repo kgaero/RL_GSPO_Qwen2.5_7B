@@ -7,10 +7,10 @@ import re
 from collections import Counter
 from typing import Any, Iterable, Optional
 
-from .config import REASONING_END, REASONING_START, SOLUTION_END, SOLUTION_START
+from .config import REASONING_END, REASONING_START, SOLUTION_END, SOLUTION_START, ensure_supported_answer_mode
 
 
-OPTION_PATTERN = re.compile(r"\b([A-Z])\b")
+OPTION_PATTERN = re.compile(r"\b([A-F])\b")
 
 
 def normalize_numeric_string(x: Any) -> Optional[str]:
@@ -99,13 +99,14 @@ def extract_multichoice_option_letter(text: str) -> Optional[str]:
     if solution is None:
         return None
 
-    letters = OPTION_PATTERN.findall(solution.upper())
-    if letters:
-        return letters[-1]
-
     compact = solution.strip().upper()
     if compact in {"A", "B", "C", "D", "E", "F"}:
         return compact
+
+    letters = OPTION_PATTERN.findall(compact)
+    unique_letters = set(letters)
+    if len(unique_letters) == 1:
+        return next(iter(unique_letters))
     return None
 
 
@@ -163,6 +164,7 @@ def malformed_multichoice_answer(text: str) -> bool:
 def completion_finished(text: str, answer_mode: str = "numeric_free_form") -> bool:
     """Detect whether the completion appears to contain a finished answer."""
 
+    ensure_supported_answer_mode(answer_mode)
     if answer_mode == "multi_choice":
         return reasoning_tag_compliant(text) and solution_tag_compliant(text) and not malformed_multichoice_answer(text)
     return reasoning_tag_compliant(text) and solution_tag_compliant(text) and not malformed_numeric_answer(text)
@@ -188,6 +190,7 @@ def infer_truncation(
 ) -> bool:
     """Heuristic truncation detector."""
 
+    ensure_supported_answer_mode(answer_mode)
     if completion_tokens < max_completion_length:
         return False
     return not completion_finished(text, answer_mode=answer_mode)

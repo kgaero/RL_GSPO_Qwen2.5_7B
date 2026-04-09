@@ -6,6 +6,7 @@ import tempfile
 import types
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.modules.setdefault(
     "torch",
@@ -23,6 +24,8 @@ from staged_rl.trainer_runtime import (
     _count_trainable_parameters,
     _has_active_peft_adapters,
     _install_trl_prepare_peft_workaround,
+    _require_trainable_parameters,
+    _validate_adapter_configuration,
     _warm_start_peft_adapter,
 )
 
@@ -75,6 +78,72 @@ class TrainerRuntimePatchTests(unittest.TestCase):
         self.assertFalse(_has_active_peft_adapters(types.SimpleNamespace(peft_config={})))
         self.assertTrue(_has_active_peft_adapters(types.SimpleNamespace(peft_config={"default": object()})))
 
+    def test_create_model_and_tokenizer_always_attaches_lora(self):
+        from staged_rl.config import build_default_run_config
+        from staged_rl.trainer_runtime import create_model_and_tokenizer
+
+        run_config = build_default_run_config()
+        fake_tokenizer = object()
+        fake_model = types.SimpleNamespace(peft_config={"default": object()})
+        observed = {}
+
+        class _FakeFastVisionModel:
+            @staticmethod
+            def from_pretrained(**kwargs):
+                observed["from_pretrained"] = kwargs
+                return fake_model, fake_tokenizer
+
+            @staticmethod
+            def get_peft_model(model, **kwargs):
+                observed["get_peft_model"] = {"model": model, "kwargs": kwargs}
+                return types.SimpleNamespace(
+                    peft_config={"default": object()},
+                    parameters=lambda: [types.SimpleNamespace(numel=lambda: 1, requires_grad=True)],
+                )
+
+        fake_unsloth = types.SimpleNamespace(FastVisionModel=_FakeFastVisionModel)
+        with mock.patch.dict(sys.modules, {"unsloth": fake_unsloth}):
+            with mock.patch("staged_rl.trainer_runtime._warm_start_peft_adapter") as warm_start:
+                with mock.patch(
+                    "staged_rl.trainer_runtime._configure_generation_cache_behavior",
+                    return_value={"patched_wrappers": [], "cache_implementation": None, "use_cache": True},
+                ):
+                    with mock.patch("staged_rl.trainer_runtime._require_trainable_parameters", return_value=(1, 1)):
+                        model, tokenizer = create_model_and_tokenizer(run_config)
+
+        self.assertIs(tokenizer, fake_tokenizer)
+        self.assertIn("get_peft_model", observed)
+        self.assertIs(observed["get_peft_model"]["model"], fake_model)
+        warm_start.assert_called_once_with(
+            model,
+            None,
+            expected_lora_rank=run_config.model.lora_rank,
+            expected_lora_alpha=run_config.model.lora_alpha,
+        )
+
+    def test_warm_start_peft_adapter_rejects_rank_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            checkpoint_dir = Path(tmpdir)
+            checkpoint_dir.joinpath("adapter_config.json").write_text(
+                '{"r": 16, "lora_alpha": 16}',
+                encoding="utf-8",
+            )
+
+            with self.assertRaises(ValueError):
+                _warm_start_peft_adapter(
+                    types.SimpleNamespace(),
+                    str(checkpoint_dir),
+                    expected_lora_rank=8,
+                    expected_lora_alpha=8,
+                )
+
+    def test_validate_adapter_configuration_requires_metadata(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            checkpoint_dir = Path(tmpdir)
+
+            with self.assertRaises(FileNotFoundError):
+                _validate_adapter_configuration(checkpoint_dir, expected_lora_rank=8, expected_lora_alpha=8)
+
     def test_count_trainable_parameters(self):
         class _FakeParam:
             def __init__(self, n, requires_grad):
@@ -90,6 +159,19 @@ class TrainerRuntimePatchTests(unittest.TestCase):
         trainable, total = _count_trainable_parameters(fake_model)
         self.assertEqual(trainable, 8)
         self.assertEqual(total, 15)
+
+    def test_require_trainable_parameters_raises_when_all_parameters_are_frozen(self):
+        class _FakeParam:
+            def __init__(self, n, requires_grad):
+                self._n = n
+                self.requires_grad = requires_grad
+
+            def numel(self):
+                return self._n
+
+        fake_model = types.SimpleNamespace(parameters=lambda: [_FakeParam(5, False), _FakeParam(7, False)])
+        with self.assertRaises(RuntimeError):
+            _require_trainable_parameters(fake_model, "Trainer model")
 
     def test_configure_generation_cache_behavior_clears_static_cache(self):
         generation_config = types.SimpleNamespace(cache_implementation="static", use_cache=False)
@@ -146,6 +228,10 @@ class TrainerRuntimePatchTests(unittest.TestCase):
         try:
             with tempfile.TemporaryDirectory() as tmpdir:
                 checkpoint_dir = Path(tmpdir)
+                checkpoint_dir.joinpath("adapter_config.json").write_text(
+                    '{"r": 8, "lora_alpha": 8}',
+                    encoding="utf-8",
+                )
                 model = _FakeModel()
                 _warm_start_peft_adapter(model, str(checkpoint_dir))
         finally:

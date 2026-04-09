@@ -44,6 +44,63 @@ def compute_checkpoint_scores(metrics: Mapping[str, float], config: CheckpointSc
     }
 
 
+def _phase_rank(phase_name: str) -> Optional[int]:
+    """Return a chronological rank for the standard `phase_*` naming scheme."""
+
+    if not phase_name.startswith("phase_"):
+        return None
+    suffix = phase_name.removeprefix("phase_")
+    if len(suffix) != 1 or not suffix.isalpha():
+        return None
+    return ord(suffix.lower()) - ord("a")
+
+
+def _ordered_search_dirs_for_selector(
+    selector: Optional[str],
+    current_phase: str,
+    current_phase_dir: Path,
+    search_dirs: Sequence[Path],
+) -> list[Path]:
+    """Prioritize the current phase, then only earlier phases in reverse chronological order."""
+
+    current_phase_dir = Path(current_phase_dir)
+    ordered: list[Path] = []
+    seen: set[str] = set()
+
+    def add(path: Path) -> None:
+        key = str(path)
+        if key not in seen:
+            seen.add(key)
+            ordered.append(path)
+
+    # `latest` is a within-phase resume selector. It should only consult the
+    # current phase directory so we do not accidentally resume from an earlier
+    # phase checkpoint.
+    if selector == "latest":
+        add(current_phase_dir)
+        return ordered
+
+    add(current_phase_dir)
+
+    current_rank = _phase_rank(current_phase)
+    prioritized_prior_phases: list[tuple[int, Path]] = []
+
+    for raw_dir in search_dirs:
+        path = Path(raw_dir)
+        if str(path) == str(current_phase_dir):
+            continue
+
+        rank = _phase_rank(path.name)
+        if current_rank is not None and rank is not None:
+            if rank < current_rank:
+                prioritized_prior_phases.append((rank, path))
+            continue
+
+    for _, path in sorted(prioritized_prior_phases, key=lambda item: item[0], reverse=True):
+        add(path)
+    return ordered
+
+
 class CheckpointRegistry:
     """Run-local checkpoint registry with best-alias tracking."""
 
@@ -249,7 +306,10 @@ def build_resume_plan(
 ) -> ResumePlan:
     """Resolve whether a selector should be treated as warm-start or trainer resume."""
 
-    resolved = resolve_selector(selector, search_dirs)
+    resolved = resolve_selector(
+        selector,
+        _ordered_search_dirs_for_selector(selector, current_phase, current_phase_dir, search_dirs),
+    )
     if resolved is None:
         return ResumePlan(
             model_load_path=default_model_name,
@@ -261,7 +321,24 @@ def build_resume_plan(
 
     checkpoint_path = str(resolved["checkpoint_path"])
     checkpoint_phase = resolved.get("phase_name")
-    if not force_warm_start and (selector == "latest" or (checkpoint_phase is not None and checkpoint_phase == current_phase)):
+    if selector == "latest":
+        if checkpoint_phase == current_phase:
+            return ResumePlan(
+                model_load_path=default_model_name,
+                trainer_resume_path=None if force_warm_start else checkpoint_path,
+                adapter_warm_start_path=checkpoint_path if force_warm_start else None,
+                selector=selector,
+                phase_name=checkpoint_phase,
+            )
+        return ResumePlan(
+            model_load_path=default_model_name,
+            trainer_resume_path=None,
+            adapter_warm_start_path=None,
+            selector=selector,
+            phase_name=checkpoint_phase,
+        )
+
+    if not force_warm_start and checkpoint_phase is not None and checkpoint_phase == current_phase:
         return ResumePlan(
             model_load_path=default_model_name,
             trainer_resume_path=checkpoint_path,

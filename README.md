@@ -38,7 +38,7 @@ The staged pipeline is defined in [staged_rl/config.py](staged_rl/config.py) and
 - `stage2_float_numeric`: free-form English problems with moderate-precision numeric answers
 - `stage3_hard_numeric`: harder multistep free-form numeric reasoning with geometry/science-heavy contexts
 - `stage4_multi_choice`: scaffolded multi-choice branch
-- `stage5_robustness`: optional multilingual/noisy robustness subset, disabled by default
+- `stage5_robustness`: reserved multilingual/noisy robustness subset, disabled by default and not runnable yet
 
 ### Training phases
 
@@ -177,18 +177,17 @@ python3 rl_gspo_qwen2_5vlm_test3.py --phase phase_e --enable-multichoice-trainin
 
 ## Kaggle T4 Profile 💻
 
-The `kaggle_t4` profile keeps the same staged pipeline but reduces runtime pressure for smaller GPUs. In [staged_rl/config.py](staged_rl/config.py), it changes:
+The `kaggle_t4` profile keeps the same staged pipeline but reduces runtime pressure for smaller GPUs. In [staged_rl/config.py](staged_rl/config.py), it mainly changes:
 
 - `max_seq_length: 16384 -> 1280`
 - `image_size: 512 -> 336`
 - `gpu_memory_utilization: 0.8 -> 0.65`
-- `lora_rank: 16 -> 8`
-- `max_lora_rank: None -> 8`
-- `lora_alpha: 16 -> 8`
 - `gradient_accumulation_steps: 2 -> 4`
 - `num_generations: 4 -> 2`
 - `max_prompt_length: 1024 -> 320`
 - `max_completion_length: 256 -> 64`
+
+LoRA is now pinned to rank 8 in the base config, so the profile keeps that setting unchanged.
 - `num_samples_per_prompt: 4 -> 1`
 - `max_eval_examples_per_subset: None -> 2`
 - Phase D override: `max_completion_length: 320 -> 96`

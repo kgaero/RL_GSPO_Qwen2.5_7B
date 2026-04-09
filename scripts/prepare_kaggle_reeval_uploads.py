@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import shutil
 import subprocess
 from dataclasses import dataclass
@@ -65,6 +66,14 @@ def parse_args() -> argparse.Namespace:
         help="Directory where the packaged baseline dataset should be written.",
     )
     parser.add_argument(
+        "--baseline-source-root",
+        default=None,
+        help=(
+            "Directory containing grpo_lora/ and grpo_eval_outputs/ for the archived baseline. "
+            "If omitted, the script auto-discovers a local checkout copy when present."
+        ),
+    )
+    parser.add_argument(
         "--code-dataset-root",
         default="/tmp/rl-gspo-qwen2-5vlm-staged-code-reeval",
         help="Directory where the packaged reevaluation code dataset should be written.",
@@ -113,15 +122,45 @@ def ensure_clean_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
-def prepare_baseline_dataset_bundle(dataset_root: Path) -> Path:
+def _baseline_source_has_artifacts(source_root: Path) -> bool:
+    return (source_root / "grpo_lora").is_dir() and (source_root / "grpo_eval_outputs").is_dir()
+
+
+def resolve_baseline_source_root(explicit_root: str | None = None) -> Path | None:
+    candidates: list[Path] = []
+    if explicit_root:
+        candidates.append(Path(explicit_root).expanduser())
+
+    env_root = os.environ.get("BASELINE_SOURCE_ROOT")
+    if env_root:
+        candidates.append(Path(env_root).expanduser())
+
+    candidates.append(ROOT)
+
+    for candidate in candidates:
+        if _baseline_source_has_artifacts(candidate):
+            return candidate.resolve()
+    return None
+
+
+def prepare_baseline_dataset_bundle(dataset_root: Path, source_root: Path) -> Path:
+    source_root = source_root.resolve()
+    required_paths = [source_root / "grpo_lora", source_root / "grpo_eval_outputs"]
+    missing = [path for path in required_paths if not path.exists()]
+    if missing:
+        missing_text = ", ".join(str(path) for path in missing)
+        raise FileNotFoundError(
+            f"Baseline source root {source_root} is missing required artifacts: {missing_text}"
+        )
+
     ensure_clean_dir(dataset_root)
 
     grpo_lora_root = dataset_root / "grpo_lora"
     grpo_eval_root = dataset_root / "grpo_eval_outputs"
-    shutil.copytree(ROOT / "grpo_lora", grpo_lora_root)
+    shutil.copytree(source_root / "grpo_lora", grpo_lora_root)
     grpo_eval_root.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(ROOT / "grpo_eval_outputs" / "eval_metrics.json", grpo_eval_root / "eval_metrics.json")
-    shutil.copy2(ROOT / "grpo_eval_outputs" / "train_log_summary.json", grpo_eval_root / "train_log_summary.json")
+    shutil.copy2(source_root / "grpo_eval_outputs" / "eval_metrics.json", grpo_eval_root / "eval_metrics.json")
+    shutil.copy2(source_root / "grpo_eval_outputs" / "train_log_summary.json", grpo_eval_root / "train_log_summary.json")
 
     write_json(
         dataset_root / "dataset-metadata.json",
@@ -323,16 +362,31 @@ def main() -> None:
     dataset_root = Path(args.baseline_dataset_root).resolve()
     code_dataset_root = Path(args.code_dataset_root).resolve()
 
-    prepared_dataset_root = prepare_baseline_dataset_bundle(dataset_root)
+    baseline_source_root = resolve_baseline_source_root(args.baseline_source_root)
+    if args.publish_baseline_dataset and baseline_source_root is None:
+        raise FileNotFoundError(
+            "Could not find baseline source artifacts. Provide --baseline-source-root or set "
+            "BASELINE_SOURCE_ROOT to a directory containing grpo_lora/ and grpo_eval_outputs/."
+        )
+
+    prepared_dataset_root: Path | None = None
+    if baseline_source_root is not None:
+        prepared_dataset_root = prepare_baseline_dataset_bundle(dataset_root, baseline_source_root)
     prepared_code_dataset_root = prepare_code_dataset_bundle(code_dataset_root)
     bundle_paths = prepare_kernel_bundles(bundle_root)
 
-    print(f"Prepared baseline dataset bundle: {prepared_dataset_root}")
+    if prepared_dataset_root is not None:
+        print(f"Prepared baseline dataset bundle: {prepared_dataset_root} (source: {baseline_source_root})")
+    else:
+        print(
+            "Skipped baseline dataset bundle: no local source artifacts were found. "
+            "The kernel bundles were still generated and continue to reference the published Kaggle baseline dataset slug."
+        )
     print(f"Prepared code dataset bundle: {prepared_code_dataset_root}")
     for bundle_dir in bundle_paths:
         print(f"Prepared kernel bundle: {bundle_dir}")
 
-    if args.publish_baseline_dataset:
+    if args.publish_baseline_dataset and prepared_dataset_root is not None:
         publish_baseline_dataset(args.kaggle_bin, prepared_dataset_root)
         print(f"Published baseline dataset: {BASELINE_DATASET}")
 

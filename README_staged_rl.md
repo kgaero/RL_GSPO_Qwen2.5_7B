@@ -64,11 +64,7 @@ Disable a stage:
 python3 rl_gspo_qwen2_5vlm_test3.py --phase phase_b --disable-stage stage3_hard_numeric
 ```
 
-Enable the optional robustness stage for analysis:
-
-```bash
-python3 rl_gspo_qwen2_5vlm_test3.py --phase phase_a --enable-stage stage5_robustness --dataset-analysis-only
-```
+The multilingual robustness stage is reserved for future work. It is tracked in the curriculum docs, but it is not currently enableable because the trainer only supports `numeric_free_form` and `multi_choice` answer modes.
 
 Phase E multi-choice training stays disabled by default. The scaffold is present, but training only runs if you opt in:
 

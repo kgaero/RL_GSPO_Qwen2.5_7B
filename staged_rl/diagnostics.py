@@ -9,6 +9,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Mapping
 
+from .evaluation import select_primary_subset_name
+
 
 def summarize_training_logs(log_history: list[dict[str, Any]]) -> dict[str, Any]:
     """Summarize numeric trainer logs, including KL statistics."""
@@ -43,7 +45,9 @@ def build_post_training_diagnostics(
     """Summarize failure modes and checkpoint ranking behavior."""
 
     checkpoint_entries = registry_data.get("checkpoints", [])
-    latest_subset = eval_results.get("subset_results", {}).get("eval_overall_numeric", {})
+    subset_results = eval_results.get("subset_results", {})
+    primary_subset_name = select_primary_subset_name(subset_results, phase_name=eval_results.get("phase_name"))
+    latest_subset = subset_results.get(primary_subset_name, {}) if primary_subset_name else {}
     all_sample_records = latest_subset.get("all_sample_records", [])
 
     failure_counts = Counter(record.get("failure_mode") for record in all_sample_records)

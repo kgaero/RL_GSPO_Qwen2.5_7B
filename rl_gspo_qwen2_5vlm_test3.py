@@ -9,8 +9,13 @@ from pathlib import Path
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-from staged_rl.config import apply_hardware_profile, build_default_hardware_profiles, build_default_run_config
-from staged_rl.data import analyze_dataset_records, dataset_to_records, load_mathvista_split, save_dataset_analysis
+from staged_rl.config import (
+    apply_hardware_profile,
+    build_default_hardware_profiles,
+    build_default_run_config,
+    ensure_supported_answer_mode,
+)
+from staged_rl.data import analyze_dataset_records, load_mathvista_split, save_dataset_analysis
 from staged_rl.diagnostics import save_json, write_fatal_error
 
 
@@ -71,7 +76,7 @@ def parse_args() -> argparse.Namespace:
         "--enable-stage",
         action="append",
         default=[],
-        help="Enable a named stage that is disabled by default, such as stage5_robustness.",
+        help="Enable a named stage that is disabled by default, if its answer mode is supported by this pipeline.",
     )
     parser.add_argument(
         "--enable-multichoice-training",
@@ -96,11 +101,23 @@ def apply_cli_overrides(run_config, args: argparse.Namespace):
         run_config.eval.max_eval_examples_per_subset = args.max_eval_examples_per_subset
 
     for stage_name in args.disable_stage:
-        if stage_name in run_config.stages:
-            run_config.stages[stage_name].enabled = False
+        if stage_name not in run_config.stages:
+            available = ", ".join(sorted(run_config.stages))
+            raise ValueError(f"Unknown stage '{stage_name}'. Available stages: {available}")
+        run_config.stages[stage_name].enabled = False
     for stage_name in args.enable_stage:
-        if stage_name in run_config.stages:
-            run_config.stages[stage_name].enabled = True
+        if stage_name not in run_config.stages:
+            available = ", ".join(sorted(run_config.stages))
+            raise ValueError(f"Unknown stage '{stage_name}'. Available stages: {available}")
+        stage_spec = run_config.stages[stage_name]
+        try:
+            ensure_supported_answer_mode(stage_spec.answer_mode)
+        except ValueError as exc:
+            raise ValueError(
+                f"Stage '{stage_name}' is reserved and cannot be enabled because answer_mode "
+                f"'{stage_spec.answer_mode}' is not supported by this pipeline."
+            ) from exc
+        stage_spec.enabled = True
 
     if args.enable_multichoice_training and "phase_e" in run_config.phases:
         run_config.phases["phase_e"].allow_multichoice_training = True
@@ -115,8 +132,8 @@ def dataset_analysis_only(run_config) -> dict:
 
     train_base = load_mathvista_split(run_config, run_config.train_split)
     eval_base = load_mathvista_split(run_config, run_config.eval_split)
-    train_analysis = analyze_dataset_records(dataset_to_records(train_base), run_config.stages)
-    eval_analysis = analyze_dataset_records(dataset_to_records(eval_base), run_config.stages)
+    train_analysis = analyze_dataset_records(train_base, run_config.stages)
+    eval_analysis = analyze_dataset_records(eval_base, run_config.stages)
     save_dataset_analysis(train_analysis, output_dir / "dataset_analysis_train.json")
     save_dataset_analysis(eval_analysis, output_dir / "dataset_analysis_eval.json")
     return {

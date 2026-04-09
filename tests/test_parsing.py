@@ -27,6 +27,13 @@ class ParsingTests(unittest.TestCase):
     def test_multichoice_option_letter(self):
         text = "<REASONING>x</REASONING><SOLUTION>The answer is C</SOLUTION>"
         self.assertEqual(extract_multichoice_option_letter(text), "C")
+        self.assertEqual(
+            extract_multichoice_option_letter("<REASONING>x</REASONING><SOLUTION>The correct answer is (B) 8/11.</SOLUTION>"),
+            "B",
+        )
+        self.assertIsNone(
+            extract_multichoice_option_letter("<REASONING>x</REASONING><SOLUTION>Answer: B, not A</SOLUTION>")
+        )
         self.assertEqual(compute_option_letter("38", ["28", "38", "52", "62"]), "B")
 
     def test_exact_and_tolerance(self):

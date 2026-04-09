@@ -16,10 +16,12 @@ from .config import (
     PhaseConfig,
     REASONING_END,
     REASONING_START,
+    SUPPORTED_ANSWER_MODES,
     RunConfig,
     SOLUTION_END,
     SOLUTION_START,
     StageSpec,
+    ensure_supported_answer_mode,
 )
 from .parsing import compute_option_letter
 
@@ -235,7 +237,7 @@ def build_prompt_text(record: Mapping[str, Any]) -> str:
     """Wrap the dataset query with a strict answer contract."""
 
     base_text = str(record.get("query") or record.get("question") or "").strip()
-    answer_mode = record.get("answer_mode", "numeric_free_form")
+    answer_mode = ensure_supported_answer_mode(record.get("answer_mode"))
 
     if answer_mode == "multi_choice":
         contract = (
@@ -304,6 +306,22 @@ def _apply_runtime_image_transform(dataset, image_size: int = 512) -> Any:
     return dataset.with_transform(_transform)
 
 
+def _materialize_image_column(dataset, image_size: int = 512) -> Any:
+    """Eagerly normalize the image column so downstream trainers see concrete payloads."""
+
+    def _transform(example: Mapping[str, Any]) -> dict[str, Any]:
+        materialized = dict(example)
+        if "image" not in materialized:
+            return materialized
+        normalized = normalize_image_payload(materialized["image"], image_size=image_size)
+        if normalized is None:
+            raise ValueError("Unable to normalize an image payload for a staged dataset example.")
+        materialized["image"] = normalized
+        return materialized
+
+    return dataset.map(_transform)
+
+
 def _assert_numeric_stage_records(dataset, stage_spec: StageSpec) -> None:
     if stage_spec.answer_mode != "numeric_free_form":
         return
@@ -322,6 +340,69 @@ def _load_dataset_imports():
     return load_dataset, interleave_datasets
 
 
+def _active_training_stage_names(phase_config: PhaseConfig, stage_specs: Mapping[str, StageSpec]) -> list[str]:
+    """Return the enabled stage names that should participate in a phase."""
+
+    active_stage_names: list[str] = []
+    skipped_stage_names: list[str] = []
+    for stage_name in phase_config.stage_mix:
+        stage_spec = stage_specs[stage_name]
+        if not stage_spec.enabled:
+            skipped_stage_names.append(stage_name)
+            continue
+        if stage_spec.answer_mode == "multi_choice" and not phase_config.allow_multichoice_training:
+            raise ValueError("Phase E multi-choice training is scaffolded only and remains disabled.")
+        active_stage_names.append(stage_name)
+
+    if skipped_stage_names:
+        LOGGER.info(
+            "Skipping disabled training stages for phase %s: %s",
+            phase_config.name,
+            ", ".join(skipped_stage_names),
+        )
+    return active_stage_names
+
+
+def _active_eval_stage_names(run_config: RunConfig) -> list[str]:
+    """Return the enabled evaluation stage names for the current phase."""
+
+    phase_config = run_config.phases[run_config.phase_name]
+    requested_stage_names = list(phase_config.eval_stage_names)
+    if not requested_stage_names:
+        requested_stage_names = [stage_name for stage_name, stage_spec in run_config.stages.items() if stage_spec.enabled]
+
+    active_stage_names: list[str] = []
+    skipped_stage_names: list[str] = []
+    for stage_name in requested_stage_names:
+        stage_spec = run_config.stages[stage_name]
+        if not stage_spec.enabled:
+            skipped_stage_names.append(stage_name)
+            continue
+        active_stage_names.append(stage_name)
+
+    if skipped_stage_names:
+        LOGGER.info(
+            "Skipping disabled eval stages for phase %s: %s",
+            phase_config.name,
+            ", ".join(skipped_stage_names),
+        )
+    return active_stage_names
+
+
+def filter_supported_answer_mode_rows(dataset) -> Any:
+    """Keep only rows that this pipeline can score reliably."""
+
+    filtered = dataset.filter(lambda example: example.get("answer_mode") in SUPPORTED_ANSWER_MODES)
+    skipped = len(dataset) - len(filtered)
+    if skipped > 0:
+        LOGGER.warning(
+            "Skipping %s unsupported rows with answer_mode outside %s.",
+            skipped,
+            SUPPORTED_ANSWER_MODES,
+        )
+    return filtered
+
+
 def load_mathvista_split(run_config: RunConfig, split_name: str):
     """Load and enrich a MathVista split."""
 
@@ -335,36 +416,30 @@ def build_stage_dataset(base_dataset, stage_spec: StageSpec, tokenizer, image_si
     """Filter, score, and prompt-format a stage dataset."""
 
     dataset = base_dataset.filter(lambda example: match_filter_spec(example, stage_spec.filter_spec))
-    dataset = dataset.map(
-        lambda example: {
-            "stage_name": stage_spec.name,
-            "stage_priority": stage_priority(example, stage_spec),
-            "prompt_text": build_prompt_text(example),
-            "prompt_messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "image"},
-                        {"type": "text", "text": build_prompt_text(example)},
-                    ],
-                }
-            ],
-            "prompt": [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "image"},
-                        {"type": "text", "text": build_prompt_text(example)},
-                    ],
-                }
+
+    def _format_example(example: Mapping[str, Any]) -> dict[str, Any]:
+        prompt_text = build_prompt_text(example)
+        prompt_message = {
+            "role": "user",
+            "content": [
+                {"type": "image"},
+                {"type": "text", "text": prompt_text},
             ],
         }
-    )
+        return {
+            "prompt_text": prompt_text,
+            "stage_name": stage_spec.name,
+            "stage_priority": stage_priority(example, stage_spec),
+            "prompt_messages": [prompt_message],
+            "prompt": [prompt_message],
+        }
+
+    dataset = dataset.map(_format_example)
     dataset = dataset.sort("stage_priority", reverse=True)
     dataset = dataset.remove_columns([name for name in ("decoded_image",) if name in dataset.column_names])
     _assert_numeric_stage_records(dataset, stage_spec)
     dataset = _maybe_apply_chat_template(dataset, tokenizer)
-    dataset = _apply_runtime_image_transform(dataset, image_size=image_size)
+    dataset = _materialize_image_column(dataset, image_size=image_size)
     return dataset
 
 
@@ -378,11 +453,10 @@ def build_phase_train_dataset(
     """Build the training dataset for a phase."""
 
     _, interleave_datasets = _load_dataset_imports()
+    active_stage_names = _active_training_stage_names(phase_config, stage_specs)
     stage_datasets = {}
-    for stage_name, weight in phase_config.stage_mix.items():
+    for stage_name in active_stage_names:
         stage_spec = stage_specs[stage_name]
-        if stage_spec.answer_mode == "multi_choice" and not phase_config.allow_multichoice_training:
-            raise ValueError("Phase E multi-choice training is scaffolded only and remains disabled.")
         stage_datasets[stage_name] = build_stage_dataset(
             base_dataset,
             stage_spec,
@@ -390,6 +464,8 @@ def build_phase_train_dataset(
             image_size=image_size,
         )
 
+    if not stage_datasets:
+        raise ValueError(f"No enabled training stages remain for phase {phase_config.name}.")
     if len(stage_datasets) == 1:
         only_stage = next(iter(stage_datasets.values()))
         return only_stage, stage_datasets
@@ -403,7 +479,7 @@ def build_phase_train_dataset(
         seed=3407,
         stopping_strategy="all_exhausted",
     )
-    mixed_dataset = _apply_runtime_image_transform(mixed_dataset, image_size=image_size)
+    mixed_dataset = _materialize_image_column(mixed_dataset, image_size=image_size)
     return mixed_dataset, stage_datasets
 
 
@@ -430,9 +506,8 @@ def build_eval_datasets(base_eval_dataset, run_config: RunConfig, tokenizer) -> 
         image_size=run_config.model.image_size,
     )
 
-    for stage_name, stage_spec in run_config.stages.items():
-        if not stage_spec.enabled and stage_name != "stage4_multi_choice":
-            continue
+    for stage_name in _active_eval_stage_names(run_config):
+        stage_spec = run_config.stages[stage_name]
         eval_datasets[stage_name] = build_stage_dataset(
             base_eval_dataset,
             stage_spec,
@@ -452,56 +527,90 @@ def dataset_to_records(dataset, limit: Optional[int] = None) -> list[dict[str, A
 def analyze_dataset_records(records: Iterable[Mapping[str, Any]], stage_specs: Mapping[str, StageSpec]) -> dict[str, Any]:
     """Compute dataset-level diagnostics and stage recommendations."""
 
-    materialized = list(records)
     field_counts = {
-        "question_type": Counter(record.get("question_type") for record in materialized),
-        "answer_type": Counter(record.get("answer_type") for record in materialized),
-        "language": Counter(record.get("language") for record in materialized),
-        "context": Counter(record.get("context") for record in materialized),
-        "context_family": Counter(record.get("context_family") for record in materialized),
-        "source": Counter(record.get("source") for record in materialized),
-        "task": Counter(record.get("task") for record in materialized),
-        "category": Counter(record.get("category") for record in materialized),
-        "grade": Counter(record.get("grade") for record in materialized),
-        "skills": Counter(skill for record in materialized for skill in (record.get("skills") or [])),
-        "precision_bucket": Counter(
-            "present" if record.get("precision") not in (None, "") else "missing" for record in materialized
-        ),
-        "unit_bucket": Counter("present" if record.get("unit") else "missing" for record in materialized),
+        "question_type": Counter(),
+        "answer_type": Counter(),
+        "answer_mode": Counter(),
+        "language": Counter(),
+        "context": Counter(),
+        "context_family": Counter(),
+        "source": Counter(),
+        "task": Counter(),
+        "category": Counter(),
+        "grade": Counter(),
+        "skills": Counter(),
+        "precision_bucket": Counter(),
+        "unit_bucket": Counter(),
     }
+
+    stage_state = {
+        stage_name: {
+            "count": 0,
+            "top_context_families": Counter(),
+            "top_sources": Counter(),
+            "examples": [],
+        }
+        for stage_name in stage_specs
+    }
+
+    total_rows = 0
+    for record in records:
+        total_rows += 1
+        field_counts["question_type"][record.get("question_type")] += 1
+        field_counts["answer_type"][record.get("answer_type")] += 1
+        field_counts["answer_mode"][record.get("answer_mode")] += 1
+        field_counts["language"][record.get("language")] += 1
+        field_counts["context"][record.get("context")] += 1
+        field_counts["context_family"][record.get("context_family")] += 1
+        field_counts["source"][record.get("source")] += 1
+        field_counts["task"][record.get("task")] += 1
+        field_counts["category"][record.get("category")] += 1
+        field_counts["grade"][record.get("grade")] += 1
+        field_counts["skills"].update(skill for skill in (record.get("skills") or []))
+        field_counts["precision_bucket"]["present" if record.get("precision") not in (None, "") else "missing"] += 1
+        field_counts["unit_bucket"]["present" if record.get("unit") else "missing"] += 1
+
+        for stage_name, stage_spec in stage_specs.items():
+            if not match_filter_spec(record, stage_spec.filter_spec):
+                continue
+            state = stage_state[stage_name]
+            state["count"] += 1
+            state["top_context_families"][record.get("context_family")] += 1
+            state["top_sources"][record.get("source")] += 1
+            if len(state["examples"]) < 3:
+                state["examples"].append(
+                    {
+                        "pid": record.get("pid"),
+                        "question_type": record.get("question_type"),
+                        "answer_type": record.get("answer_type"),
+                        "answer_mode": record.get("answer_mode"),
+                        "context": record.get("context"),
+                        "source": record.get("source"),
+                        "skills": record.get("skills"),
+                        "answer": record.get("answer"),
+                        "question": str(record.get("question", ""))[:180],
+                    }
+                )
 
     stage_summaries = {}
     warnings = []
-    for stage_name, stage_spec in stage_specs.items():
-        matched = [record for record in materialized if match_filter_spec(record, stage_spec.filter_spec)]
-        heterogeneity = Counter(record.get("context_family") for record in matched)
+    for stage_name, state in stage_state.items():
+        heterogeneity = state["top_context_families"]
         stage_summaries[stage_name] = {
-            "count": len(matched),
-            "recommended_train_size": int(len(matched) * 0.8),
-            "recommended_eval_size": int(len(matched) * 0.2),
+            "count": state["count"],
+            "recommended_train_size": int(state["count"] * 0.8),
+            "recommended_eval_size": int(state["count"] * 0.2),
             "top_context_families": heterogeneity.most_common(5),
-            "top_sources": Counter(record.get("source") for record in matched).most_common(5),
-            "examples": [
-                {
-                    "pid": record.get("pid"),
-                    "question_type": record.get("question_type"),
-                    "answer_type": record.get("answer_type"),
-                    "context": record.get("context"),
-                    "source": record.get("source"),
-                    "skills": record.get("skills"),
-                    "answer": record.get("answer"),
-                    "question": str(record.get("question", ""))[:180],
-                }
-                for record in matched[:3]
-            ],
+            "top_sources": state["top_sources"].most_common(5),
+            "examples": list(state["examples"]),
         }
-        if len(matched) < 32:
-            warnings.append(f"Stage {stage_name} is very small ({len(matched)} examples).")
+        if state["count"] < 32:
+            warnings.append(f"Stage {stage_name} is very small ({state['count']} examples).")
         if len(heterogeneity) > 6:
             warnings.append(f"Stage {stage_name} is heterogeneous across {len(heterogeneity)} context families.")
 
     return {
-        "total_rows": len(materialized),
+        "total_rows": total_rows,
         "field_counts": {key: dict(counter) for key, counter in field_counts.items()},
         "stage_summaries": stage_summaries,
         "warnings": warnings,

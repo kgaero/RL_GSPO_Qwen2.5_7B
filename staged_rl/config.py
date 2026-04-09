@@ -11,6 +11,16 @@ REASONING_START = "<REASONING>"
 REASONING_END = "</REASONING>"
 SOLUTION_START = "<SOLUTION>"
 SOLUTION_END = "</SOLUTION>"
+SUPPORTED_ANSWER_MODES = ("numeric_free_form", "multi_choice")
+
+
+def ensure_supported_answer_mode(answer_mode: str) -> str:
+    """Validate that an answer mode is one this pipeline can score."""
+
+    if answer_mode not in SUPPORTED_ANSWER_MODES:
+        supported = ", ".join(SUPPORTED_ANSWER_MODES)
+        raise ValueError(f"Unsupported answer mode '{answer_mode}'. Supported modes: {supported}")
+    return answer_mode
 
 
 def _tuple(values: Optional[Sequence[str]]) -> tuple[str, ...]:
@@ -172,9 +182,9 @@ class ModelConfig:
     fast_inference: bool = True
     fast_inference_kwargs: dict[str, Any] = field(default_factory=dict)
     gpu_memory_utilization: float = 0.8
-    lora_rank: int = 16
-    max_lora_rank: Optional[int] = None
-    lora_alpha: int = 16
+    lora_rank: int = 8
+    max_lora_rank: Optional[int] = 8
+    lora_alpha: int = 8
     finetune_vision_layers: bool = False
     finetune_language_layers: bool = True
     finetune_attention_modules: bool = True

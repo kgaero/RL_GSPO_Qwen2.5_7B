@@ -5,7 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Optional
 
-from .config import REASONING_END, REASONING_START, SOLUTION_END, SOLUTION_START, PhaseConfig
+from .config import (
+    PhaseConfig,
+    REASONING_END,
+    REASONING_START,
+    SOLUTION_END,
+    SOLUTION_START,
+    ensure_supported_answer_mode,
+)
 from .parsing import (
     completion_finished,
     compute_option_letter,
@@ -41,7 +48,14 @@ class RewardRuntimeContext:
         return len(text.split())
 
 
+def _require_supported_answer_mode(answer_mode: str) -> str:
+    """Validate the scoring contract before applying a reward or metric."""
+
+    return ensure_supported_answer_mode(answer_mode)
+
+
 def _exact_or_multichoice_match(completion: str, gold_answer: Any, answer_mode: str, choices: Optional[Iterable[str]]) -> bool:
+    _require_supported_answer_mode(answer_mode)
     if answer_mode == "multi_choice":
         predicted = extract_multichoice_option_letter(completion)
         gold_letter = compute_option_letter(gold_answer, choices)
@@ -56,6 +70,7 @@ def _tolerance_match_for_record(
     answer_mode: str,
     precision: Optional[float],
 ) -> bool:
+    _require_supported_answer_mode(answer_mode)
     if answer_mode != "numeric_free_form":
         return False
     solution = extract_single_solution_text(completion)
@@ -69,6 +84,7 @@ def _tolerance_match_for_record(
 
 
 def _format_reward_single(completion: str, answer_mode: str) -> float:
+    _require_supported_answer_mode(answer_mode)
     score = 0.0
     if reasoning_tag_compliant(completion):
         score += 1.0
@@ -82,6 +98,7 @@ def _format_reward_single(completion: str, answer_mode: str) -> float:
 
 
 def _parseable_reward_single(completion: str, answer_mode: str) -> float:
+    _require_supported_answer_mode(answer_mode)
     if answer_mode == "multi_choice":
         return 1.0 if not malformed_multichoice_answer(completion) else 0.0
     solution = extract_single_solution_text(completion)
@@ -91,6 +108,7 @@ def _parseable_reward_single(completion: str, answer_mode: str) -> float:
 
 
 def _finished_reward_single(completion: str, answer_mode: str, token_count: int, max_completion_length: int) -> float:
+    _require_supported_answer_mode(answer_mode)
     finished = completion_finished(completion, answer_mode=answer_mode)
     if finished and token_count < max_completion_length:
         return 1.0

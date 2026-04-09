@@ -81,7 +81,7 @@ The phase defines how strongly each reward matters and how stages are mixed.
 | `stage2_float_numeric` | `numeric_free_form` | `free_form`, `integer/float`, `english` | `table`, `chart`, `plot`, `scientific figure`, `natural image` | `arithmetic reasoning`, `statistical reasoning`, `scientific reasoning`, `numeric commonsense` | medium | add moderate precision and broader visual formats |
 | `stage3_hard_numeric` | `numeric_free_form` | `free_form`, `integer/float`, `english` | `geometry diagram`, `plot`, `scientific figure`, `abstract scene` | `geometry reasoning`, `algebraic reasoning`, `scientific reasoning`, `arithmetic reasoning`, `statistical reasoning` | hard | push multistep reasoning, geometry, algebra, harder figures |
 | `stage4_multi_choice` | `multi_choice` | `multi_choice` only | `geometry diagram`, `scientific figure`, `plot` | `geometry reasoning`, `algebraic reasoning` | separate branch | keep multi-choice logic isolated from numeric extraction |
-| `stage5_robustness` | `mixed` | non-English examples | none | none | optional robustness | reserved for multilingual/noisy data, disabled by default |
+| `stage5_robustness` | `mixed` | non-English examples | none | none | reserved robustness | tracked for multilingual/noisy data, disabled by default and not runnable in the current trainer |
 
 ### 4.2 Exact implemented stage filters
 
@@ -91,7 +91,7 @@ The phase defines how strongly each reward matters and how stages are mixed.
 | `stage2_float_numeric` | `free_form` | `integer`, `float` | `english` | `table`, `chart`, `plot`, `scientific figure`, `natural image` | `arithmetic reasoning`, `statistical reasoning`, `scientific reasoning`, `numeric commonsense` | `numeric_free_form` | moderate precision |
 | `stage3_hard_numeric` | `free_form` | `integer`, `float` | `english` | `geometry diagram`, `plot`, `scientific figure`, `abstract scene` | `geometry reasoning`, `algebraic reasoning`, `scientific reasoning`, `arithmetic reasoning`, `statistical reasoning` | `numeric_free_form` | `hard_only=True` |
 | `stage4_multi_choice` | `multi_choice` | not constrained here | not constrained here | not constrained here | not constrained here | `multi_choice` | separate scaffold only |
-| `stage5_robustness` | none | none | `chinese`, `persian` | none | none | none | `enabled=False` |
+| `stage5_robustness` | none | none | `chinese`, `persian` | none | none | none | `enabled=False`, reserved |
 
 ### 4.3 Stage ordering logic
 
@@ -115,7 +115,7 @@ This makes the curriculum "easy-first within stage", not only "easy stage before
 | `stage2_float_numeric` | precision and tables/charts should be introduced only after structure is mostly stable | float parsing and tolerance do not get enough signal |
 | `stage3_hard_numeric` | hard visual math should not dominate early | sparse rewards and long completions reduce learning efficiency |
 | `stage4_multi_choice` | multi-choice needs a separate parser and reward branch | numeric and option-letter parsing get entangled |
-| `stage5_robustness` | robustness is late-stage work | multilingual/noisy data destabilizes early training |
+| `stage5_robustness` | robustness is late-stage work | multilingual/noisy data is reserved until mixed-mode parsing and scoring are implemented |
 
 ## 5. Phase definitions
 
@@ -324,9 +324,9 @@ These are the default settings before any hardware-profile override.
 | `load_in_4bit` | `True` | 4-bit quantized model load | critical for memory savings |
 | `fast_inference` | `True` | Unsloth/vLLM fast generation path | important for GRPO generation efficiency |
 | `gpu_memory_utilization` | `0.8` | vLLM memory target | controls how aggressively GPU memory is used |
-| `lora_rank` | `16` | adapter rank | higher rank gives more capacity but costs more memory |
-| `max_lora_rank` | `None` | maximum adapter rank exposed to vLLM | falls back to `lora_rank` |
-| `lora_alpha` | `16` | LoRA scaling | affects adapter update magnitude |
+| `lora_rank` | `8` | adapter rank | pinned to a compact adapter for all phases |
+| `max_lora_rank` | `8` | maximum adapter rank exposed to vLLM | kept aligned with `lora_rank` |
+| `lora_alpha` | `8` | LoRA scaling | kept aligned with the fixed adapter rank |
 | `finetune_vision_layers` | `False` | train vision tower or not | kept off for memory efficiency |
 | `finetune_language_layers` | `True` | train language stack | main adaptation target |
 | `finetune_attention_modules` | `True` | train attention modules | needed for reasoning adaptation |
@@ -403,9 +403,9 @@ Metrics computed at checkpoint time include:
 | `max_seq_length` | `16384` | `1280` | huge memory reduction |
 | `image_size` | `512` | `336` | lower vision memory cost |
 | `gpu_memory_utilization` | `0.8` | `0.65` | safer vLLM budget |
-| `lora_rank` | `16` | `8` | lower adapter memory |
-| `max_lora_rank` | `None` | `8` | keep vLLM LoRA budget bounded |
-| `lora_alpha` | `16` | `8` | matched to smaller rank |
+| `lora_rank` | `8` | `8` | pinned LoRA rank |
+| `max_lora_rank` | `8` | `8` | keep vLLM LoRA budget bounded |
+| `lora_alpha` | `8` | `8` | matched to the fixed rank |
 | `gradient_accumulation_steps` | `2` | `4` | preserve effective optimization pressure with smaller safe runtime |
 | `num_generations` | `4` | `2` | large generation-memory reduction while still valid for GRPO |
 | `max_prompt_length` | `1024` | `320` | lower prompt memory |
@@ -432,7 +432,7 @@ Tradeoffs accepted:
 - fewer sampled generations
 - shorter completions
 - smaller eval sample count
-- lower LoRA rank
+- fixed LoRA rank 8
 
 What was gained:
 

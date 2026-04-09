@@ -18,7 +18,6 @@ from .data import (
     analyze_dataset_records,
     build_eval_datasets,
     build_phase_train_dataset,
-    dataset_to_records,
     load_mathvista_split,
     save_dataset_analysis,
 )
@@ -149,6 +148,62 @@ def _count_trainable_parameters(model: Any) -> tuple[int, int]:
     return trainable, total
 
 
+def _require_trainable_parameters(model: Any, context: str) -> tuple[int, int]:
+    """Raise when a model has parameters but none are trainable."""
+
+    trainable_params, total_params = _count_trainable_parameters(model)
+    LOGGER.info("%s parameter counts: trainable=%s total=%s", context, trainable_params, total_params)
+    if total_params > 0 and trainable_params == 0:
+        raise RuntimeError(
+            f"{context} has zero trainable parameters. "
+            "This usually means the Unsloth LoRA wrapper was not attached correctly."
+        )
+    return trainable_params, total_params
+
+
+def _validate_adapter_configuration(
+    checkpoint_dir: Path,
+    *,
+    expected_lora_rank: Optional[int] = None,
+    expected_lora_alpha: Optional[int] = None,
+) -> None:
+    """Fail fast when a checkpoint adapter does not match the pinned runtime LoRA shape."""
+
+    adapter_config_path = checkpoint_dir / "adapter_config.json"
+    if not adapter_config_path.exists():
+        raise FileNotFoundError(f"Missing adapter_config.json in checkpoint directory: {checkpoint_dir}")
+
+    try:
+        adapter_config = json.loads(adapter_config_path.read_text(encoding="utf-8"))
+    except Exception as exc:  # pragma: no cover - defensive validation for Kaggle runs
+        raise RuntimeError(f"Failed to read adapter config at {adapter_config_path}: {exc}") from exc
+
+    if not isinstance(adapter_config, Mapping):
+        raise ValueError(f"Adapter config at {adapter_config_path} must be a JSON object.")
+
+    adapter_rank = adapter_config.get("r")
+    if adapter_rank is None:
+        raise ValueError(f"Adapter config at {adapter_config_path} is missing required field 'r'.")
+    if adapter_rank is not None and expected_lora_rank is not None and int(adapter_rank) != int(expected_lora_rank):
+        raise ValueError(
+            f"Checkpoint {checkpoint_dir} uses LoRA rank {int(adapter_rank)}, "
+            f"but this run is pinned to rank {int(expected_lora_rank)}."
+        )
+
+    adapter_alpha = adapter_config.get("lora_alpha")
+    if adapter_alpha is None:
+        raise ValueError(f"Adapter config at {adapter_config_path} is missing required field 'lora_alpha'.")
+    if (
+        adapter_alpha is not None
+        and expected_lora_alpha is not None
+        and int(adapter_alpha) != int(expected_lora_alpha)
+    ):
+        raise ValueError(
+            f"Checkpoint {checkpoint_dir} uses LoRA alpha {int(adapter_alpha)}, "
+            f"but this run is pinned to alpha {int(expected_lora_alpha)}."
+        )
+
+
 def _has_active_peft_adapters(model: Any) -> bool:
     """Return whether the model already has live PEFT adapters attached."""
 
@@ -205,7 +260,13 @@ def _configure_generation_cache_behavior(model: Any) -> dict[str, Any]:
     }
 
 
-def _warm_start_peft_adapter(model: Any, adapter_path: Optional[str]) -> None:
+def _warm_start_peft_adapter(
+    model: Any,
+    adapter_path: Optional[str],
+    *,
+    expected_lora_rank: Optional[int] = None,
+    expected_lora_alpha: Optional[int] = None,
+) -> None:
     """Load checkpoint LoRA weights into the active Unsloth PEFT wrapper.
 
     Cross-phase continuation must keep the model object returned by
@@ -222,6 +283,12 @@ def _warm_start_peft_adapter(model: Any, adapter_path: Optional[str]) -> None:
     checkpoint_dir = Path(adapter_path)
     if not checkpoint_dir.exists():
         raise FileNotFoundError(f"Warm-start adapter path does not exist: {checkpoint_dir}")
+
+    _validate_adapter_configuration(
+        checkpoint_dir,
+        expected_lora_rank=expected_lora_rank,
+        expected_lora_alpha=expected_lora_alpha,
+    )
 
     errors: list[str] = []
 
@@ -300,31 +367,29 @@ def create_model_and_tokenizer(
         **model_config.fast_inference_kwargs,
     )
 
-    if not _has_active_peft_adapters(model):
-        model = FastVisionModel.get_peft_model(
-            model,
-            finetune_vision_layers=model_config.finetune_vision_layers,
-            finetune_language_layers=model_config.finetune_language_layers,
-            finetune_attention_modules=model_config.finetune_attention_modules,
-            finetune_mlp_modules=model_config.finetune_mlp_modules,
-            r=model_config.lora_rank,
-            lora_alpha=model_config.lora_alpha,
-            bias=model_config.bias,
-            random_state=model_config.random_state,
-            use_rslora=model_config.use_rslora,
-            loftq_config=model_config.loftq_config,
-            use_gradient_checkpointing=model_config.use_gradient_checkpointing,
-        )
-    _warm_start_peft_adapter(model, adapter_warm_start_path)
+    model = FastVisionModel.get_peft_model(
+        model,
+        finetune_vision_layers=model_config.finetune_vision_layers,
+        finetune_language_layers=model_config.finetune_language_layers,
+        finetune_attention_modules=model_config.finetune_attention_modules,
+        finetune_mlp_modules=model_config.finetune_mlp_modules,
+        r=model_config.lora_rank,
+        lora_alpha=model_config.lora_alpha,
+        bias=model_config.bias,
+        random_state=model_config.random_state,
+        use_rslora=model_config.use_rslora,
+        loftq_config=model_config.loftq_config,
+        use_gradient_checkpointing=model_config.use_gradient_checkpointing,
+    )
+    _warm_start_peft_adapter(
+        model,
+        adapter_warm_start_path,
+        expected_lora_rank=model_config.lora_rank,
+        expected_lora_alpha=model_config.lora_alpha,
+    )
     generation_runtime = _configure_generation_cache_behavior(model)
     LOGGER.info("Generation cache runtime after model prep: %s", generation_runtime)
-    trainable_params, total_params = _count_trainable_parameters(model)
-    LOGGER.info("Model parameter counts after PEFT prep: trainable=%s total=%s", trainable_params, total_params)
-    if total_params > 0 and trainable_params == 0:
-        raise RuntimeError(
-            "Model has zero trainable parameters after PEFT preparation. "
-            "LoRA adapters were not attached correctly."
-        )
+    _require_trainable_parameters(model, "Model after PEFT preparation")
     return model, tokenizer
 
 
@@ -368,6 +433,7 @@ class MetricAwareGRPOTrainerMixin:
             reward_funcs=self.reward_funcs_list,
             reward_weights=self.reward_controller.current_weights(),
             eval_config=self.run_config.eval,
+            phase_name=self.phase_name,
         )
 
         checkpoint_entry = write_checkpoint_artifacts(
@@ -492,6 +558,14 @@ def run_phase(
         force_warm_start=warm_start_selector is not None,
     )
 
+    checkpoint_path_for_validation = resume_plan.adapter_warm_start_path or resume_plan.trainer_resume_path
+    if checkpoint_path_for_validation:
+        _validate_adapter_configuration(
+            Path(checkpoint_path_for_validation),
+            expected_lora_rank=run_config.model.lora_rank,
+            expected_lora_alpha=run_config.model.lora_alpha,
+        )
+
     model, tokenizer = create_model_and_tokenizer(
         run_config,
         model_name_or_path=resume_plan.model_load_path,
@@ -501,11 +575,11 @@ def run_phase(
     eval_base = load_mathvista_split(run_config, run_config.eval_split)
 
     save_dataset_analysis(
-        analyze_dataset_records(dataset_to_records(train_base), run_config.stages),
+        analyze_dataset_records(train_base, run_config.stages),
         output_dir / "dataset_analysis_train.json",
     )
     save_dataset_analysis(
-        analyze_dataset_records(dataset_to_records(eval_base), run_config.stages),
+        analyze_dataset_records(eval_base, run_config.stages),
         output_dir / "dataset_analysis_eval.json",
     )
 
@@ -554,6 +628,7 @@ def run_phase(
         run_config=run_config,
         phase_name=resolved_phase,
     )
+    _require_trainable_parameters(trainer.model, "GRPOTrainer model after initialization")
     apply_reward_weights(trainer, reward_funcs, reward_controller.current_weights())
 
     train_result = trainer.train(resume_from_checkpoint=resume_plan.trainer_resume_path)

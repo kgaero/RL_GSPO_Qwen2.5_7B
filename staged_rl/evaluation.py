@@ -6,7 +6,7 @@ import json
 from statistics import mean
 from typing import Any, Callable, Mapping, Optional
 
-from .config import EvalConfig
+from .config import EvalConfig, ensure_supported_answer_mode
 from .parsing import (
     completion_finished,
     compute_repetition_rate,
@@ -91,17 +91,40 @@ def aggregate_subset_metrics(per_prompt_records: list[dict[str, Any]], all_sampl
     return metrics
 
 
-def select_overall_metrics(subset_results: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
+def _primary_subset_priority(phase_name: Optional[str]) -> tuple[str, ...]:
+    """Return the subset priority order for a given phase."""
+
+    if phase_name == "phase_d":
+        return ("stage3_hard_numeric", "eval_overall_numeric", "eval_full_split", "stage4_multi_choice")
+    if phase_name == "phase_e":
+        return ("stage4_multi_choice", "eval_overall_numeric", "eval_full_split", "stage3_hard_numeric")
+    return ("eval_overall_numeric", "eval_full_split", "stage3_hard_numeric", "stage4_multi_choice")
+
+
+def select_primary_subset_name(
+    subset_results: Mapping[str, Mapping[str, Any]],
+    phase_name: Optional[str] = None,
+) -> Optional[str]:
+    """Choose the subset that should drive checkpoint ranking and summaries."""
+
+    for subset_name in _primary_subset_priority(phase_name):
+        if subset_name in subset_results:
+            return subset_name
+    if len(subset_results) == 1:
+        return next(iter(subset_results.keys()))
+    return None
+
+
+def select_overall_metrics(
+    subset_results: Mapping[str, Mapping[str, Any]],
+    phase_name: Optional[str] = None,
+) -> dict[str, Any]:
     """Choose the primary metric block from one or more evaluated subsets."""
 
-    if "eval_overall_numeric" in subset_results:
-        return dict(subset_results["eval_overall_numeric"].get("metrics", {}))
-    if "eval_full_split" in subset_results:
-        return dict(subset_results["eval_full_split"].get("metrics", {}))
-    if len(subset_results) == 1:
-        only_payload = next(iter(subset_results.values()))
-        return dict(only_payload.get("metrics", {}))
-    return {}
+    primary_subset_name = select_primary_subset_name(subset_results, phase_name=phase_name)
+    if primary_subset_name is None:
+        return {}
+    return dict(subset_results[primary_subset_name].get("metrics", {}))
 
 
 def _sample_reward_components(
@@ -117,6 +140,14 @@ def _sample_reward_components(
         component_scores[f"reward_component/{name}"] = score
         total += score * reward_weights.get(name, 0.0)
     return component_scores, total
+
+
+def _prepare_prompt_for_generation(prompt: Any, tokenizer: Any) -> Any:
+    """Convert conversational prompts into the text form expected by vLLM generation."""
+
+    if isinstance(prompt, list) and hasattr(tokenizer, "apply_chat_template"):
+        return tokenizer.apply_chat_template(prompt, tokenize=False, add_generation_prompt=True)
+    return prompt
 
 
 def evaluate_dataset_subset(
@@ -148,11 +179,11 @@ def evaluate_dataset_subset(
     all_sample_records: list[dict[str, Any]] = []
 
     for prompt_index in range(len(subset)):
-        prompt = subset[prompt_index]["prompt"]
+        prompt = _prepare_prompt_for_generation(subset[prompt_index]["prompt"], runtime.tokenizer)
         prompt_messages = subset[prompt_index].get("prompt_messages")
         image = subset[prompt_index]["image"]
         gold_answer = subset[prompt_index]["answer"]
-        answer_mode = subset[prompt_index]["answer_mode"]
+        answer_mode = ensure_supported_answer_mode(subset[prompt_index]["answer_mode"])
         precision = subset[prompt_index].get("precision")
         choices = subset[prompt_index].get("choices")
 
@@ -289,6 +320,7 @@ def evaluate_checkpoint(
     reward_funcs: list[Callable[..., list[float]]],
     reward_weights: Mapping[str, float],
     eval_config: EvalConfig,
+    phase_name: Optional[str] = None,
 ) -> dict[str, Any]:
     """Evaluate all checkpoint subsets."""
 
@@ -304,9 +336,10 @@ def evaluate_checkpoint(
             eval_config=eval_config,
         )
 
-    overall_metrics = select_overall_metrics(subset_results)
+    overall_metrics = select_overall_metrics(subset_results, phase_name=phase_name)
     subset_metrics = {name: payload["metrics"] for name, payload in subset_results.items()}
     return {
+        "phase_name": phase_name,
         "metrics": overall_metrics,
         "subset_metrics": subset_metrics,
         "subset_results": subset_results,

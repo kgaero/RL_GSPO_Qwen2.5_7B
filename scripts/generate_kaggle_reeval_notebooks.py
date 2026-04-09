@@ -64,7 +64,11 @@ def build_copy_and_catalog_cell() -> str:
             raise FileNotFoundError(
                 f"Could not find attached code dataset. Visible inputs: {glob.glob('/kaggle/input/*')}"
             )
-        return sorted(matches)[0]
+        if len(matches) > 1:
+            raise RuntimeError(
+                f"Ambiguous code dataset attachment. Matches={matches}. Visible inputs: {glob.glob('/kaggle/input/*')}"
+            )
+        return matches[0]
 
 
     def load_json_if_exists(path):
