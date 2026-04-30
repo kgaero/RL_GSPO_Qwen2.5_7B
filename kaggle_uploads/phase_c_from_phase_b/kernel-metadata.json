@@ -1,0 +1,19 @@
+{
+  "id": "mcgmcg1/rl-gspo-qwen2-5vlm-phase-c-continue",
+  "title": "RL GSPO Qwen2 5VLM Phase C Continue",
+  "code_file": "kaggle_staged_train_phase_c_from_phase_b.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "dataset_sources": [
+    "mcgmcg1/rl-gspo-qwen2-5vlm-staged-code",
+    "mcgmcg1/rl-gspo-qwen2-5vlm-phaseb-best-checkpoint"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

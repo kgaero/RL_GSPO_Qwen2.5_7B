@@ -1,0 +1,7 @@
+{
+  "phase_name": "baseline",
+  "checkpoint_name": "baseline_rank8",
+  "checkpoint_path": "baseline_rank8",
+  "source_phase_name": "baseline",
+  "notes": "Rank-8 zeroed LoRA adapter for base-model evaluation."
+}

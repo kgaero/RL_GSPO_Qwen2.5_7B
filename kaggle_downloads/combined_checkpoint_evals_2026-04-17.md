@@ -1,0 +1,35 @@
+| account | phase | checkpoint | global_step | normalized_exact_match | tolerance_accuracy | parseable_answer_rate | average_total_reward | structure_score | correctness_score | composite_score | source_ref | note |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| DAD | baseline | baseline_rank8 |  | 0.25 | 0.25 | 0.25 | -0.0625 | 0.0 | 0.24999999999999997 | 0.15 | mcgmcg1/rl-gspo-qwen2-5vlm-reeval-base8-phasewise-4 | eval4 baseline on testmini |
+| KG | phase_a | checkpoint-60 | 60 | 0.5 | 0.5 | 1.0 | 5.625 | 0.75 | 0.5499999999999999 | 0.6 | kgaero/rl-gspo-abc-eval4-ms-progress-hfmodel |  |
+| KG | phase_a | checkpoint-120 | 120 | 0.5 | 0.5 | 1.0 | 5.71875 | 0.75 | 0.5499999999999999 | 0.6 | kgaero/rl-gspo-abc-eval4-ms-progress-hfmodel |  |
+| KG | phase_a | checkpoint-180 | 180 | 0.0 | 0.0 | 1.0 | 4.75 | 0.75 | 0.1 | 0.3 | kgaero/rl-gspo-abc-eval4-ms-progress-hfmodel |  |
+| KG | phase_a | checkpoint-237 | 237 | 0.25 | 0.25 | 1.0 | 5.46875 | 0.75 | 0.32499999999999996 | 0.45 | kgaero/rl-gspo-abc-eval4-ms-progress-hfmodel |  |
+| DAD | phase_b | checkpoint-60 | 60 | 0.25 | 0.25 | 0.75 | 3.25625 | 0.55 | 0.3 | 0.36249999999999993 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-120 | 120 | 0.5 | 0.5 | 1.0 | 5.7 | 0.75 | 0.5499999999999999 | 0.6 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-180 | 180 | 0.5 | 0.5 | 1.0 | 5.625 | 0.75 | 0.5499999999999999 | 0.6 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-240 | 240 | 0.5 | 0.5 | 1.0 | 5.949999999999999 | 0.75 | 0.5499999999999999 | 0.6 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-300 | 300 | 0.25 | 0.25 | 1.0 | 4.95 | 0.75 | 0.32499999999999996 | 0.45 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-360 | 360 | 0.0 | 0.0 | 1.0 | 3.7 | 0.75 | 0.1 | 0.3 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-420 | 420 | 0.75 | 0.75 | 1.0 | 8.2 | 0.75 | 0.7749999999999999 | 0.75 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-480 | 480 | 0.0 | 0.0 | 1.0 | 3.7 | 0.75 | 0.1 | 0.3 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-540 | 540 | 0.5 | 0.5 | 1.0 | 6.949999999999999 | 0.75 | 0.5499999999999999 | 0.6 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-1020 | 1020 | 0.5 | 0.5 | 1.0 | 7.699999999999999 | 0.75 | 0.5499999999999999 | 0.6 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-1080 | 1080 | 1.0 | 1.0 | 1.0 | 11.7 | 0.75 | 0.9999999999999999 | 0.9 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-1140 | 1140 | 0.5 | 0.75 | 1.0 | 7.675 | 0.75 | 0.6 | 0.6375000000000001 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-1200 | 1200 | 0.75 | 1.0 | 1.0 | 9.7 | 0.75 | 0.8249999999999998 | 0.7875000000000001 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| DAD | phase_b | checkpoint-1208 | 1208 | 0.75 | 0.75 | 1.0 | 9.674999999999999 | 0.75 | 0.7749999999999999 | 0.75 | mcgmcg1/rl-gspo-qwen2-5vlm-phase-b-continue |  |
+| Mimi | phase_c | checkpoint-60 | 60 | 0.5 | 0.5 | 0.75 | 3.65 | 0.5 | 0.5249999999999999 | 0.5000000000000001 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-120 | 120 | 0.5 | 0.5 | 1.0 | 5.949999999999999 | 0.75 | 0.5499999999999999 | 0.6 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-180 | 180 | 0.25 | 0.5 | 1.0 | 5.075 | 0.75 | 0.375 | 0.4875 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-240 | 240 | 0.25 | 0.25 | 1.0 | 4.95 | 0.75 | 0.32499999999999996 | 0.45 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-300 | 300 | 0.5 | 0.5 | 1.0 | 6.699999999999999 | 0.75 | 0.5499999999999999 | 0.6 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-360 | 360 | 0.25 | 0.25 | 1.0 | 5.075 | 0.75 | 0.32499999999999996 | 0.45 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-420 | 420 | 0.25 | 0.25 | 1.0 | 5.2 | 0.75 | 0.32499999999999996 | 0.45 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-480 | 480 | 0.75 | 0.75 | 1.0 | 9.075 | 0.75 | 0.7749999999999999 | 0.75 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-540 | 540 | 0.75 | 0.75 | 1.0 | 9.075 | 0.75 | 0.7749999999999999 | 0.75 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-600 | 600 | 0.25 | 0.25 | 1.0 | 5.425 | 0.75 | 0.32499999999999996 | 0.45 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_c | checkpoint-602 | 602 | 0.25 | 0.25 | 1.0 | 5.45 | 0.75 | 0.32499999999999996 | 0.45 | pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best |  |
+| Mimi | phase_d | checkpoint-60 | 60 | 0.0 | 0.0 | 0.0 | -1.175 | -0.2 | 0.0 | -0.08750000000000001 | pg1234wwe/phase-d | latest rerun |
+| Mimi | phase_d | checkpoint-120 | 120 | 0.25 | 0.25 | 0.5 | 2.1125 | 0.25 | 0.27499999999999997 | 0.24999999999999997 | pg1234wwe/phase-d | latest rerun |
+| Mimi | phase_d | checkpoint-130 | 130 | 0.0 | 0.0 | 0.25 | 0.26874999999999993 | 0.12499999999999999 | 0.025 | 0.04999999999999998 | pg1234wwe/phase-d | latest rerun |

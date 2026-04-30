@@ -1,0 +1,13 @@
+{
+  "phase": "phase_d",
+  "resume": null,
+  "warm_start_checkpoint": "/kaggle/input/kaggle-staged-train-phase-cd-from-phase-b-best/RL_GSPO_Qwen2.5VLM/outputs_staged_phase_cd_continue/phase_c/checkpoint-480",
+  "dataset_analysis_only": false,
+  "output_root": "outputs_staged_phase_d_continue",
+  "train_split": "test",
+  "eval_split": "testmini",
+  "hardware_profile": "kaggle_t4",
+  "disabled_stages": [],
+  "enabled_stages": [],
+  "enable_multichoice_training": false
+}

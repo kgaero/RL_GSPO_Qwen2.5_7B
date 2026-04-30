@@ -1,0 +1,18 @@
+{
+  "id": "mcgmcg1/rl-gspo-qwen2-5vlm-staged-train-abc-eval4",
+  "title": "RL GSPO Qwen2 5VLM Staged Train A-B-C Eval4",
+  "code_file": "kaggle_staged_train_abc_eval4.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "dataset_sources": [
+    "mcgmcg1/rl-gspo-qwen2-5vlm-staged-code"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

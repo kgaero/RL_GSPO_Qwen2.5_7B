@@ -1,0 +1,2775 @@
+{
+  "history": [
+    {
+      "normalized_exact_match": 0.25,
+      "tolerance_accuracy": 0.25,
+      "best_of_k_accuracy": 0.25,
+      "best_of_k_tolerance_accuracy": 0.25,
+      "parseable_answer_rate": 0.75,
+      "malformed_answer_rate": 0.25,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 0.75,
+      "truncation_rate": 0.25,
+      "average_completion_tokens": 55.0,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 0.75,
+      "sample_level_normalized_exact_match": 0.25,
+      "sample_level_tolerance_accuracy": 0.25,
+      "average_total_reward": 3.25625,
+      "reward_component/brevity_reward_mean": -0.125,
+      "reward_component/correctness_reward_mean": 0.25,
+      "reward_component/finished_reward_mean": 0.5,
+      "reward_component/format_reward_mean": 1.625,
+      "reward_component/parseable_reward_mean": 0.75,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.5,
+      "tolerance_accuracy": 0.5,
+      "best_of_k_accuracy": 0.5,
+      "best_of_k_tolerance_accuracy": 0.5,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 27.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.5,
+      "sample_level_tolerance_accuracy": 0.5,
+      "average_total_reward": 5.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.5,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.5,
+      "tolerance_accuracy": 0.5,
+      "best_of_k_accuracy": 0.5,
+      "best_of_k_tolerance_accuracy": 0.5,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 34.75,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.5,
+      "sample_level_tolerance_accuracy": 0.5,
+      "average_total_reward": 5.625,
+      "reward_component/brevity_reward_mean": 0.625,
+      "reward_component/correctness_reward_mean": 0.5,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.5,
+      "tolerance_accuracy": 0.5,
+      "best_of_k_accuracy": 0.5,
+      "best_of_k_tolerance_accuracy": 0.5,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 24.75,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.5,
+      "sample_level_tolerance_accuracy": 0.5,
+      "average_total_reward": 5.949999999999999,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.5,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.25,
+      "tolerance_accuracy": 0.25,
+      "best_of_k_accuracy": 0.25,
+      "best_of_k_tolerance_accuracy": 0.25,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 26.75,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.25,
+      "sample_level_tolerance_accuracy": 0.25,
+      "average_total_reward": 4.95,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.25,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.0,
+      "tolerance_accuracy": 0.0,
+      "best_of_k_accuracy": 0.0,
+      "best_of_k_tolerance_accuracy": 0.0,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 26.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.0,
+      "sample_level_tolerance_accuracy": 0.0,
+      "average_total_reward": 3.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.0,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.75,
+      "tolerance_accuracy": 0.75,
+      "best_of_k_accuracy": 0.75,
+      "best_of_k_tolerance_accuracy": 0.75,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 25.5,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.75,
+      "sample_level_tolerance_accuracy": 0.75,
+      "average_total_reward": 8.2,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.75,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.0,
+      "tolerance_accuracy": 0.0,
+      "best_of_k_accuracy": 0.0,
+      "best_of_k_tolerance_accuracy": 0.0,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 28.0,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.0,
+      "sample_level_tolerance_accuracy": 0.0,
+      "average_total_reward": 3.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.0,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.5,
+      "tolerance_accuracy": 0.5,
+      "best_of_k_accuracy": 0.5,
+      "best_of_k_tolerance_accuracy": 0.5,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 24.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.5,
+      "sample_level_tolerance_accuracy": 0.5,
+      "average_total_reward": 6.949999999999999,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.5,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.5,
+      "tolerance_accuracy": 0.5,
+      "best_of_k_accuracy": 0.5,
+      "best_of_k_tolerance_accuracy": 0.5,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 23.75,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.5,
+      "sample_level_tolerance_accuracy": 0.5,
+      "average_total_reward": 6.949999999999999,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.5,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.5,
+      "tolerance_accuracy": 0.5,
+      "best_of_k_accuracy": 0.5,
+      "best_of_k_tolerance_accuracy": 0.5,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 25.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.5,
+      "sample_level_tolerance_accuracy": 0.5,
+      "average_total_reward": 7.199999999999999,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.5,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.75,
+      "tolerance_accuracy": 0.75,
+      "best_of_k_accuracy": 0.75,
+      "best_of_k_tolerance_accuracy": 0.75,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 25.75,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.75,
+      "sample_level_tolerance_accuracy": 0.75,
+      "average_total_reward": 9.325,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.75,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.25,
+      "tolerance_accuracy": 0.25,
+      "best_of_k_accuracy": 0.25,
+      "best_of_k_tolerance_accuracy": 0.25,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 27.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.25,
+      "sample_level_tolerance_accuracy": 0.25,
+      "average_total_reward": 5.575,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.25,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.75,
+      "tolerance_accuracy": 0.75,
+      "best_of_k_accuracy": 0.75,
+      "best_of_k_tolerance_accuracy": 0.75,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 26.75,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.75,
+      "sample_level_tolerance_accuracy": 0.75,
+      "average_total_reward": 9.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.75,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.25,
+      "tolerance_accuracy": 0.25,
+      "best_of_k_accuracy": 0.25,
+      "best_of_k_tolerance_accuracy": 0.25,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 25.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.25,
+      "sample_level_tolerance_accuracy": 0.25,
+      "average_total_reward": 5.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.25,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.25,
+      "tolerance_accuracy": 0.25,
+      "best_of_k_accuracy": 0.25,
+      "best_of_k_tolerance_accuracy": 0.25,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 26.5,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.25,
+      "sample_level_tolerance_accuracy": 0.25,
+      "average_total_reward": 5.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.25,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 0.5,
+      "tolerance_accuracy": 0.5,
+      "best_of_k_accuracy": 0.5,
+      "best_of_k_tolerance_accuracy": 0.5,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 28.75,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 0.5,
+      "sample_level_tolerance_accuracy": 0.5,
+      "average_total_reward": 7.699999999999999,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 0.5,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    {
+      "normalized_exact_match": 1.0,
+      "tolerance_accuracy": 1.0,
+      "best_of_k_accuracy": 1.0,
+      "best_of_k_tolerance_accuracy": 1.0,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 28.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 1.0,
+      "sample_level_tolerance_accuracy": 1.0,
+      "average_total_reward": 11.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 1.0,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    }
+  ],
+  "reward_weights": {
+    "format_reward": 0.75,
+    "parseable_reward": 0.75,
+    "finished_reward": 1.25,
+    "correctness_reward": 8.0,
+    "brevity_reward": 0.2,
+    "tolerance_reward": 0.0
+  },
+  "decision_history": [
+    {
+      "history_length_before": 0,
+      "history_length_after": 1,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.25,
+        "tolerance_accuracy": 0.25,
+        "best_of_k_accuracy": 0.25,
+        "best_of_k_tolerance_accuracy": 0.25,
+        "parseable_answer_rate": 0.75,
+        "malformed_answer_rate": 0.25,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 0.75,
+        "truncation_rate": 0.25,
+        "average_completion_tokens": 55.0,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 0.75,
+        "sample_level_normalized_exact_match": 0.25,
+        "sample_level_tolerance_accuracy": 0.25,
+        "average_total_reward": 3.25625,
+        "reward_component/brevity_reward_mean": -0.125,
+        "reward_component/correctness_reward_mean": 0.25,
+        "reward_component/finished_reward_mean": 0.5,
+        "reward_component/format_reward_mean": 1.625,
+        "reward_component/parseable_reward_mean": 0.75,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.0,
+        "correctness_reward": 4.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 4.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": true,
+        "format_guard": true,
+        "finish_guard": true,
+        "stable_structure": false,
+        "stable_window_ready": false,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": null,
+      "exact_current": 0.25,
+      "exact_delta": null,
+      "avg_token_fraction": 0.859375,
+      "rule_events": [
+        {
+          "rule_key": "parseable_guard",
+          "component": "parseable_reward",
+          "before": 0.75,
+          "after": 0.75,
+          "changed": false,
+          "evidence": {
+            "parseable_answer_rate": 0.75,
+            "parseable_floor_threshold": 0.85,
+            "parseable_guard_weight": 0.75
+          }
+        },
+        {
+          "rule_key": "format_guard",
+          "component": "format_reward",
+          "before": 0.75,
+          "after": 0.75,
+          "changed": false,
+          "evidence": {
+            "solution_tag_compliance": 0.75,
+            "solution_tag_floor_threshold": 0.9,
+            "reasoning_tag_compliance": 1.0,
+            "reasoning_tag_floor_threshold": 0.88,
+            "malformed_answer_rate": 0.25,
+            "malformed_ceiling_threshold": 0.1,
+            "formatting_guard_weight": 0.75
+          }
+        },
+        {
+          "rule_key": "finish_guard",
+          "component": "finished_reward",
+          "before": 1.0,
+          "after": 1.25,
+          "changed": true,
+          "evidence": {
+            "truncation_rate": 0.25,
+            "truncation_ceiling_threshold": 0.15,
+            "average_completion_tokens": 55.0,
+            "average_token_fraction_threshold": 0.85,
+            "max_completion_length": 64,
+            "finish_step": 0.25
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.0,
+          "after": 1.25,
+          "delta": 0.25
+        },
+        "correctness_reward": {
+          "before": 4.0,
+          "after": 4.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "finished_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 1,
+      "history_length_after": 2,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.5,
+        "tolerance_accuracy": 0.5,
+        "best_of_k_accuracy": 0.5,
+        "best_of_k_tolerance_accuracy": 0.5,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 27.25,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.5,
+        "sample_level_tolerance_accuracy": 0.5,
+        "average_total_reward": 5.7,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.5,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 4.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 4.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": 0.25,
+      "exact_current": 0.5,
+      "exact_delta": 0.25,
+      "avg_token_fraction": 0.42578125,
+      "rule_events": [],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 4.0,
+          "after": 4.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 2,
+      "history_length_after": 3,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.5,
+        "tolerance_accuracy": 0.5,
+        "best_of_k_accuracy": 0.5,
+        "best_of_k_tolerance_accuracy": 0.5,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 34.75,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.5,
+        "sample_level_tolerance_accuracy": 0.5,
+        "average_total_reward": 5.625,
+        "reward_component/brevity_reward_mean": 0.625,
+        "reward_component/correctness_reward_mean": 0.5,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 4.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 4.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.5,
+      "exact_current": 0.5,
+      "exact_delta": 0.0,
+      "avg_token_fraction": 0.54296875,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 4.0,
+          "after": 4.5,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.5,
+            "exact_current": 0.5,
+            "exact_delta": 0.0,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 4.0,
+          "after": 4.5,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 3,
+      "history_length_after": 4,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.5,
+        "tolerance_accuracy": 0.5,
+        "best_of_k_accuracy": 0.5,
+        "best_of_k_tolerance_accuracy": 0.5,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 24.75,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.5,
+        "sample_level_tolerance_accuracy": 0.5,
+        "average_total_reward": 5.949999999999999,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.5,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 4.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 5.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.5,
+      "exact_current": 0.5,
+      "exact_delta": 0.0,
+      "avg_token_fraction": 0.38671875,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 4.5,
+          "after": 5.0,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.5,
+            "exact_current": 0.5,
+            "exact_delta": 0.0,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 4.5,
+          "after": 5.0,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 4,
+      "history_length_after": 5,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.25,
+        "tolerance_accuracy": 0.25,
+        "best_of_k_accuracy": 0.25,
+        "best_of_k_tolerance_accuracy": 0.25,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 26.75,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.25,
+        "sample_level_tolerance_accuracy": 0.25,
+        "average_total_reward": 4.95,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.25,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 5.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 5.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.5,
+      "exact_current": 0.25,
+      "exact_delta": -0.25,
+      "avg_token_fraction": 0.41796875,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 5.0,
+          "after": 5.5,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.5,
+            "exact_current": 0.25,
+            "exact_delta": -0.25,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 5.0,
+          "after": 5.5,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 5,
+      "history_length_after": 6,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.0,
+        "tolerance_accuracy": 0.0,
+        "best_of_k_accuracy": 0.0,
+        "best_of_k_tolerance_accuracy": 0.0,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 26.25,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.0,
+        "sample_level_tolerance_accuracy": 0.0,
+        "average_total_reward": 3.7,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.0,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 5.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.25,
+      "exact_current": 0.0,
+      "exact_delta": -0.25,
+      "avg_token_fraction": 0.41015625,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 5.5,
+          "after": 6.0,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.25,
+            "exact_current": 0.0,
+            "exact_delta": -0.25,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 5.5,
+          "after": 6.0,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 6,
+      "history_length_after": 7,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.75,
+        "tolerance_accuracy": 0.75,
+        "best_of_k_accuracy": 0.75,
+        "best_of_k_tolerance_accuracy": 0.75,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 25.5,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.75,
+        "sample_level_tolerance_accuracy": 0.75,
+        "average_total_reward": 8.2,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.75,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": 0.0,
+      "exact_current": 0.75,
+      "exact_delta": 0.75,
+      "avg_token_fraction": 0.3984375,
+      "rule_events": [],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 6.0,
+          "after": 6.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 7,
+      "history_length_after": 8,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.0,
+        "tolerance_accuracy": 0.0,
+        "best_of_k_accuracy": 0.0,
+        "best_of_k_tolerance_accuracy": 0.0,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 28.0,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.0,
+        "sample_level_tolerance_accuracy": 0.0,
+        "average_total_reward": 3.7,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.0,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.75,
+      "exact_current": 0.0,
+      "exact_delta": -0.75,
+      "avg_token_fraction": 0.4375,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 6.0,
+          "after": 6.5,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.75,
+            "exact_current": 0.0,
+            "exact_delta": -0.75,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 6.0,
+          "after": 6.5,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 8,
+      "history_length_after": 9,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.5,
+        "tolerance_accuracy": 0.5,
+        "best_of_k_accuracy": 0.5,
+        "best_of_k_tolerance_accuracy": 0.5,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 24.25,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.5,
+        "sample_level_tolerance_accuracy": 0.5,
+        "average_total_reward": 6.949999999999999,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.5,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": 0.0,
+      "exact_current": 0.5,
+      "exact_delta": 0.5,
+      "avg_token_fraction": 0.37890625,
+      "rule_events": [],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 6.5,
+          "after": 6.5,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 9,
+      "history_length_after": 10,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.5,
+        "tolerance_accuracy": 0.5,
+        "best_of_k_accuracy": 0.5,
+        "best_of_k_tolerance_accuracy": 0.5,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 23.75,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.5,
+        "sample_level_tolerance_accuracy": 0.5,
+        "average_total_reward": 6.949999999999999,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.5,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 6.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 7.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.5,
+      "exact_current": 0.5,
+      "exact_delta": 0.0,
+      "avg_token_fraction": 0.37109375,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 6.5,
+          "after": 7.0,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.5,
+            "exact_current": 0.5,
+            "exact_delta": 0.0,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 6.5,
+          "after": 7.0,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 10,
+      "history_length_after": 11,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.5,
+        "tolerance_accuracy": 0.5,
+        "best_of_k_accuracy": 0.5,
+        "best_of_k_tolerance_accuracy": 0.5,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 25.25,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.5,
+        "sample_level_tolerance_accuracy": 0.5,
+        "average_total_reward": 7.199999999999999,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.5,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 7.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 7.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.5,
+      "exact_current": 0.5,
+      "exact_delta": 0.0,
+      "avg_token_fraction": 0.39453125,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 7.0,
+          "after": 7.5,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.5,
+            "exact_current": 0.5,
+            "exact_delta": 0.0,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 7.0,
+          "after": 7.5,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 11,
+      "history_length_after": 12,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.75,
+        "tolerance_accuracy": 0.75,
+        "best_of_k_accuracy": 0.75,
+        "best_of_k_tolerance_accuracy": 0.75,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 25.75,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.75,
+        "sample_level_tolerance_accuracy": 0.75,
+        "average_total_reward": 9.325,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.75,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 7.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 7.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": 0.5,
+      "exact_current": 0.75,
+      "exact_delta": 0.25,
+      "avg_token_fraction": 0.40234375,
+      "rule_events": [],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 7.5,
+          "after": 7.5,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 12,
+      "history_length_after": 13,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.25,
+        "tolerance_accuracy": 0.25,
+        "best_of_k_accuracy": 0.25,
+        "best_of_k_tolerance_accuracy": 0.25,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 27.25,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.25,
+        "sample_level_tolerance_accuracy": 0.25,
+        "average_total_reward": 5.575,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.25,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 7.5,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.75,
+      "exact_current": 0.25,
+      "exact_delta": -0.5,
+      "avg_token_fraction": 0.42578125,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 7.5,
+          "after": 8.0,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.75,
+            "exact_current": 0.25,
+            "exact_delta": -0.5,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 7.5,
+          "after": 8.0,
+          "delta": 0.5
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [
+        "correctness_reward"
+      ],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 13,
+      "history_length_after": 14,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.75,
+        "tolerance_accuracy": 0.75,
+        "best_of_k_accuracy": 0.75,
+        "best_of_k_tolerance_accuracy": 0.75,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 26.75,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.75,
+        "sample_level_tolerance_accuracy": 0.75,
+        "average_total_reward": 9.7,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.75,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": 0.25,
+      "exact_current": 0.75,
+      "exact_delta": 0.5,
+      "avg_token_fraction": 0.41796875,
+      "rule_events": [],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 8.0,
+          "after": 8.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 14,
+      "history_length_after": 15,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.25,
+        "tolerance_accuracy": 0.25,
+        "best_of_k_accuracy": 0.25,
+        "best_of_k_tolerance_accuracy": 0.25,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 25.25,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.25,
+        "sample_level_tolerance_accuracy": 0.25,
+        "average_total_reward": 5.7,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.25,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.75,
+      "exact_current": 0.25,
+      "exact_delta": -0.5,
+      "avg_token_fraction": 0.39453125,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 8.0,
+          "after": 8.5,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.75,
+            "exact_current": 0.25,
+            "exact_delta": -0.5,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 8.0,
+          "after": 8.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": [
+        {
+          "component": "correctness_reward",
+          "before": 8.5,
+          "after": 8.0,
+          "lower_bound": 1.0,
+          "upper_bound": 8.0
+        }
+      ]
+    },
+    {
+      "history_length_before": 15,
+      "history_length_after": 16,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.25,
+        "tolerance_accuracy": 0.25,
+        "best_of_k_accuracy": 0.25,
+        "best_of_k_tolerance_accuracy": 0.25,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 26.5,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.25,
+        "sample_level_tolerance_accuracy": 0.25,
+        "average_total_reward": 5.7,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.25,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": true,
+        "correctness_escalation": true
+      },
+      "exact_previous": 0.25,
+      "exact_current": 0.25,
+      "exact_delta": 0.0,
+      "avg_token_fraction": 0.4140625,
+      "rule_events": [
+        {
+          "rule_key": "correctness_escalation",
+          "component": "correctness_reward",
+          "before": 8.0,
+          "after": 8.5,
+          "changed": true,
+          "evidence": {
+            "exact_previous": 0.25,
+            "exact_current": 0.25,
+            "exact_delta": 0.0,
+            "exact_match_plateau_delta": 0.02,
+            "stable_window": 2,
+            "correctness_step": 0.5
+          }
+        }
+      ],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 8.0,
+          "after": 8.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": [
+        {
+          "component": "correctness_reward",
+          "before": 8.5,
+          "after": 8.0,
+          "lower_bound": 1.0,
+          "upper_bound": 8.0
+        }
+      ]
+    },
+    {
+      "history_length_before": 16,
+      "history_length_after": 17,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 0.5,
+        "tolerance_accuracy": 0.5,
+        "best_of_k_accuracy": 0.5,
+        "best_of_k_tolerance_accuracy": 0.5,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 28.75,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 0.5,
+        "sample_level_tolerance_accuracy": 0.5,
+        "average_total_reward": 7.699999999999999,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 0.5,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": 0.25,
+      "exact_current": 0.5,
+      "exact_delta": 0.25,
+      "avg_token_fraction": 0.44921875,
+      "rule_events": [],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 8.0,
+          "after": 8.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": []
+    },
+    {
+      "history_length_before": 17,
+      "history_length_after": 18,
+      "max_completion_length": 64,
+      "metrics": {
+        "normalized_exact_match": 1.0,
+        "tolerance_accuracy": 1.0,
+        "best_of_k_accuracy": 1.0,
+        "best_of_k_tolerance_accuracy": 1.0,
+        "parseable_answer_rate": 1.0,
+        "malformed_answer_rate": 0.0,
+        "reasoning_tag_compliance": 1.0,
+        "solution_tag_compliance": 1.0,
+        "truncation_rate": 0.0,
+        "average_completion_tokens": 28.25,
+        "repetition_rate": 0.0,
+        "sampled_answer_diversity": 1.0,
+        "sample_level_normalized_exact_match": 1.0,
+        "sample_level_tolerance_accuracy": 1.0,
+        "average_total_reward": 11.7,
+        "reward_component/brevity_reward_mean": 1.0,
+        "reward_component/correctness_reward_mean": 1.0,
+        "reward_component/finished_reward_mean": 1.0,
+        "reward_component/format_reward_mean": 2.0,
+        "reward_component/parseable_reward_mean": 1.0,
+        "reward_component/tolerance_reward_mean": 0.0
+      },
+      "thresholds": {
+        "parseable_floor_threshold": 0.85,
+        "parseable_stable_threshold": 0.92,
+        "solution_tag_floor_threshold": 0.9,
+        "solution_tag_stable_threshold": 0.95,
+        "reasoning_tag_floor_threshold": 0.88,
+        "reasoning_tag_stable_threshold": 0.93,
+        "malformed_ceiling_threshold": 0.1,
+        "malformed_stable_threshold": 0.05,
+        "truncation_ceiling_threshold": 0.15,
+        "truncation_stable_threshold": 0.08,
+        "average_token_fraction_threshold": 0.85,
+        "exact_match_plateau_delta": 0.02,
+        "stable_window": 2,
+        "correctness_step": 0.5,
+        "finish_step": 0.25,
+        "parseable_guard_weight": 0.75,
+        "formatting_guard_weight": 0.75
+      },
+      "pre_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "post_update_weights": {
+        "format_reward": 0.75,
+        "parseable_reward": 0.75,
+        "finished_reward": 1.25,
+        "correctness_reward": 8.0,
+        "brevity_reward": 0.2,
+        "tolerance_reward": 0.0
+      },
+      "rule_status": {
+        "parseable_guard": false,
+        "format_guard": false,
+        "finish_guard": false,
+        "stable_structure": true,
+        "stable_window_ready": true,
+        "correctness_plateau": false,
+        "correctness_escalation": false
+      },
+      "exact_previous": 0.5,
+      "exact_current": 1.0,
+      "exact_delta": 0.5,
+      "avg_token_fraction": 0.44140625,
+      "rule_events": [],
+      "weight_deltas": {
+        "format_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "parseable_reward": {
+          "before": 0.75,
+          "after": 0.75,
+          "delta": 0.0
+        },
+        "finished_reward": {
+          "before": 1.25,
+          "after": 1.25,
+          "delta": 0.0
+        },
+        "correctness_reward": {
+          "before": 8.0,
+          "after": 8.0,
+          "delta": 0.0
+        },
+        "brevity_reward": {
+          "before": 0.2,
+          "after": 0.2,
+          "delta": 0.0
+        },
+        "tolerance_reward": {
+          "before": 0.0,
+          "after": 0.0,
+          "delta": 0.0
+        }
+      },
+      "changed_components": [],
+      "clamped_components": []
+    }
+  ],
+  "last_decision": {
+    "history_length_before": 17,
+    "history_length_after": 18,
+    "max_completion_length": 64,
+    "metrics": {
+      "normalized_exact_match": 1.0,
+      "tolerance_accuracy": 1.0,
+      "best_of_k_accuracy": 1.0,
+      "best_of_k_tolerance_accuracy": 1.0,
+      "parseable_answer_rate": 1.0,
+      "malformed_answer_rate": 0.0,
+      "reasoning_tag_compliance": 1.0,
+      "solution_tag_compliance": 1.0,
+      "truncation_rate": 0.0,
+      "average_completion_tokens": 28.25,
+      "repetition_rate": 0.0,
+      "sampled_answer_diversity": 1.0,
+      "sample_level_normalized_exact_match": 1.0,
+      "sample_level_tolerance_accuracy": 1.0,
+      "average_total_reward": 11.7,
+      "reward_component/brevity_reward_mean": 1.0,
+      "reward_component/correctness_reward_mean": 1.0,
+      "reward_component/finished_reward_mean": 1.0,
+      "reward_component/format_reward_mean": 2.0,
+      "reward_component/parseable_reward_mean": 1.0,
+      "reward_component/tolerance_reward_mean": 0.0
+    },
+    "thresholds": {
+      "parseable_floor_threshold": 0.85,
+      "parseable_stable_threshold": 0.92,
+      "solution_tag_floor_threshold": 0.9,
+      "solution_tag_stable_threshold": 0.95,
+      "reasoning_tag_floor_threshold": 0.88,
+      "reasoning_tag_stable_threshold": 0.93,
+      "malformed_ceiling_threshold": 0.1,
+      "malformed_stable_threshold": 0.05,
+      "truncation_ceiling_threshold": 0.15,
+      "truncation_stable_threshold": 0.08,
+      "average_token_fraction_threshold": 0.85,
+      "exact_match_plateau_delta": 0.02,
+      "stable_window": 2,
+      "correctness_step": 0.5,
+      "finish_step": 0.25,
+      "parseable_guard_weight": 0.75,
+      "formatting_guard_weight": 0.75
+    },
+    "pre_update_weights": {
+      "format_reward": 0.75,
+      "parseable_reward": 0.75,
+      "finished_reward": 1.25,
+      "correctness_reward": 8.0,
+      "brevity_reward": 0.2,
+      "tolerance_reward": 0.0
+    },
+    "post_update_weights": {
+      "format_reward": 0.75,
+      "parseable_reward": 0.75,
+      "finished_reward": 1.25,
+      "correctness_reward": 8.0,
+      "brevity_reward": 0.2,
+      "tolerance_reward": 0.0
+    },
+    "rule_status": {
+      "parseable_guard": false,
+      "format_guard": false,
+      "finish_guard": false,
+      "stable_structure": true,
+      "stable_window_ready": true,
+      "correctness_plateau": false,
+      "correctness_escalation": false
+    },
+    "exact_previous": 0.5,
+    "exact_current": 1.0,
+    "exact_delta": 0.5,
+    "avg_token_fraction": 0.44140625,
+    "rule_events": [],
+    "weight_deltas": {
+      "format_reward": {
+        "before": 0.75,
+        "after": 0.75,
+        "delta": 0.0
+      },
+      "parseable_reward": {
+        "before": 0.75,
+        "after": 0.75,
+        "delta": 0.0
+      },
+      "finished_reward": {
+        "before": 1.25,
+        "after": 1.25,
+        "delta": 0.0
+      },
+      "correctness_reward": {
+        "before": 8.0,
+        "after": 8.0,
+        "delta": 0.0
+      },
+      "brevity_reward": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0.0
+      },
+      "tolerance_reward": {
+        "before": 0.0,
+        "after": 0.0,
+        "delta": 0.0
+      }
+    },
+    "changed_components": [],
+    "clamped_components": []
+  }
+}

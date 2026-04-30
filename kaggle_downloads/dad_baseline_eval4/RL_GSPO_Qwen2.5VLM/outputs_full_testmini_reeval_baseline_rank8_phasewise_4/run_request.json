@@ -1,0 +1,26 @@
+{
+  "default_phase": "phase_c",
+  "output_root": "outputs_full_testmini_reeval_baseline_rank8_phasewise_4",
+  "eval_split": "testmini",
+  "hardware_profile": "kaggle_t4",
+  "model_lora_rank": 8,
+  "model_max_lora_rank": 8,
+  "model_lora_alpha": 8,
+  "max_eval_examples_per_subset": 4,
+  "save_full_completion_text": false,
+  "overall_only": false,
+  "full_split": false,
+  "case_pack": null,
+  "cases_per_group": 2,
+  "disabled_stages": [],
+  "enabled_stages": [],
+  "targets": [
+    {
+      "label": "baseline_rank8",
+      "checkpoint": "/kaggle/working/RL_GSPO_Qwen2.5VLM/baseline_rank8",
+      "phase": "phase_a",
+      "max_completion_length": 64,
+      "reward_weights_json": null
+    }
+  ]
+}

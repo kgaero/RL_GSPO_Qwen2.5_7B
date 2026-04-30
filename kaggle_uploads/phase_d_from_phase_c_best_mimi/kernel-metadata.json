@@ -1,0 +1,22 @@
+{
+  "id": "pg1234wwe/notebooka5a804aafe",
+  "id_no": 115814543,
+  "title": "rl-gspo-qwen2-5vlm-phase-d-continue",
+  "code_file": "kaggle_staged_train_phase_d_from_phase_c_best.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "dataset_sources": [
+    "kgaero/rl-gspo-qwen2-5vlm-staged-code-v2",
+    "kgaero/qwen2-5-vl-7b-unsloth-bnb4-cache-hf"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [
+    "pg1234wwe/kaggle-staged-train-phase-cd-from-phase-b-best"
+  ],
+  "model_sources": []
+}

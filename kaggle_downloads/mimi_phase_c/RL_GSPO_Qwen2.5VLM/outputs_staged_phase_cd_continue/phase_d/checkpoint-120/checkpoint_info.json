@@ -1,0 +1,37 @@
+{
+  "checkpoint_path": "outputs_staged_phase_cd_continue/phase_d/checkpoint-120",
+  "global_step": 120,
+  "phase_name": "phase_d",
+  "selector_phase_name": "phase_d",
+  "metrics": {
+    "normalized_exact_match": 0.0,
+    "tolerance_accuracy": 0.0,
+    "best_of_k_accuracy": 0.0,
+    "best_of_k_tolerance_accuracy": 0.0,
+    "parseable_answer_rate": 0.75,
+    "malformed_answer_rate": 0.25,
+    "reasoning_tag_compliance": 1.0,
+    "solution_tag_compliance": 1.0,
+    "truncation_rate": 0.0,
+    "average_completion_tokens": 44.0,
+    "repetition_rate": 0.0,
+    "sampled_answer_diversity": 0.75,
+    "sample_level_normalized_exact_match": 0.0,
+    "sample_level_tolerance_accuracy": 0.0,
+    "average_total_reward": 2.1374999999999997,
+    "reward_component/brevity_reward_mean": 0.875,
+    "reward_component/correctness_reward_mean": 0.0,
+    "reward_component/finished_reward_mean": 0.75,
+    "reward_component/format_reward_mean": 1.875,
+    "reward_component/parseable_reward_mean": 0.75,
+    "reward_component/tolerance_reward_mean": 0.0,
+    "structure_score": 0.625,
+    "correctness_score": 0.07500000000000001,
+    "composite_score": 0.25
+  },
+  "scores": {
+    "structure_score": 0.625,
+    "correctness_score": 0.07500000000000001,
+    "composite_score": 0.25
+  }
+}

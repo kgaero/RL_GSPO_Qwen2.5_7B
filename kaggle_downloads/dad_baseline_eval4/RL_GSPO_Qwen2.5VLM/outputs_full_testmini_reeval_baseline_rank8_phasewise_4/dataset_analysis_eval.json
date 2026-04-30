@@ -1,0 +1,531 @@
+{
+  "total_rows": 1000,
+  "field_counts": {
+    "question_type": {
+      "free_form": 460,
+      "multi_choice": 540
+    },
+    "answer_type": {
+      "float": 40,
+      "integer": 418,
+      "text": 540,
+      "list": 2
+    },
+    "language": {
+      "english": 936,
+      "chinese": 62,
+      "persian": 2
+    },
+    "context": {
+      "scientific figure": 92,
+      "natural image": 109,
+      "geometry diagram": 216,
+      "synthetic scene": 124,
+      "abstract scene": 61,
+      "puzzle test": 36,
+      "bar chart": 119,
+      "function plot": 62,
+      "scatter plot": 36,
+      "line plot": 39,
+      "table": 70,
+      "pie chart": 12,
+      "document image": 12,
+      "medical image": 3,
+      "map chart": 8,
+      "violin plot": 1
+    },
+    "context_family": {
+      "scientific figure": 92,
+      "natural image": 109,
+      "geometry diagram": 216,
+      "synthetic scene": 124,
+      "abstract scene": 61,
+      "puzzle test": 36,
+      "chart": 139,
+      "plot": 138,
+      "table": 70,
+      "document image": 12,
+      "medical image": 3
+    },
+    "source": {
+      "scibench": 17,
+      "textvqa": 6,
+      "geoqa+": 62,
+      "clevr-math": 62,
+      "geometry3k": 62,
+      "unigeo": 62,
+      "iconqa": 62,
+      "super-clevr": 62,
+      "iqtest": 37,
+      "dvqa": 62,
+      "tqa": 16,
+      "scienceqa": 9,
+      "chartqa": 50,
+      "kvqa": 60,
+      "functionqa": 62,
+      "figureqa": 62,
+      "tabmwp": 62,
+      "vqa2.0": 32,
+      "ai2d": 43,
+      "geos": 22,
+      "theoremqa": 11,
+      "paperqa": 19,
+      "vqa-as": 7,
+      "plotqa": 19,
+      "a-okvqa": 6,
+      "parsvqa-caps": 2,
+      "docvqa": 12,
+      "pmc-vqa": 1,
+      "mapqa": 8,
+      "vizwiz": 1,
+      "vqa-rad": 2
+    },
+    "task": {
+      "textbook question answering": 158,
+      "visual question answering": 179,
+      "geometry problem solving": 208,
+      "math word problem": 186,
+      "figure question answering": 269
+    },
+    "category": {
+      "math-targeted-vqa": 540,
+      "general-vqa": 460
+    },
+    "grade": {
+      "college": 112,
+      "daily life": 381,
+      "high school": 306,
+      "elementary school": 201
+    },
+    "skills": {
+      "scientific reasoning": 122,
+      "numeric commonsense": 144,
+      "arithmetic reasoning": 353,
+      "geometry reasoning": 239,
+      "algebraic reasoning": 281,
+      "logical reasoning": 37,
+      "statistical reasoning": 301
+    },
+    "precision_bucket": {
+      "present": 40,
+      "missing": 960
+    },
+    "unit_bucket": {
+      "missing": 950,
+      "present": 50
+    }
+  },
+  "stage_summaries": {
+    "stage1_easy_numeric": {
+      "count": 195,
+      "recommended_train_size": 156,
+      "recommended_eval_size": 39,
+      "top_context_families": [
+        [
+          "natural image",
+          81
+        ],
+        [
+          "synthetic scene",
+          63
+        ],
+        [
+          "table",
+          51
+        ]
+      ],
+      "top_sources": [
+        [
+          "clevr-math",
+          62
+        ],
+        [
+          "kvqa",
+          60
+        ],
+        [
+          "tabmwp",
+          47
+        ],
+        [
+          "vqa2.0",
+          14
+        ],
+        [
+          "textvqa",
+          6
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "2",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "context": "natural image",
+          "source": "textvqa",
+          "skills": [
+            "numeric commonsense",
+            "arithmetic reasoning"
+          ],
+          "answer": "1000",
+          "question": "what is the total volume of the measuring cup?"
+        },
+        {
+          "pid": "4",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "context": "synthetic scene",
+          "source": "clevr-math",
+          "skills": [
+            "geometry reasoning",
+            "arithmetic reasoning"
+          ],
+          "answer": "4",
+          "question": "Subtract all large rubber spheres. Subtract all big shiny cylinders. How many objects are left?"
+        },
+        {
+          "pid": "11",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "context": "synthetic scene",
+          "source": "clevr-math",
+          "skills": [
+            "arithmetic reasoning"
+          ],
+          "answer": "5",
+          "question": "Subtract all red things. Subtract all tiny matte balls. How many objects are left?"
+        }
+      ]
+    },
+    "stage2_float_numeric": {
+      "count": 287,
+      "recommended_train_size": 229,
+      "recommended_eval_size": 57,
+      "top_context_families": [
+        [
+          "chart",
+          92
+        ],
+        [
+          "natural image",
+          82
+        ],
+        [
+          "table",
+          57
+        ],
+        [
+          "plot",
+          35
+        ],
+        [
+          "scientific figure",
+          21
+        ]
+      ],
+      "top_sources": [
+        [
+          "dvqa",
+          62
+        ],
+        [
+          "kvqa",
+          60
+        ],
+        [
+          "tabmwp",
+          53
+        ],
+        [
+          "chartqa",
+          43
+        ],
+        [
+          "plotqa",
+          19
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "1",
+          "question_type": "free_form",
+          "answer_type": "float",
+          "context": "scientific figure",
+          "source": "scibench",
+          "skills": [
+            "scientific reasoning"
+          ],
+          "answer": "1.2",
+          "question": "When a spring does work on an object, we cannot find the work by simply multiplying the spring force by the object's displacement. The reason is that there is no one value for the "
+        },
+        {
+          "pid": "2",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "context": "natural image",
+          "source": "textvqa",
+          "skills": [
+            "numeric commonsense",
+            "arithmetic reasoning"
+          ],
+          "answer": "1000",
+          "question": "what is the total volume of the measuring cup?"
+        },
+        {
+          "pid": "13",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "context": "bar chart",
+          "source": "dvqa",
+          "skills": [
+            "statistical reasoning"
+          ],
+          "answer": "0",
+          "question": "How many objects are preferred by more than 90 percent of people in at least one category?"
+        }
+      ]
+    },
+    "stage3_hard_numeric": {
+      "count": 119,
+      "recommended_train_size": 95,
+      "recommended_eval_size": 23,
+      "top_context_families": [
+        [
+          "plot",
+          60
+        ],
+        [
+          "scientific figure",
+          24
+        ],
+        [
+          "abstract scene",
+          22
+        ],
+        [
+          "geometry diagram",
+          13
+        ]
+      ],
+      "top_sources": [
+        [
+          "iconqa",
+          28
+        ],
+        [
+          "functionqa",
+          26
+        ],
+        [
+          "plotqa",
+          19
+        ],
+        [
+          "scibench",
+          17
+        ],
+        [
+          "chartqa",
+          14
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "1",
+          "question_type": "free_form",
+          "answer_type": "float",
+          "context": "scientific figure",
+          "source": "scibench",
+          "skills": [
+            "scientific reasoning"
+          ],
+          "answer": "1.2",
+          "question": "When a spring does work on an object, we cannot find the work by simply multiplying the spring force by the object's displacement. The reason is that there is no one value for the "
+        },
+        {
+          "pid": "21",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "context": "abstract scene",
+          "source": "iconqa",
+          "skills": [
+            "arithmetic reasoning"
+          ],
+          "answer": "2",
+          "question": "Fill in the blank to describe the model. The model has 4 dots divided into 2 equal groups. There are (_) dots in each group."
+        },
+        {
+          "pid": "37",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "context": "function plot",
+          "source": "functionqa",
+          "skills": [
+            "algebraic reasoning"
+          ],
+          "answer": "3",
+          "question": "What is the limit as x approaches -1?"
+        }
+      ]
+    },
+    "stage4_multi_choice": {
+      "count": 540,
+      "recommended_train_size": 432,
+      "recommended_eval_size": 108,
+      "top_context_families": [
+        [
+          "geometry diagram",
+          203
+        ],
+        [
+          "plot",
+          77
+        ],
+        [
+          "scientific figure",
+          67
+        ],
+        [
+          "synthetic scene",
+          61
+        ],
+        [
+          "chart",
+          47
+        ]
+      ],
+      "top_sources": [
+        [
+          "geoqa+",
+          62
+        ],
+        [
+          "geometry3k",
+          62
+        ],
+        [
+          "unigeo",
+          62
+        ],
+        [
+          "figureqa",
+          62
+        ],
+        [
+          "super-clevr",
+          61
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "3",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "context": "geometry diagram",
+          "source": "geoqa+",
+          "skills": [
+            "geometry reasoning",
+            "algebraic reasoning"
+          ],
+          "answer": "145°",
+          "question": "△ABC的两内角平分线OB、OC相交于点O，若∠A＝110°，则∠BOC＝（）"
+        },
+        {
+          "pid": "5",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "context": "geometry diagram",
+          "source": "geometry3k",
+          "skills": [
+            "geometry reasoning",
+            "algebraic reasoning"
+          ],
+          "answer": "97",
+          "question": "Find $m\\angle H$"
+        },
+        {
+          "pid": "6",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "context": "geometry diagram",
+          "source": "unigeo",
+          "skills": [
+            "geometry reasoning",
+            "algebraic reasoning"
+          ],
+          "answer": "6cm",
+          "question": "As shown in the figure, if CB = 4.0, DB = 7.0, and D is the midpoint of AC, then the length of AC is ()"
+        }
+      ]
+    },
+    "stage5_robustness": {
+      "count": 64,
+      "recommended_train_size": 51,
+      "recommended_eval_size": 12,
+      "top_context_families": [
+        [
+          "geometry diagram",
+          62
+        ],
+        [
+          "natural image",
+          2
+        ]
+      ],
+      "top_sources": [
+        [
+          "geoqa+",
+          62
+        ],
+        [
+          "parsvqa-caps",
+          2
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "3",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "context": "geometry diagram",
+          "source": "geoqa+",
+          "skills": [
+            "geometry reasoning",
+            "algebraic reasoning"
+          ],
+          "answer": "145°",
+          "question": "△ABC的两内角平分线OB、OC相交于点O，若∠A＝110°，则∠BOC＝（）"
+        },
+        {
+          "pid": "9",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "context": "geometry diagram",
+          "source": "geoqa+",
+          "skills": [
+            "geometry reasoning",
+            "algebraic reasoning"
+          ],
+          "answer": "8",
+          "question": "如图是一株美丽的勾股树，其中所有四边形都是正方形，所有的三角形都是直角三角形，若正方形A、B的面积分别为5、3，则最大正方形C的面积是（）"
+        },
+        {
+          "pid": "17",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "context": "geometry diagram",
+          "source": "geoqa+",
+          "skills": [
+            "geometry reasoning",
+            "algebraic reasoning"
+          ],
+          "answer": "5",
+          "question": "如图，在Rt△ABC中，∠ACB＝90°，D是AB的中点，AB＝10，则CD的长为（）"
+        }
+      ]
+    }
+  },
+  "warnings": [
+    "Stage stage4_multi_choice is heterogeneous across 11 context families."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "mcgmcg1/rl-gspo-abc-eval4-ms",
+  "title": "rl-gspo-abc-eval4-ms",
+  "code_file": "kaggle_staged_train_abc_eval4_ms.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "dataset_sources": [
+    "mcgmcg1/rl-gspo-qwen2-5vlm-staged-code"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

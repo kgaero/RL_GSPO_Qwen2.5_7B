@@ -1,0 +1,26 @@
+Phase: phase_d
+Global step: 60
+Checkpoint: outputs_staged_phase_d_continue/phase_d/checkpoint-60
+
+Metrics:
+  normalized_exact_match: 0.0000
+  tolerance_accuracy: 0.0000
+  parseable_answer_rate: 0.0000
+  solution_tag_compliance: 0.0000
+  reasoning_tag_compliance: 0.2500
+  malformed_answer_rate: 1.0000
+  truncation_rate: 1.0000
+  average_completion_tokens: 96.00
+
+Scores:
+  structure_score: -0.2000
+  correctness_score: 0.0000
+  composite_score: -0.0875
+
+Reward weights:
+  format_reward: 0.5000
+  parseable_reward: 0.5000
+  finished_reward: 0.7500
+  correctness_reward: 5.0000
+  brevity_reward: 0.3000
+  tolerance_reward: 1.0000

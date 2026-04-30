@@ -1,0 +1,13 @@
+{
+  "phase": "phase_c",
+  "resume": null,
+  "warm_start_checkpoint": "/kaggle/input/rl-gspo-qwen2-5vlm-phaseb-best-composite-180/phase_b/checkpoint-180",
+  "dataset_analysis_only": false,
+  "output_root": "outputs_staged_phase_cd_continue",
+  "train_split": "test",
+  "eval_split": "testmini",
+  "hardware_profile": "kaggle_t4",
+  "disabled_stages": [],
+  "enabled_stages": [],
+  "enable_multichoice_training": false
+}

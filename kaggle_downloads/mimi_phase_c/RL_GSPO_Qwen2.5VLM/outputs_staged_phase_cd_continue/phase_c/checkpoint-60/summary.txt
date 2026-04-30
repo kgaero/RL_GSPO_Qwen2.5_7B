@@ -1,0 +1,26 @@
+Phase: phase_c
+Global step: 60
+Checkpoint: outputs_staged_phase_cd_continue/phase_c/checkpoint-60
+
+Metrics:
+  normalized_exact_match: 0.5000
+  tolerance_accuracy: 0.5000
+  parseable_answer_rate: 0.7500
+  solution_tag_compliance: 0.7500
+  reasoning_tag_compliance: 0.7500
+  malformed_answer_rate: 0.2500
+  truncation_rate: 0.2500
+  average_completion_tokens: 58.00
+
+Scores:
+  structure_score: 0.5000
+  correctness_score: 0.5250
+  composite_score: 0.5000
+
+Reward weights:
+  format_reward: 0.5000
+  parseable_reward: 0.5000
+  finished_reward: 0.7500
+  correctness_reward: 5.0000
+  brevity_reward: 0.2000
+  tolerance_reward: 1.0000

@@ -1,0 +1,24 @@
+{
+  "targets": [
+    {
+      "label": "baseline_rank8",
+      "checkpoint": "/kaggle/working/RL_GSPO_Qwen2.5VLM/baseline_rank8",
+      "phase": "phase_a",
+      "max_completion_length": 256
+    },
+    {
+      "label": "smoke_phase_b_best",
+      "checkpoint": "/kaggle/input/notebooks/mcgmcg1/rl-gspo-qwen2-5vlm-staged-train/RL_GSPO_Qwen2.5VLM/outputs_staged/phase_b/checkpoint-60",
+      "phase": "phase_b",
+      "max_completion_length": 64,
+      "reward_weights_json": "/kaggle/input/notebooks/mcgmcg1/rl-gspo-qwen2-5vlm-staged-train/RL_GSPO_Qwen2.5VLM/outputs_staged/phase_b/checkpoint-60/reward_weights.json"
+    },
+    {
+      "label": "smoke_phase_c_best",
+      "checkpoint": "/kaggle/input/notebooks/mcgmcg1/rl-gspo-qwen2-5vlm-staged-train/RL_GSPO_Qwen2.5VLM/outputs_staged/phase_c/checkpoint-119",
+      "phase": "phase_c",
+      "max_completion_length": 64,
+      "reward_weights_json": "/kaggle/input/notebooks/mcgmcg1/rl-gspo-qwen2-5vlm-staged-train/RL_GSPO_Qwen2.5VLM/outputs_staged/phase_c/checkpoint-119/reward_weights.json"
+    }
+  ]
+}

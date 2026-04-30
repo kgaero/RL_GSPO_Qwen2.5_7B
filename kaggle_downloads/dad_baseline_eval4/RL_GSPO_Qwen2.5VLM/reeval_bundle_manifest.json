@@ -1,0 +1,11 @@
+{
+  "bundle_type": "full_testmini_reevaluation_code",
+  "entrypoint": "rl_gspo_qwen2_5vlm_eval.py",
+  "archives": [
+    "staged_rl.tar"
+  ],
+  "notes": [
+    "This dataset is separate from the original staged training code bundle.",
+    "It exists only to support inference-only reevaluation notebooks."
+  ]
+}

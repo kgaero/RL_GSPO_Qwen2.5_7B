@@ -1,0 +1,24 @@
+{
+  "targets": [
+    {
+      "label": "baseline_rank8",
+      "phase": "phase_a",
+      "checkpoint_path": "/kaggle/working/RL_GSPO_Qwen2.5VLM/baseline_rank8",
+      "output_dir": "outputs_full_testmini_reeval_baseline_rank8_phasewise_4/baseline_rank8",
+      "eval_split": "testmini",
+      "eval_mode": "default",
+      "max_completion_length": 64,
+      "original_normalized_exact_match": null,
+      "reevaluated_normalized_exact_match": 0.25,
+      "original_tolerance_accuracy": null,
+      "reevaluated_tolerance_accuracy": 0.25,
+      "reevaluated_parseable_answer_rate": 0.25,
+      "reevaluated_malformed_answer_rate": 0.75,
+      "reevaluated_truncation_rate": 0.75,
+      "reevaluated_average_completion_tokens": 61.25,
+      "structure_score": 0.0,
+      "correctness_score": 0.24999999999999997,
+      "composite_score": 0.15
+    }
+  ]
+}

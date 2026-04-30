@@ -1,0 +1,8 @@
+{
+  "format_reward": 0.75,
+  "parseable_reward": 0.75,
+  "finished_reward": 1.25,
+  "correctness_reward": 5.0,
+  "brevity_reward": 0.2,
+  "tolerance_reward": 0.0
+}

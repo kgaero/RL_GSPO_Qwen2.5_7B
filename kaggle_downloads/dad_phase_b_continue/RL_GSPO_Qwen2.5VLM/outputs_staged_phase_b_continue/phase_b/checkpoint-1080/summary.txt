@@ -1,0 +1,26 @@
+Phase: phase_b
+Global step: 1080
+Checkpoint: outputs_staged_phase_b_continue/phase_b/checkpoint-1080
+
+Metrics:
+  normalized_exact_match: 1.0000
+  tolerance_accuracy: 1.0000
+  parseable_answer_rate: 1.0000
+  solution_tag_compliance: 1.0000
+  reasoning_tag_compliance: 1.0000
+  malformed_answer_rate: 0.0000
+  truncation_rate: 0.0000
+  average_completion_tokens: 28.25
+
+Scores:
+  structure_score: 0.7500
+  correctness_score: 1.0000
+  composite_score: 0.9000
+
+Reward weights:
+  format_reward: 0.7500
+  parseable_reward: 0.7500
+  finished_reward: 1.2500
+  correctness_reward: 8.0000
+  brevity_reward: 0.2000
+  tolerance_reward: 0.0000

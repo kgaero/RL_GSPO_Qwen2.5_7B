@@ -1,0 +1,35 @@
+Error in sitecustomize; set PYTHONVERBOSE for traceback:
+ModuleNotFoundError: No module named 'wrapt'
+2026-04-10 17:12:14,216 | INFO | staged_rl.trainer_runtime | Visible CUDA devices: 2 | ['Tesla T4', 'Tesla T4']
+2026-04-10 17:12:14,216 | WARNING | staged_rl.trainer_runtime | Multiple GPUs are visible, but the current runner does not configure DDP or tensor parallelism. Training and vLLM evaluation remain effectively single-GPU unless the launch path is extended.
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+INFO 04-10 17:12:22 [__init__.py:216] Automatically detected platform cuda.
+ERROR 04-10 17:12:23 [fa_utils.py:57] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+🦥 Unsloth Zoo will now patch everything to make training faster!
+2026-04-10 17:12:28,391 | INFO | staged_rl.trainer_runtime | Loading model unsloth/Qwen2.5-VL-7B-Instruct with max_seq_length=1280, fast_inference=True, gpu_memory_utilization=0.65, max_lora_rank=8, fast_inference_kwargs={'compilation_config': {'level': 3, 'cudagraph_mode': 'PIECEWISE'}}
+==((====))==  Unsloth 2026.3.11: Fast Qwen2_5_Vl patching. Transformers: 4.56.2. vLLM: 0.10.2.
+   \\   /|    Tesla T4. Num GPUs = 2. Max memory: 14.563 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.8.0+cu128. CUDA: 7.5. CUDA Toolkit: 12.8. Triton: 3.4.0
+\        /    Bfloat16 = FALSE. FA [Xformers = 0.0.32.post1. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+INFO 04-10 17:12:35 [vllm_utils.py:724] Unsloth: Patching vLLM v1 graph capture
+INFO 04-10 17:12:35 [vllm_utils.py:753] Unsloth: Patching vLLM v0 graph capture
+Unsloth: Vision model detected, setting approx_max_num_seqs to 1
+Unsloth: vLLM loading unsloth/qwen2.5-vl-7b-instruct-unsloth-bnb-4bit with actual GPU utilization = 64.37%
+Unsloth: Your GPU has CUDA compute capability 7.5 with VRAM = 14.56 GB.
+Unsloth: Using conservativeness = 1.0. Chunked prefill tokens = 2048. Num Sequences = 1.
+Unsloth: vLLM's KV Cache can use up to 3.36 GB. Also swap space = 4 GB.
+Unsloth: Disabling `disable_cascade_attn` in vLLM to allow for better on policy RL!
+Unsloth: Not an error, but `device` is not supported in vLLM. Skipping.
+INFO 04-10 17:12:35 [utils.py:328] non-default args: {'load_format': 'bitsandbytes', 'dtype': torch.float16, 'seed': 0, 'max_model_len': 1280, 'enable_prefix_caching': True, 'disable_cascade_attn': True, 'gpu_memory_utilization': 0.6436853266723386, 'max_num_batched_tokens': 8192, 'max_num_seqs': 1, 'max_logprobs': 0, 'disable_log_stats': True, 'quantization': 'bitsandbytes', 'limit_mm_per_prompt': {'image': 1, 'video': 0}, 'enable_lora': True, 'max_lora_rank': 8, 'enable_chunked_prefill': True, 'compilation_config': {"level":3,"debug_dump_path":"","cache_dir":"","backend":"","custom_ops":[],"splitting_ops":null,"use_inductor":true,"compile_sizes":null,"inductor_compile_config":{"enable_auto_functionalized_v2":false},"inductor_passes":{},"cudagraph_mode":1,"use_cudagraph":true,"cudagraph_num_of_warmups":0,"cudagraph_capture_sizes":null,"cudagraph_copy_inputs":false,"full_cuda_graph":false,"pass_config":{},"max_capture_size":null,"local_cache_dir":null}, 'model': 'unsloth/qwen2.5-vl-7b-instruct-unsloth-bnb-4bit'}
+INFO 04-10 17:12:44 [__init__.py:742] Resolved architecture: Qwen2_5_VLForConditionalGeneration
+`torch_dtype` is deprecated! Use `dtype` instead!
+WARNING 04-10 17:12:44 [__init__.py:2767] Casting torch.bfloat16 to torch.float16.
+INFO 04-10 17:12:44 [__init__.py:1815] Using max model len 1280
+WARNING 04-10 17:12:45 [_ipex_ops.py:16] Import error msg: No module named 'intel_extension_for_pytorch'
+INFO 04-10 17:12:45 [scheduler.py:222] Chunked prefill is enabled with max_num_batched_tokens=8192.
+WARNING 04-10 17:12:45 [scheduler.py:269] max_num_batched_tokens (8192) exceeds max_num_seqs * max_model_len (1280). This may lead to unexpected behavior.
+WARNING 04-10 17:12:45 [lora.py:92] `lora_extra_vocab_size` is deprecated and will be removed in v0.12.0. Additional vocabulary support for LoRA adapters is being phased out.
+WARNING 04-10 17:12:45 [scheduler.py:269] max_num_batched_tokens (8192) exceeds max_num_seqs * max_model_len (1280). This may lead to unexpected behavior.
+Unsloth: vLLM Bitsandbytes config using kwargs = {'load_in_8bit': False, 'load_in_4bit': True, 'bnb_4bit_compute_dtype': 'float16', 'bnb_4bit_quant_storage': 'uint8', 'bnb_4bit_quant_type': 'nf4', 'bnb_4bit_use_double_quant': True, 'llm_int8_enable_fp32_cpu_offload': False, 'llm_int8_has_fp16_weight': False, 'llm_int8_skip_modules': ['embed_tokens', 'embedding', 'lm_head', 'multi_modal_projector', 'merger', 'modality_projection', 'router', 'visual', 'model.visual.blocks.31.mlp', 'model.visual.blocks.24.attn', 'model.visual.blocks.30.mlp', 'model.visual.blocks.30.attn', 'model.visual.blocks.25.attn', 'model.visual.blocks.29.attn', 'model.visual.blocks.26.attn', 'model.visual.blocks.28.attn', 'model.visual.blocks.19.attn', 'model.visual.blocks.29.mlp', 'model.visual.blocks.28.mlp', 'model.visual.blocks.31.attn', 'model.visual.blocks.25.mlp', 'model.visual.blocks.26.mlp', 'model.visual.blocks.20.attn', 'model.visual.blocks.27.mlp', 'model.visual.blocks.17.attn', 'model.visual.blocks.24.mlp', 'model.visual.blocks.18.attn', 'model.visual.blocks.16.attn', 'model.visual.blocks.11.attn', 'model.visual.blocks.21.mlp', 'model.visual.blocks.20.mlp', 'model.visual.blocks.23.mlp', 'model.visual.blocks.9.attn', 'model.visual.blocks.12.attn', 'model.visual.blocks.23.attn', 'model.visual.blocks.19.mlp', 'model.visual.blocks.22.mlp', 'model.visual.blocks.18.mlp', 'model.visual.blocks.13.attn', 'model.visual.blocks.8.attn', 'model.visual.blocks.11.mlp', 'model.visual.blocks.10.mlp', 'model.visual.blocks.6.attn', 'model.visual.blocks.15.mlp', 'model.visual.blocks.8.mlp', 'model.visual.blocks.9.mlp', 'model.visual.blocks.14.attn', 'model.visual.blocks.5.mlp', 'model.visual.blocks.14.mlp', 'model.visual.blocks.10.attn', 'model.visual.blocks.6.mlp', 'model.visual.blocks.7.mlp', 'model.visual.blocks.5.attn', 'model.visual.blocks.4.mlp', 'model.visual.blocks.16.mlp', 'model.visual.blocks.12.mlp', 'model.visual.blocks.13.mlp', 'model.visual.blocks.2.mlp', 'model.visual.blocks.3.mlp', 'model.visual.blocks.1.attn', 'model.visual.blocks.0.attn', 'model.visual.blocks.4.attn', 'model.visual.blocks.2.attn', 'model.visual.blocks.15.attn', 'model.visual.blocks.3.attn', 'model.visual.blocks.1.mlp', 'model.visual.blocks.17.mlp', 'model.visual.blocks.0.mlp', 'model.visual.blocks.7.attn', 'model.visual.blocks.31.mlp.down_proj'], 'llm_int8_threshold': 6.0}

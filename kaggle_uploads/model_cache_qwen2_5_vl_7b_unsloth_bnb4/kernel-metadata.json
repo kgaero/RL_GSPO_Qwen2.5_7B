@@ -1,0 +1,17 @@
+{
+  "id": "kgaero/qwen2-5-vl-7b-unsloth-bnb4-cache-builder",
+  "title": "qwen2-5-vl-7b-unsloth-bnb4-cache-builder",
+  "code_file": "kaggle_model_cache_qwen2_5_vl_7b_unsloth_bnb4.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "false",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "kgaero/kaggle-api-key"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

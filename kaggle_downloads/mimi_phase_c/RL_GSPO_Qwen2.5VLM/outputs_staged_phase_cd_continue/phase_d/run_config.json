@@ -1,0 +1,686 @@
+{
+  "dataset_name": "AI4Math/MathVista",
+  "train_split": "test",
+  "eval_split": "testmini",
+  "output_root": "outputs_staged_phase_cd_continue",
+  "phase_name": "phase_d",
+  "hardware_profile_name": "kaggle_t4",
+  "model": {
+    "base_model_name": "/kaggle/input/qwen2-5-vl-7b-unsloth-bnb4-cache-hf",
+    "max_seq_length": 1280,
+    "image_size": 336,
+    "load_in_4bit": true,
+    "fast_inference": true,
+    "fast_inference_kwargs": {
+      "compilation_config": {
+        "level": 3,
+        "cudagraph_mode": "PIECEWISE"
+      }
+    },
+    "gpu_memory_utilization": 0.65,
+    "lora_rank": 8,
+    "max_lora_rank": 8,
+    "lora_alpha": 8,
+    "finetune_vision_layers": false,
+    "finetune_language_layers": true,
+    "finetune_attention_modules": true,
+    "finetune_mlp_modules": true,
+    "bias": "none",
+    "random_state": 3407,
+    "use_rslora": false,
+    "loftq_config": null,
+    "use_gradient_checkpointing": "unsloth"
+  },
+  "trainer_defaults": {
+    "learning_rate": 3e-05,
+    "adam_beta1": 0.9,
+    "adam_beta2": 0.99,
+    "weight_decay": 0.1,
+    "warmup_ratio": 0.1,
+    "lr_scheduler_type": "cosine",
+    "optim": "adamw_8bit",
+    "logging_steps": 1,
+    "log_completions": false,
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 4,
+    "num_generations": 2,
+    "max_prompt_length": 320,
+    "max_completion_length": 64,
+    "temperature": 0.7,
+    "num_train_epochs": 0.5,
+    "save_steps": 60,
+    "max_grad_norm": 0.1,
+    "report_to": "none",
+    "importance_sampling_level": "sequence",
+    "mask_truncated_completions": false,
+    "loss_type": "dr_grpo",
+    "restore_callback_states_from_checkpoint": true
+  },
+  "eval": {
+    "num_samples_per_prompt": 1,
+    "temperature": 1.0,
+    "top_k": 50,
+    "max_eval_examples_per_subset": 4,
+    "max_eval_examples_overall": null,
+    "abs_tol_default": 1e-06,
+    "rel_tol_default": 1e-06,
+    "save_full_completion_text": false
+  },
+  "reward_gate": {
+    "parseable_floor_threshold": 0.85,
+    "parseable_stable_threshold": 0.92,
+    "solution_tag_floor_threshold": 0.9,
+    "solution_tag_stable_threshold": 0.95,
+    "reasoning_tag_floor_threshold": 0.88,
+    "reasoning_tag_stable_threshold": 0.93,
+    "malformed_ceiling_threshold": 0.1,
+    "malformed_stable_threshold": 0.05,
+    "truncation_ceiling_threshold": 0.15,
+    "truncation_stable_threshold": 0.08,
+    "average_token_fraction_threshold": 0.85,
+    "exact_match_plateau_delta": 0.02,
+    "stable_window": 2,
+    "correctness_step": 0.5,
+    "finish_step": 0.25,
+    "parseable_guard_weight": 0.75,
+    "formatting_guard_weight": 0.75,
+    "format_floor": 0.25,
+    "parseable_floor": 0.25,
+    "finish_floor": 0.5
+  },
+  "checkpoint_scores": {
+    "structure_weights": {
+      "parseable_answer_rate": 0.35,
+      "solution_tag_compliance": 0.2,
+      "reasoning_tag_compliance": 0.2,
+      "malformed_answer_rate": -0.15,
+      "truncation_rate": -0.1
+    },
+    "correctness_weights": {
+      "normalized_exact_match": 0.7,
+      "tolerance_accuracy": 0.2,
+      "parseable_answer_rate": 0.1
+    },
+    "composite_weights": {
+      "normalized_exact_match": 0.45,
+      "tolerance_accuracy": 0.15,
+      "parseable_answer_rate": 0.15,
+      "solution_tag_compliance": 0.1,
+      "reasoning_tag_compliance": 0.05,
+      "malformed_answer_rate": -0.05,
+      "truncation_rate": -0.05
+    }
+  },
+  "stages": {
+    "stage1_easy_numeric": {
+      "name": "stage1_easy_numeric",
+      "description": "Free-form integer english subset emphasizing easy numeric tasks.",
+      "answer_mode": "numeric_free_form",
+      "filter_spec": {
+        "question_types": [
+          "free_form"
+        ],
+        "answer_types": [
+          "integer"
+        ],
+        "languages": [
+          "english"
+        ],
+        "sources": [],
+        "contexts": [],
+        "context_families": [
+          "synthetic scene",
+          "table",
+          "natural image"
+        ],
+        "tasks": [],
+        "categories": [],
+        "grades": [],
+        "skills_any": [
+          "arithmetic reasoning",
+          "statistical reasoning",
+          "numeric commonsense"
+        ],
+        "skills_all": [],
+        "precision_values": [],
+        "precision_min": null,
+        "precision_max": null,
+        "require_unit": null,
+        "unit_values": [],
+        "answer_modes": [
+          "numeric_free_form"
+        ]
+      },
+      "priority_context_families": [
+        "synthetic scene",
+        "table"
+      ],
+      "priority_contexts": [],
+      "priority_skills": [
+        "arithmetic reasoning",
+        "statistical reasoning",
+        "numeric commonsense"
+      ],
+      "priority_grades": [
+        "elementary school",
+        "daily life"
+      ],
+      "hard_only": false,
+      "enabled": true
+    },
+    "stage2_float_numeric": {
+      "name": "stage2_float_numeric",
+      "description": "Free-form english subset with moderate precision numeric reasoning.",
+      "answer_mode": "numeric_free_form",
+      "filter_spec": {
+        "question_types": [
+          "free_form"
+        ],
+        "answer_types": [
+          "integer",
+          "float"
+        ],
+        "languages": [
+          "english"
+        ],
+        "sources": [],
+        "contexts": [],
+        "context_families": [
+          "table",
+          "chart",
+          "plot",
+          "scientific figure",
+          "natural image"
+        ],
+        "tasks": [],
+        "categories": [],
+        "grades": [],
+        "skills_any": [
+          "arithmetic reasoning",
+          "statistical reasoning",
+          "scientific reasoning",
+          "numeric commonsense"
+        ],
+        "skills_all": [],
+        "precision_values": [],
+        "precision_min": null,
+        "precision_max": null,
+        "require_unit": null,
+        "unit_values": [],
+        "answer_modes": [
+          "numeric_free_form"
+        ]
+      },
+      "priority_context_families": [
+        "table",
+        "chart",
+        "plot",
+        "scientific figure"
+      ],
+      "priority_contexts": [],
+      "priority_skills": [
+        "statistical reasoning",
+        "scientific reasoning",
+        "arithmetic reasoning"
+      ],
+      "priority_grades": [],
+      "hard_only": false,
+      "enabled": true
+    },
+    "stage3_hard_numeric": {
+      "name": "stage3_hard_numeric",
+      "description": "Free-form english subset for harder multistep numeric reasoning.",
+      "answer_mode": "numeric_free_form",
+      "filter_spec": {
+        "question_types": [
+          "free_form"
+        ],
+        "answer_types": [
+          "integer",
+          "float"
+        ],
+        "languages": [
+          "english"
+        ],
+        "sources": [],
+        "contexts": [],
+        "context_families": [
+          "geometry diagram",
+          "plot",
+          "scientific figure",
+          "abstract scene"
+        ],
+        "tasks": [],
+        "categories": [],
+        "grades": [],
+        "skills_any": [
+          "geometry reasoning",
+          "algebraic reasoning",
+          "scientific reasoning",
+          "arithmetic reasoning",
+          "statistical reasoning"
+        ],
+        "skills_all": [],
+        "precision_values": [],
+        "precision_min": null,
+        "precision_max": null,
+        "require_unit": null,
+        "unit_values": [],
+        "answer_modes": [
+          "numeric_free_form"
+        ]
+      },
+      "priority_context_families": [
+        "geometry diagram",
+        "scientific figure",
+        "plot"
+      ],
+      "priority_contexts": [],
+      "priority_skills": [
+        "geometry reasoning",
+        "algebraic reasoning",
+        "scientific reasoning"
+      ],
+      "priority_grades": [
+        "high school",
+        "college"
+      ],
+      "hard_only": true,
+      "enabled": true
+    },
+    "stage4_multi_choice": {
+      "name": "stage4_multi_choice",
+      "description": "Strictly separate multi-choice branch scaffold.",
+      "answer_mode": "multi_choice",
+      "filter_spec": {
+        "question_types": [
+          "multi_choice"
+        ],
+        "answer_types": [],
+        "languages": [],
+        "sources": [],
+        "contexts": [],
+        "context_families": [],
+        "tasks": [],
+        "categories": [],
+        "grades": [],
+        "skills_any": [],
+        "skills_all": [],
+        "precision_values": [],
+        "precision_min": null,
+        "precision_max": null,
+        "require_unit": null,
+        "unit_values": [],
+        "answer_modes": [
+          "multi_choice"
+        ]
+      },
+      "priority_context_families": [
+        "geometry diagram",
+        "scientific figure",
+        "plot"
+      ],
+      "priority_contexts": [],
+      "priority_skills": [
+        "geometry reasoning",
+        "algebraic reasoning"
+      ],
+      "priority_grades": [],
+      "hard_only": false,
+      "enabled": true
+    },
+    "stage5_robustness": {
+      "name": "stage5_robustness",
+      "description": "Optional multilingual/noisy robustness subset.",
+      "answer_mode": "mixed",
+      "filter_spec": {
+        "question_types": [],
+        "answer_types": [],
+        "languages": [
+          "chinese",
+          "persian"
+        ],
+        "sources": [],
+        "contexts": [],
+        "context_families": [],
+        "tasks": [],
+        "categories": [],
+        "grades": [],
+        "skills_any": [],
+        "skills_all": [],
+        "precision_values": [],
+        "precision_min": null,
+        "precision_max": null,
+        "require_unit": null,
+        "unit_values": [],
+        "answer_modes": []
+      },
+      "priority_context_families": [],
+      "priority_contexts": [],
+      "priority_skills": [],
+      "priority_grades": [],
+      "hard_only": false,
+      "enabled": false
+    }
+  },
+  "phases": {
+    "phase_a": {
+      "name": "phase_a",
+      "description": "Structure stabilization on Stage 1.",
+      "stage_mix": {
+        "stage1_easy_numeric": 1.0
+      },
+      "output_subdir": "phase_a",
+      "reward_components": {
+        "format_reward": {
+          "name": "format_reward",
+          "initial_weight": 1.0,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "parseable_reward": {
+          "name": "parseable_reward",
+          "initial_weight": 1.0,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "finished_reward": {
+          "name": "finished_reward",
+          "initial_weight": 1.5,
+          "min_weight": 0.5,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "correctness_reward": {
+          "name": "correctness_reward",
+          "initial_weight": 2.0,
+          "min_weight": 1.0,
+          "max_weight": 8.0,
+          "enabled": true
+        },
+        "brevity_reward": {
+          "name": "brevity_reward",
+          "initial_weight": 0.25,
+          "min_weight": 0.0,
+          "max_weight": 1.0,
+          "enabled": true
+        },
+        "tolerance_reward": {
+          "name": "tolerance_reward",
+          "initial_weight": 0.0,
+          "min_weight": 0.0,
+          "max_weight": 2.0,
+          "enabled": false
+        }
+      },
+      "default_resume": {
+        "selector": null
+      },
+      "trainer_overrides": {},
+      "enable_tolerance_reward": false,
+      "allow_multichoice_training": false,
+      "eval_stage_names": [
+        "stage1_easy_numeric",
+        "stage2_float_numeric",
+        "stage3_hard_numeric"
+      ]
+    },
+    "phase_b": {
+      "name": "phase_b",
+      "description": "Correctness strengthening with Stage 1/2 mix.",
+      "stage_mix": {
+        "stage1_easy_numeric": 0.7,
+        "stage2_float_numeric": 0.3
+      },
+      "output_subdir": "phase_b",
+      "reward_components": {
+        "format_reward": {
+          "name": "format_reward",
+          "initial_weight": 0.75,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "parseable_reward": {
+          "name": "parseable_reward",
+          "initial_weight": 0.75,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "finished_reward": {
+          "name": "finished_reward",
+          "initial_weight": 1.0,
+          "min_weight": 0.5,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "correctness_reward": {
+          "name": "correctness_reward",
+          "initial_weight": 4.0,
+          "min_weight": 1.0,
+          "max_weight": 8.0,
+          "enabled": true
+        },
+        "brevity_reward": {
+          "name": "brevity_reward",
+          "initial_weight": 0.2,
+          "min_weight": 0.0,
+          "max_weight": 1.0,
+          "enabled": true
+        },
+        "tolerance_reward": {
+          "name": "tolerance_reward",
+          "initial_weight": 0.0,
+          "min_weight": 0.0,
+          "max_weight": 2.0,
+          "enabled": false
+        }
+      },
+      "default_resume": {
+        "selector": "best_structure"
+      },
+      "trainer_overrides": {},
+      "enable_tolerance_reward": false,
+      "allow_multichoice_training": false,
+      "eval_stage_names": [
+        "stage1_easy_numeric",
+        "stage2_float_numeric",
+        "stage3_hard_numeric"
+      ]
+    },
+    "phase_c": {
+      "name": "phase_c",
+      "description": "Precision and harder reasoning with Stage 2/3 mix.",
+      "stage_mix": {
+        "stage2_float_numeric": 0.6,
+        "stage3_hard_numeric": 0.4
+      },
+      "output_subdir": "phase_c",
+      "reward_components": {
+        "format_reward": {
+          "name": "format_reward",
+          "initial_weight": 0.5,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "parseable_reward": {
+          "name": "parseable_reward",
+          "initial_weight": 0.5,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "finished_reward": {
+          "name": "finished_reward",
+          "initial_weight": 0.75,
+          "min_weight": 0.5,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "correctness_reward": {
+          "name": "correctness_reward",
+          "initial_weight": 5.0,
+          "min_weight": 1.0,
+          "max_weight": 8.0,
+          "enabled": true
+        },
+        "brevity_reward": {
+          "name": "brevity_reward",
+          "initial_weight": 0.2,
+          "min_weight": 0.0,
+          "max_weight": 1.0,
+          "enabled": true
+        },
+        "tolerance_reward": {
+          "name": "tolerance_reward",
+          "initial_weight": 1.0,
+          "min_weight": 0.0,
+          "max_weight": 2.0,
+          "enabled": true
+        }
+      },
+      "default_resume": {
+        "selector": "best_composite"
+      },
+      "trainer_overrides": {},
+      "enable_tolerance_reward": true,
+      "allow_multichoice_training": false,
+      "eval_stage_names": [
+        "stage1_easy_numeric",
+        "stage2_float_numeric",
+        "stage3_hard_numeric"
+      ]
+    },
+    "phase_d": {
+      "name": "phase_d",
+      "description": "Hard Stage 3 strengthening with longer completions allowed.",
+      "stage_mix": {
+        "stage3_hard_numeric": 1.0
+      },
+      "output_subdir": "phase_d",
+      "reward_components": {
+        "format_reward": {
+          "name": "format_reward",
+          "initial_weight": 0.5,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "parseable_reward": {
+          "name": "parseable_reward",
+          "initial_weight": 0.5,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "finished_reward": {
+          "name": "finished_reward",
+          "initial_weight": 0.75,
+          "min_weight": 0.5,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "correctness_reward": {
+          "name": "correctness_reward",
+          "initial_weight": 5.0,
+          "min_weight": 1.0,
+          "max_weight": 8.0,
+          "enabled": true
+        },
+        "brevity_reward": {
+          "name": "brevity_reward",
+          "initial_weight": 0.3,
+          "min_weight": 0.0,
+          "max_weight": 1.0,
+          "enabled": true
+        },
+        "tolerance_reward": {
+          "name": "tolerance_reward",
+          "initial_weight": 1.0,
+          "min_weight": 0.0,
+          "max_weight": 2.0,
+          "enabled": true
+        }
+      },
+      "default_resume": {
+        "selector": "best_composite"
+      },
+      "trainer_overrides": {
+        "max_completion_length": 96
+      },
+      "enable_tolerance_reward": true,
+      "allow_multichoice_training": false,
+      "eval_stage_names": [
+        "stage1_easy_numeric",
+        "stage2_float_numeric",
+        "stage3_hard_numeric"
+      ]
+    },
+    "phase_e": {
+      "name": "phase_e",
+      "description": "Scaffolded multi-choice branch.",
+      "stage_mix": {
+        "stage4_multi_choice": 1.0
+      },
+      "output_subdir": "phase_e",
+      "reward_components": {
+        "format_reward": {
+          "name": "format_reward",
+          "initial_weight": 0.75,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "parseable_reward": {
+          "name": "parseable_reward",
+          "initial_weight": 0.75,
+          "min_weight": 0.25,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "finished_reward": {
+          "name": "finished_reward",
+          "initial_weight": 1.0,
+          "min_weight": 0.5,
+          "max_weight": 2.0,
+          "enabled": true
+        },
+        "correctness_reward": {
+          "name": "correctness_reward",
+          "initial_weight": 4.0,
+          "min_weight": 1.0,
+          "max_weight": 8.0,
+          "enabled": true
+        },
+        "brevity_reward": {
+          "name": "brevity_reward",
+          "initial_weight": 0.2,
+          "min_weight": 0.0,
+          "max_weight": 1.0,
+          "enabled": true
+        },
+        "tolerance_reward": {
+          "name": "tolerance_reward",
+          "initial_weight": 0.0,
+          "min_weight": 0.0,
+          "max_weight": 2.0,
+          "enabled": false
+        }
+      },
+      "default_resume": {
+        "selector": "best_composite"
+      },
+      "trainer_overrides": {},
+      "enable_tolerance_reward": false,
+      "allow_multichoice_training": false,
+      "eval_stage_names": [
+        "stage4_multi_choice"
+      ]
+    }
+  },
+  "multichoice_scaffold_enabled": true
+}

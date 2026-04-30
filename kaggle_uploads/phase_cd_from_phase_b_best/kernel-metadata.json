@@ -1,0 +1,21 @@
+{
+  "id": "pg1234wwe/notebook066567203a",
+  "id_no": 80428685,
+  "title": "notebook066567203a",
+  "code_file": "kaggle_staged_train_phase_cd_from_phase_b_best.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "dataset_sources": [
+    "mcgmcg1/rl-gspo-qwen2-5vlm-staged-code",
+    "kgaero/qwen2-5-vl-7b-unsloth-bnb4-cache-hf",
+    "kgaero/rl-gspo-qwen2-5vlm-phaseb-best-composite-180"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

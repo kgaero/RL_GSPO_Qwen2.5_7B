@@ -1,0 +1,26 @@
+Phase: phase_a
+Global step: None
+Checkpoint: /kaggle/working/RL_GSPO_Qwen2.5VLM/baseline_rank8
+
+Metrics:
+  normalized_exact_match: 0.2500
+  tolerance_accuracy: 0.2500
+  parseable_answer_rate: 0.2500
+  solution_tag_compliance: 0.2500
+  reasoning_tag_compliance: 0.2500
+  malformed_answer_rate: 0.7500
+  truncation_rate: 0.7500
+  average_completion_tokens: 61.25
+
+Scores:
+  structure_score: 0.0000
+  correctness_score: 0.2500
+  composite_score: 0.1500
+
+Reward weights:
+  format_reward: 1.0000
+  parseable_reward: 1.0000
+  finished_reward: 1.5000
+  correctness_reward: 2.0000
+  brevity_reward: 0.2500
+  tolerance_reward: 0.0000

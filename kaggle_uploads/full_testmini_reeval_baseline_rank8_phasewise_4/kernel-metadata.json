@@ -1,0 +1,20 @@
+{
+  "id": "mcgmcg1/rl-gspo-qwen2-5vlm-reeval-base8-phasewise-4",
+  "title": "RL GSPO Qwen2 5VLM Reeval Base8 Phasewise 4",
+  "code_file": "kaggle_full_testmini_reeval_baseline_rank8_phasewise_4.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "dataset_sources": [
+    "mcgmcg1/rl-gspo-qwen2-5vlm-reeval-code-v2"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [
+    "mcgmcg1/rl-gspo-qwen2-5vlm-staged-train"
+  ],
+  "model_sources": []
+}

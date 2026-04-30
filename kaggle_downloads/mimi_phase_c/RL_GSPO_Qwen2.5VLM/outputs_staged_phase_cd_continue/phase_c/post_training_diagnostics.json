@@ -1,0 +1,59 @@
+{
+  "dominant_failure_modes": [
+    [
+      "parseable_but_wrong",
+      3
+    ],
+    [
+      "exact_match",
+      1
+    ]
+  ],
+  "parseability_improved_before_correctness": true,
+  "structure_regression_checkpoints": [],
+  "checkpoint_ranking_differences": {
+    "latest": "outputs_staged_phase_cd_continue/phase_c/checkpoint-602",
+    "best_structure": "outputs_staged_phase_cd_continue/phase_c/checkpoint-120",
+    "best_correctness": "outputs_staged_phase_cd_continue/phase_c/checkpoint-480",
+    "best_composite": "outputs_staged_phase_cd_continue/phase_c/checkpoint-480"
+  },
+  "structure_score_series": [
+    0.5,
+    0.75,
+    0.75,
+    0.75,
+    0.75,
+    0.75,
+    0.75,
+    0.75,
+    0.75,
+    0.75,
+    0.75
+  ],
+  "parseable_answer_rate_series": [
+    0.75,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "normalized_exact_match_series": [
+    0.5,
+    0.5,
+    0.25,
+    0.25,
+    0.5,
+    0.25,
+    0.25,
+    0.75,
+    0.75,
+    0.25,
+    0.25
+  ]
+}

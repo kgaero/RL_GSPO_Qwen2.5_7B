@@ -1,0 +1,9 @@
+2026-04-12T09:10:38.600283 Notebook start
+2026-04-12T09:10:39.019254 Copied code dataset and cataloged adapters
+2026-04-12T09:10:39.033422 Installing uv and creating venv
+2026-04-12T09:17:53.424389 Finished venv package installs
+2026-04-12T09:18:18.237076 Verified dependencies in venv
+2026-04-12T09:18:21.105764 Prepared baseline rank8 adapter
+2026-04-12T09:18:21.153217 Resolved target spec
+2026-04-12T09:18:21.190112 Starting reevaluation subprocess
+2026-04-12T09:54:40.138402 Reevaluation finished successfully

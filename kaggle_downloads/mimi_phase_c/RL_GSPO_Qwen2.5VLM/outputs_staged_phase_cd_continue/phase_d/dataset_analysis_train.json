@@ -1,0 +1,555 @@
+{
+  "total_rows": 5141,
+  "field_counts": {
+    "question_type": {
+      "free_form": 2289,
+      "multi_choice": 2852
+    },
+    "answer_type": {
+      "integer": 2043,
+      "text": 2852,
+      "float": 232,
+      "list": 14
+    },
+    "answer_mode": {
+      "numeric_free_form": 2275,
+      "multi_choice": 2852,
+      "unsupported": 14
+    },
+    "language": {
+      "english": 4801,
+      "chinese": 338,
+      "persian": 2
+    },
+    "context": {
+      "scatter plot": 169,
+      "synthetic scene": 676,
+      "table": 380,
+      "geometry diagram": 1154,
+      "bar chart": 662,
+      "abstract scene": 314,
+      "function plot": 338,
+      "line plot": 163,
+      "map chart": 22,
+      "natural image": 506,
+      "document image": 47,
+      "puzzle test": 190,
+      "scientific figure": 426,
+      "pie chart": 85,
+      "medical image": 3,
+      "radar chart": 4,
+      "heatmap chart": 1,
+      "word cloud": 1
+    },
+    "context_family": {
+      "plot": 670,
+      "synthetic scene": 676,
+      "table": 380,
+      "geometry diagram": 1154,
+      "chart": 774,
+      "abstract scene": 314,
+      "natural image": 506,
+      "document image": 47,
+      "puzzle test": 190,
+      "scientific figure": 426,
+      "medical image": 3,
+      "word cloud": 1
+    },
+    "source": {
+      "plotqa": 86,
+      "super-clevr": 338,
+      "tabmwp": 338,
+      "unigeo": 338,
+      "dvqa": 338,
+      "iconqa": 338,
+      "functionqa": 338,
+      "chartqa": 267,
+      "mapqa": 22,
+      "geoqa+": 338,
+      "geos": 97,
+      "figureqa": 338,
+      "kvqa": 322,
+      "clevr-math": 338,
+      "vqa-as": 19,
+      "docvqa": 47,
+      "iqtest": 191,
+      "geometry3k": 338,
+      "ai2d": 224,
+      "vqa2.0": 156,
+      "scienceqa": 29,
+      "paperqa": 89,
+      "scibench": 77,
+      "tqa": 69,
+      "theoremqa": 42,
+      "vqa-rad": 2,
+      "a-okvqa": 10,
+      "textvqa": 8,
+      "parsvqa-caps": 2,
+      "vizwiz": 1,
+      "pmc-vqa": 1
+    },
+    "task": {
+      "figure question answering": 1378,
+      "visual question answering": 859,
+      "math word problem": 1014,
+      "geometry problem solving": 1111,
+      "textbook question answering": 779
+    },
+    "category": {
+      "general-vqa": 2279,
+      "math-targeted-vqa": 2862
+    },
+    "grade": {
+      "daily life": 1932,
+      "elementary school": 1071,
+      "high school": 1589,
+      "college": 549
+    },
+    "skills": {
+      "statistical reasoning": 1569,
+      "arithmetic reasoning": 1740,
+      "algebraic reasoning": 1467,
+      "geometry reasoning": 1190,
+      "numeric commonsense": 714,
+      "logical reasoning": 194,
+      "scientific reasoning": 533
+    },
+    "precision_bucket": {
+      "missing": 4909,
+      "present": 232
+    },
+    "unit_bucket": {
+      "missing": 4878,
+      "present": 263
+    }
+  },
+  "stage_summaries": {
+    "stage1_easy_numeric": {
+      "count": 946,
+      "recommended_train_size": 756,
+      "recommended_eval_size": 189,
+      "top_context_families": [
+        [
+          "natural image",
+          378
+        ],
+        [
+          "synthetic scene",
+          347
+        ],
+        [
+          "table",
+          221
+        ]
+      ],
+      "top_sources": [
+        [
+          "clevr-math",
+          338
+        ],
+        [
+          "kvqa",
+          322
+        ],
+        [
+          "tabmwp",
+          213
+        ],
+        [
+          "vqa2.0",
+          49
+        ],
+        [
+          "super-clevr",
+          9
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "1003",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "table",
+          "source": "tabmwp",
+          "skills": [
+            "statistical reasoning",
+            "arithmetic reasoning"
+          ],
+          "answer": "",
+          "question": "The players on a quiz show received the following scores. What is the mean of the numbers?'"
+        },
+        {
+          "pid": "1004",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "table",
+          "source": "tabmwp",
+          "skills": [
+            "statistical reasoning",
+            "arithmetic reasoning"
+          ],
+          "answer": "",
+          "question": "Some friends played a trivia game and recorded their scores. What is the mode of the numbers?'"
+        },
+        {
+          "pid": "1006",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "table",
+          "source": "tabmwp",
+          "skills": [
+            "statistical reasoning",
+            "arithmetic reasoning"
+          ],
+          "answer": "",
+          "question": "The financial aid office at Massey University produced an internal report on the number of students receiving scholarships. According to the table, what was the rate of change betw"
+        }
+      ]
+    },
+    "stage2_float_numeric": {
+      "count": 1429,
+      "recommended_train_size": 1143,
+      "recommended_eval_size": 285,
+      "top_context_families": [
+        [
+          "chart",
+          513
+        ],
+        [
+          "natural image",
+          385
+        ],
+        [
+          "table",
+          280
+        ],
+        [
+          "plot",
+          143
+        ],
+        [
+          "scientific figure",
+          108
+        ]
+      ],
+      "top_sources": [
+        [
+          "dvqa",
+          338
+        ],
+        [
+          "kvqa",
+          322
+        ],
+        [
+          "tabmwp",
+          265
+        ],
+        [
+          "chartqa",
+          228
+        ],
+        [
+          "plotqa",
+          86
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "1001",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "scatter plot",
+          "source": "plotqa",
+          "skills": [
+            "statistical reasoning"
+          ],
+          "answer": "",
+          "question": "In how many years, is the percentage of labor tax greater than 3 %?"
+        },
+        {
+          "pid": "1003",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "table",
+          "source": "tabmwp",
+          "skills": [
+            "statistical reasoning",
+            "arithmetic reasoning"
+          ],
+          "answer": "",
+          "question": "The players on a quiz show received the following scores. What is the mean of the numbers?'"
+        },
+        {
+          "pid": "1004",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "table",
+          "source": "tabmwp",
+          "skills": [
+            "statistical reasoning",
+            "arithmetic reasoning"
+          ],
+          "answer": "",
+          "question": "Some friends played a trivia game and recorded their scores. What is the mode of the numbers?'"
+        }
+      ]
+    },
+    "stage3_hard_numeric": {
+      "count": 519,
+      "recommended_train_size": 415,
+      "recommended_eval_size": 103,
+      "top_context_families": [
+        [
+          "plot",
+          254
+        ],
+        [
+          "scientific figure",
+          108
+        ],
+        [
+          "abstract scene",
+          93
+        ],
+        [
+          "geometry diagram",
+          64
+        ]
+      ],
+      "top_sources": [
+        [
+          "iconqa",
+          133
+        ],
+        [
+          "functionqa",
+          111
+        ],
+        [
+          "plotqa",
+          86
+        ],
+        [
+          "scibench",
+          77
+        ],
+        [
+          "chartqa",
+          57
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "1001",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "scatter plot",
+          "source": "plotqa",
+          "skills": [
+            "statistical reasoning"
+          ],
+          "answer": "",
+          "question": "In how many years, is the percentage of labor tax greater than 3 %?"
+        },
+        {
+          "pid": "1013",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "geometry diagram",
+          "source": "iconqa",
+          "skills": [
+            "arithmetic reasoning",
+            "geometry reasoning"
+          ],
+          "answer": "",
+          "question": "What is the perimeter of the square?"
+        },
+        {
+          "pid": "1018",
+          "question_type": "free_form",
+          "answer_type": "integer",
+          "answer_mode": "numeric_free_form",
+          "context": "abstract scene",
+          "source": "iconqa",
+          "skills": [
+            "arithmetic reasoning"
+          ],
+          "answer": "",
+          "question": "What number is shown?"
+        }
+      ]
+    },
+    "stage4_multi_choice": {
+      "count": 2852,
+      "recommended_train_size": 2281,
+      "recommended_eval_size": 570,
+      "top_context_families": [
+        [
+          "geometry diagram",
+          1090
+        ],
+        [
+          "plot",
+          415
+        ],
+        [
+          "synthetic scene",
+          329
+        ],
+        [
+          "scientific figure",
+          305
+        ],
+        [
+          "chart",
+          261
+        ]
+      ],
+      "top_sources": [
+        [
+          "unigeo",
+          338
+        ],
+        [
+          "geoqa+",
+          338
+        ],
+        [
+          "figureqa",
+          338
+        ],
+        [
+          "geometry3k",
+          338
+        ],
+        [
+          "super-clevr",
+          329
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "1002",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "answer_mode": "multi_choice",
+          "context": "synthetic scene",
+          "source": "super-clevr",
+          "skills": [
+            "arithmetic reasoning"
+          ],
+          "answer": "",
+          "question": "Are there fewer small rubber objects that are in front of the large red metallic chopper than tiny cyan matte objects left of the tiny red thing?"
+        },
+        {
+          "pid": "1005",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "answer_mode": "multi_choice",
+          "context": "geometry diagram",
+          "source": "unigeo",
+          "skills": [
+            "algebraic reasoning",
+            "geometry reasoning"
+          ],
+          "answer": "",
+          "question": "As shown in the figure, in ⊙O, AB ∥ CD, ∠BCD = 100.0, E is any point on ⁀DC, A, B, C, and D are the four points on ⊙O, then the angle of ∠AEC is ()"
+        },
+        {
+          "pid": "1010",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "answer_mode": "multi_choice",
+          "context": "abstract scene",
+          "source": "iconqa",
+          "skills": [
+            "numeric commonsense"
+          ],
+          "answer": "",
+          "question": "What time is shown? Answer by typing a time word, not a number. It is (_) after three."
+        }
+      ]
+    },
+    "stage5_robustness": {
+      "count": 340,
+      "recommended_train_size": 272,
+      "recommended_eval_size": 68,
+      "top_context_families": [
+        [
+          "geometry diagram",
+          338
+        ],
+        [
+          "natural image",
+          2
+        ]
+      ],
+      "top_sources": [
+        [
+          "geoqa+",
+          338
+        ],
+        [
+          "parsvqa-caps",
+          2
+        ]
+      ],
+      "examples": [
+        {
+          "pid": "1015",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "answer_mode": "multi_choice",
+          "context": "geometry diagram",
+          "source": "geoqa+",
+          "skills": [
+            "algebraic reasoning",
+            "geometry reasoning"
+          ],
+          "answer": "",
+          "question": "如图，在△ABC中，点D是BC边上的一点，E，F分别是AD，BE的中点，连接CE，CF，若S△CEF＝5，则△ABC的面积为（）"
+        },
+        {
+          "pid": "1059",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "answer_mode": "multi_choice",
+          "context": "geometry diagram",
+          "source": "geoqa+",
+          "skills": [
+            "algebraic reasoning",
+            "geometry reasoning"
+          ],
+          "answer": "",
+          "question": "如图，以原点O为圆心的圆交x轴于A、B两点，交y轴的正半轴于点C，D为第一象限内⊙O上的一点，若∠DAB＝25°，则∠OCD的度数是（）"
+        },
+        {
+          "pid": "1064",
+          "question_type": "multi_choice",
+          "answer_type": "text",
+          "answer_mode": "multi_choice",
+          "context": "geometry diagram",
+          "source": "geoqa+",
+          "skills": [
+            "algebraic reasoning",
+            "geometry reasoning"
+          ],
+          "answer": "",
+          "question": "如图，在△ABC中，点D在边BC上，点E，F分别是AD，CE的中点，且△BEF的面积为3，则△ABC的面积是（）"
+        }
+      ]
+    }
+  },
+  "warnings": [
+    "Stage stage4_multi_choice is heterogeneous across 12 context families."
+  ]
+}
