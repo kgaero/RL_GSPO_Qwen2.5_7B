@@ -84,11 +84,6 @@ def parse_args() -> argparse.Namespace:
         help="Single-target override for the generation/evaluation completion budget.",
     )
     parser.add_argument(
-        "--base-model-path",
-        default=None,
-        help="Override the base model path or repo id (use a local Kaggle input path to avoid downloads).",
-    )
-    parser.add_argument(
         "--case-pack",
         default=None,
         choices=("kaggle_validation",),
@@ -144,8 +139,6 @@ def apply_cli_overrides(run_config, args: argparse.Namespace):
     run_config.output_root = args.output_root
     if args.eval_split:
         run_config.eval_split = args.eval_split
-    if args.base_model_path:
-        run_config.model.base_model_name = str(Path(args.base_model_path).expanduser())
     if args.max_eval_examples_per_subset is not None:
         run_config.eval.max_eval_examples_per_subset = args.max_eval_examples_per_subset
     elif args.full_split:

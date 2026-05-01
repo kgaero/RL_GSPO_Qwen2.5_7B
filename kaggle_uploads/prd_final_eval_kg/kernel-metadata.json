@@ -1,0 +1,19 @@
+{
+  "id": "kgaero/rl-gspo-prd-final-eval-kg",
+  "title": "rl-gspo-prd-final-eval-kg",
+  "code_file": "prd_final_eval_kg.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "dataset_sources": [
+    "kgaero/qwen2-5-vl-7b-unsloth-bnb4-cache-hf",
+    "kgaero/rl-gspo-prd-final-eval-inputs-kg"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": []
+}

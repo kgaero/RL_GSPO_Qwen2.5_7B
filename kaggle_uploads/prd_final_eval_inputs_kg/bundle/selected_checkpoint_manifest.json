@@ -1,0 +1,24 @@
+{
+  "bundle_type": "prd_final_eval_selected_checkpoints",
+  "targets": [
+    {
+      "label": "phase_a_ckpt_237",
+      "phase": "phase_a",
+      "relative_checkpoint": "selected_checkpoints/phase_a_ckpt_237"
+    },
+    {
+      "label": "phase_b_ckpt_180",
+      "phase": "phase_b",
+      "relative_checkpoint": "selected_checkpoints/phase_b_ckpt_180"
+    },
+    {
+      "label": "phase_c_ckpt_240",
+      "phase": "phase_c",
+      "relative_checkpoint": "selected_checkpoints/phase_c_ckpt_240"
+    }
+  ],
+  "notes": [
+    "Baseline rank8 adapter is generated inside the notebook by zeroing a rank-8 selected adapter.",
+    "Selected checkpoints are KG-only phasewise outputs except baseline, which is a zeroed rank-8 adapter for base-model evaluation."
+  ]
+}

@@ -52,6 +52,7 @@ unsloth_compiled_cache/
 *.pth
 *.ckpt
 *.onnx
+*.tar.gz
 
 # Local analysis export
 RL Qwen Model Analysis.docx

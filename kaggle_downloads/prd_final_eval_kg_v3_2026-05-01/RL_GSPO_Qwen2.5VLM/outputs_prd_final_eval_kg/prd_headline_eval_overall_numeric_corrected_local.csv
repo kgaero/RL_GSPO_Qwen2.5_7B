@@ -1,0 +1,5 @@
+Phase,Checkpoint,Exact,Tol,Parseable,Avg Reward,Structure,Correctness,Composite
+Baseline,baseline_rank8,0.25,0.25,0.25,-0.0625,0.0,0.24999999999999997,0.15
+Phase A,phase_a/checkpoint-237,0.25,0.25,1.0,5.875,0.75,0.32499999999999996,0.45
+Phase B,phase_b/checkpoint-180,0.75,0.75,1.0,7.074999999999999,0.75,0.7749999999999999,0.75
+Phase C,phase_c/checkpoint-240,0.75,0.75,1.0,7.574999999999999,0.75,0.7749999999999999,0.75

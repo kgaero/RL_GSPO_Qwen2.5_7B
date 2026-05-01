@@ -1,0 +1,13 @@
+Phase,Checkpoint,Exact,Tol,Parseable,Avg Reward,Structure,Correctness,Composite,Eval Subset,Malformed,Truncation
+Baseline,baseline_rank8,0.0,0.0,0.5,1.15625,,,,stage1_easy_numeric,0.5,0.5
+Baseline,baseline_rank8,0.5,0.5,0.5,2.09375,,,,stage2_float_numeric,0.5,0.5
+Baseline,baseline_rank8,0.0,0.0,0.0,-2.0,,,,stage3_hard_numeric,1.0,1.0
+Phase A,phase_a/checkpoint-237,0.5,0.5,1.0,6.5,,,,stage1_easy_numeric,0.0,0.0
+Phase A,phase_a/checkpoint-237,0.75,0.75,1.0,7.09375,,,,stage2_float_numeric,0.0,0.0
+Phase A,phase_a/checkpoint-237,0.0,0.0,0.75,4.375,,,,stage3_hard_numeric,0.25,0.0
+Phase B,phase_b/checkpoint-180,0.75,0.75,1.0,7.074999999999999,,,,stage1_easy_numeric,0.0,0.0
+Phase B,phase_b/checkpoint-180,0.75,0.75,1.0,7.074999999999999,,,,stage2_float_numeric,0.0,0.0
+Phase B,phase_b/checkpoint-180,0.0,0.0,1.0,3.6750000000000003,,,,stage3_hard_numeric,0.0,0.0
+Phase C,phase_c/checkpoint-240,0.25,0.25,1.0,4.825,,,,stage1_easy_numeric,0.0,0.0
+Phase C,phase_c/checkpoint-240,0.75,0.75,1.0,7.574999999999999,,,,stage2_float_numeric,0.0,0.0
+Phase C,phase_c/checkpoint-240,0.25,0.25,1.0,4.825,,,,stage3_hard_numeric,0.0,0.0

@@ -1,0 +1,7 @@
+{
+  "label": "phase_c_ckpt_240",
+  "phase": "phase_c",
+  "checkpoint": "/kaggle/working/RL_GSPO_Qwen2.5VLM/prd_final_eval_inputs_kg/selected_checkpoints/phase_c_ckpt_240",
+  "max_completion_length": 64,
+  "reward_weights_json": "/kaggle/working/RL_GSPO_Qwen2.5VLM/prd_final_eval_inputs_kg/selected_checkpoints/phase_c_ckpt_240/reward_weights.json"
+}

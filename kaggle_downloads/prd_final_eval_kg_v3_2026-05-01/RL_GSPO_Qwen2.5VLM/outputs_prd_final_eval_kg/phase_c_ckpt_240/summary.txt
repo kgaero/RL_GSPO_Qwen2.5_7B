@@ -1,0 +1,26 @@
+Phase: phase_c
+Global step: 240
+Checkpoint: /kaggle/working/RL_GSPO_Qwen2.5VLM/prd_final_eval_inputs_kg/selected_checkpoints/phase_c_ckpt_240
+
+Metrics:
+  normalized_exact_match: 0.7500
+  tolerance_accuracy: 0.7500
+  parseable_answer_rate: 1.0000
+  solution_tag_compliance: 1.0000
+  reasoning_tag_compliance: 1.0000
+  malformed_answer_rate: 0.0000
+  truncation_rate: 0.0000
+  average_completion_tokens: 25.75
+
+Scores:
+  structure_score: 0.7500
+  correctness_score: 0.7750
+  composite_score: 0.7500
+
+Reward weights:
+  format_reward: 0.7500
+  parseable_reward: 0.7500
+  finished_reward: 1.0000
+  correctness_reward: 5.5000
+  brevity_reward: 0.2000
+  tolerance_reward: 1.0000

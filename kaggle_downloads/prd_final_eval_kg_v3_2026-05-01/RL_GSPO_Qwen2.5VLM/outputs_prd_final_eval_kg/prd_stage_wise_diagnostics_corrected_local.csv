@@ -1,0 +1,13 @@
+Phase,Checkpoint,Eval Subset,Exact,Tol,Parseable,Malformed,Truncation,Avg Reward
+Baseline,baseline_rank8,stage1_easy_numeric,0.0,0.0,0.5,0.5,0.5,1.15625
+Baseline,baseline_rank8,stage2_float_numeric,0.5,0.5,0.5,0.5,0.5,2.09375
+Baseline,baseline_rank8,stage3_hard_numeric,0.0,0.0,0.0,1.0,1.0,-2.0
+Phase A,phase_a/checkpoint-237,stage1_easy_numeric,0.5,0.5,1.0,0.0,0.0,6.5
+Phase A,phase_a/checkpoint-237,stage2_float_numeric,0.75,0.75,1.0,0.0,0.0,7.09375
+Phase A,phase_a/checkpoint-237,stage3_hard_numeric,0.0,0.0,0.75,0.25,0.0,4.375
+Phase B,phase_b/checkpoint-180,stage1_easy_numeric,0.75,0.75,1.0,0.0,0.0,7.074999999999999
+Phase B,phase_b/checkpoint-180,stage2_float_numeric,0.75,0.75,1.0,0.0,0.0,7.074999999999999
+Phase B,phase_b/checkpoint-180,stage3_hard_numeric,0.0,0.0,1.0,0.0,0.0,3.6750000000000003
+Phase C,phase_c/checkpoint-240,stage1_easy_numeric,0.25,0.25,1.0,0.0,0.0,4.825
+Phase C,phase_c/checkpoint-240,stage2_float_numeric,0.75,0.75,1.0,0.0,0.0,7.574999999999999
+Phase C,phase_c/checkpoint-240,stage3_hard_numeric,0.25,0.25,1.0,0.0,0.0,4.825

@@ -1,0 +1,196 @@
+{
+  "settings": {
+    "headline_eval_subset": "eval_overall_numeric",
+    "eval_split": "testmini",
+    "max_eval_examples_per_subset": 4,
+    "num_samples_per_prompt": 1,
+    "max_completion_length": 64,
+    "hardware_profile": "kaggle_t4",
+    "lora_rank": 8,
+    "kaggle_account": "KG / kgaero"
+  },
+  "headline_rows": [
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Exact": 0.25,
+      "Tol": 0.25,
+      "Parseable": 0.25,
+      "Avg Reward": -0.0625,
+      "Structure": 0.0,
+      "Correctness": 0.24999999999999997,
+      "Composite": 0.15
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Exact": 0.25,
+      "Tol": 0.25,
+      "Parseable": 1.0,
+      "Avg Reward": 5.875,
+      "Structure": 0.75,
+      "Correctness": 0.32499999999999996,
+      "Composite": 0.45
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Exact": 0.75,
+      "Tol": 0.75,
+      "Parseable": 1.0,
+      "Avg Reward": 7.074999999999999,
+      "Structure": 0.75,
+      "Correctness": 0.7749999999999999,
+      "Composite": 0.75
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Exact": 0.75,
+      "Tol": 0.75,
+      "Parseable": 1.0,
+      "Avg Reward": 7.574999999999999,
+      "Structure": 0.75,
+      "Correctness": 0.7749999999999999,
+      "Composite": 0.75
+    }
+  ],
+  "stage_wise_rows": [
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.0,
+      "Tol": 0.0,
+      "Parseable": 0.5,
+      "Malformed": 0.5,
+      "Truncation": 0.5,
+      "Avg Reward": 1.15625
+    },
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.5,
+      "Tol": 0.5,
+      "Parseable": 0.5,
+      "Malformed": 0.5,
+      "Truncation": 0.5,
+      "Avg Reward": 2.09375
+    },
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.0,
+      "Tol": 0.0,
+      "Parseable": 0.0,
+      "Malformed": 1.0,
+      "Truncation": 1.0,
+      "Avg Reward": -2.0
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.5,
+      "Tol": 0.5,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 6.5
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.75,
+      "Tol": 0.75,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 7.09375
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.0,
+      "Tol": 0.0,
+      "Parseable": 0.75,
+      "Malformed": 0.25,
+      "Truncation": 0.0,
+      "Avg Reward": 4.375
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.75,
+      "Tol": 0.75,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 7.074999999999999
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.75,
+      "Tol": 0.75,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 7.074999999999999
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.0,
+      "Tol": 0.0,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 3.6750000000000003
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.25,
+      "Tol": 0.25,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 4.825
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.75,
+      "Tol": 0.75,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 7.574999999999999
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.25,
+      "Tol": 0.25,
+      "Parseable": 1.0,
+      "Malformed": 0.0,
+      "Truncation": 0.0,
+      "Avg Reward": 4.825
+    }
+  ],
+  "notes": [
+    "Headline score columns are read from each target eval_metrics.json because subset_metrics.json does not persist structure_score/correctness_score/composite_score.",
+    "Stage-wise diagnostic rows retain per-stage metrics available in subset_metrics.json."
+  ]
+}
