@@ -78,6 +78,11 @@ def parse_args() -> argparse.Namespace:
         help="Limit evaluation examples per subset. Omit for the full selected subset.",
     )
     parser.add_argument(
+        "--no-max-eval-examples-per-subset",
+        action="store_true",
+        help="Clear any eval subset cap inherited from the hardware profile.",
+    )
+    parser.add_argument(
         "--max-completion-length",
         type=int,
         default=None,
@@ -146,7 +151,9 @@ def apply_cli_overrides(run_config, args: argparse.Namespace):
         run_config.eval_split = args.eval_split
     if args.base_model_path:
         run_config.model.base_model_name = str(Path(args.base_model_path).expanduser())
-    if args.max_eval_examples_per_subset is not None:
+    if args.no_max_eval_examples_per_subset:
+        run_config.eval.max_eval_examples_per_subset = None
+    elif args.max_eval_examples_per_subset is not None:
         run_config.eval.max_eval_examples_per_subset = args.max_eval_examples_per_subset
     elif args.full_split:
         # Full-split reevaluation should not inherit the small-GPU sample cap.
