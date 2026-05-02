@@ -1,0 +1,77 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{yuan2025vlcogito}
+\citation{shen2025satori}
+\citation{shen2025satori}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{deepseekmath2024}
+\citation{wu2025sppo,noukhovitch2025async}
+\citation{huang2025visionr1,wei2025coldstart,chen2025revisualr1}
+\citation{lu2024mathvista}
+\citation{zhang2025mavis,qi2025cogcom,liu2025infimmr,yuan2025vlcogito}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Overview of the staged metric-gated GRPO loop. The pipeline couples phase-specific data curation, GRPO fine-tuning, checkpoint-side evaluation, reward-weight adaptation, and alias-based continuation. The method studied here is the fine-tuning pipeline around GRPO rather than a new GRPO loss.}}{2}{figure.caption.2}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:pipeline}{{1}{2}{Overview of the staged metric-gated GRPO loop. The pipeline couples phase-specific data curation, GRPO fine-tuning, checkpoint-side evaluation, reward-weight adaptation, and alias-based continuation. The method studied here is the fine-tuning pipeline around GRPO rather than a new GRPO loss}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Contributions.}{2}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{RL fine-tuning and preference optimization.}{2}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Multimodal mathematical reasoning.}{2}{section*.4}\protected@file@percent }
+\citation{liu2025infimmr,yuan2025vlcogito,chen2026rucl}
+\@writefile{toc}{\contentsline {paragraph}{Curriculum and adaptive reward control.}{3}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Problem Setup and Design Goals}{3}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Method}{3}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Task, response contract, and phase structure}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Code-derived filter definitions for the three numeric curriculum stages used in the main training path. The stages overlap and are implemented as filtered views over the same MathVista split, not as fixed disjoint datasets.}}{4}{table.caption.6}\protected@file@percent }
+\newlabel{tab:stage-matrix}{{1}{4}{Code-derived filter definitions for the three numeric curriculum stages used in the main training path. The stages overlap and are implemented as filtered views over the same MathVista split, not as fixed disjoint datasets}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Reward decomposition}{4}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Metric-gated reward control}{4}{subsection.4.3}\protected@file@percent }
+\citation{mathvista_hf,lu2024mathvista}
+\citation{unsloth_qwen25vl_hf,bai2025qwen25vl}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Runtime and evaluation settings used for the reported final comparison. The memory-constrained hardware profile contains a small evaluation cap by default, but the final evaluation explicitly clears that cap and evaluates the full selected subsets.}}{5}{table.caption.10}\protected@file@percent }
+\newlabel{tab:t4-profile}{{2}{5}{Runtime and evaluation settings used for the reported final comparison. The memory-constrained hardware profile contains a small evaluation cap by default, but the final evaluation explicitly clears that cap and evaluates the full selected subsets}{table.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Checkpoint-side evaluation and alias-based selection}{5}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experimental Setting and Evaluation Protocol}{5}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Dataset and model.}{5}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Training protocol.}{5}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Runtime profile.}{5}{section*.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Final full evaluation on \texttt  {eval\_overall\_numeric} from MathVista \texttt  {testmini} ($456$ examples).}}{6}{table.caption.13}\protected@file@percent }
+\newlabel{tab:headline}{{3}{6}{Final full evaluation on \texttt {eval\_overall\_numeric} from MathVista \texttt {testmini} ($456$ examples)}{table.caption.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Baseline versus the highest-scoring primary checkpoint, Phase B \texttt  {checkpoint-180}.}}{6}{table.caption.14}\protected@file@percent }
+\newlabel{tab:base-final}{{4}{6}{Baseline versus the highest-scoring primary checkpoint, Phase B \texttt {checkpoint-180}}{table.caption.14}{}}
+\@writefile{toc}{\contentsline {paragraph}{Final evaluation protocol.}{6}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{6}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Results}{6}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Full primary evaluation}{6}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Improvement over baseline}{6}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Reward trajectory during training}{6}{subsection.6.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Training reward across the selected Phase A--C runs. Faint lines show raw per-step logged reward values from \texttt  {trainer\_state.json}; thick lines show 21-step centered moving averages.}}{7}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:reward-vs-step}{{2}{7}{Training reward across the selected Phase A--C runs. Faint lines show raw per-step logged reward values from \texttt {trainer\_state.json}; thick lines show 21-step centered moving averages}{figure.caption.15}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Stage-wise diagnostic evaluation on full \texttt  {testmini} stage filters. These diagnostics are separate from the primary \texttt  {eval\_overall\_numeric} comparison.}}{7}{table.caption.16}\protected@file@percent }
+\newlabel{tab:stage-diagnostics}{{5}{7}{Stage-wise diagnostic evaluation on full \texttt {testmini} stage filters. These diagnostics are separate from the primary \texttt {eval\_overall\_numeric} comparison}{table.caption.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Stage-wise diagnostics}{7}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Structure improves before correctness}{7}{subsection.6.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Training evolution across checkpoint-side milestones. The reported primary result uses the full evaluation in Table~\ref {tab:headline}; this figure is retained as a qualitative view of the structure-first, correctness-later trajectory observed during training.}}{8}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:evolution}{{3}{8}{Training evolution across checkpoint-side milestones. The reported primary result uses the full evaluation in Table~\ref {tab:headline}; this figure is retained as a qualitative view of the structure-first, correctness-later trajectory observed during training}{figure.caption.17}{}}
+\bibstyle{iclr2026_conference}
+\bibdata{references}
+\bibcite{mathvista_hf}{{1}{2026}{{AI4Math}}{{}}}
+\bibcite{bai2025qwen25vl}{{2}{2025}{{Bai et~al.}}{{Bai, Chen, Liu, Wang, Ge, Song, Dang, Wang, Wang, Tang, Zhong, Zhu, Yang, Li, Wan, Wang, Ding, Fu, Xu, Ye, Zhang, Xie, Cheng, Zhang, Yang, Xu, Lin, et~al.}}}
+\bibcite{chen2025revisualr1}{{3}{2025}{{Chen et~al.}}{{Chen, Guo, Su, Li, Wu, Chen, Chen, Wang, Qu, and Cheng}}}
+\bibcite{chen2026rucl}{{4}{2026}{{Chen et~al.}}{{Chen, Li, Chen, Gong, Li, Qin, Chang, Xu, Yang, Alinejad-Rokny, Qu, Zheng, and Yang}}}
+\bibcite{huang2025visionr1}{{5}{2025}{{Huang et~al.}}{{Huang, Jia, Zhai, Cao, Ye, Zhao, Hu, and Lin}}}
+\bibcite{liu2025infimmr}{{6}{2025}{{Liu et~al.}}{{Liu, Liu, Zhu, Xie, Li, Yuan, Wang, Li, Cheung, Zhang, Wu, and Yang}}}
+\bibcite{lu2024mathvista}{{7}{2024}{{Lu et~al.}}{{Lu, Bansal, Xia, Liu, Li, Hajishirzi, Cheng, Chang, Galley, and Gao}}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations and Reproducibility}{9}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{9}{section.8}\protected@file@percent }
+\bibcite{noukhovitch2025async}{{8}{2025}{{Noukhovitch et~al.}}{{Noukhovitch, Huang, Xhonneux, Hosseini, Agarwal, and Courville}}}
+\bibcite{qi2025cogcom}{{9}{2025}{{Qi et~al.}}{{Qi, Ding, Wang, Bai, Lv, Hong, Xu, Hou, Li, Dong, and Tang}}}
+\bibcite{deepseekmath2024}{{10}{2024}{{Shao et~al.}}{{Shao, Wang, Zhu, Xu, Song, Bi, Zhang, Zhang, Li, Wu, and Guo}}}
+\bibcite{shen2025satori}{{11}{2025}{{Shen et~al.}}{{Shen, Wei, Qu, and Cheng}}}
+\bibcite{unsloth_qwen25vl_hf}{{12}{2026}{{Unsloth}}{{}}}
+\bibcite{wei2025coldstart}{{13}{2025}{{Wei et~al.}}{{Wei, Li, Zheng, Wang, Wang, Kong, Sun, and Huang}}}
+\bibcite{wu2025sppo}{{14}{2025}{{Wu et~al.}}{{Wu, Sun, Yuan, Ji, Yang, and Gu}}}
+\bibcite{yuan2025vlcogito}{{15}{2025}{{Yuan et~al.}}{{Yuan, Xiao, Leng, Wang, Li, Xu, Chan, Zhao, Xu, Wei, Zhang, and Rong}}}
+\bibcite{zhang2025mavis}{{16}{2025}{{Zhang et~al.}}{{Zhang, Wei, Jiang, Guo, Zhang, Tong, Liu, Zhou, Zhang, Gao, and Li}}}
+\gdef \@abspage@last{10}

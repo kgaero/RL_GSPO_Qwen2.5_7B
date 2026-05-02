@@ -1,85 +1,50 @@
-\documentclass[11pt]{article}
-\usepackage[landscape,margin=0.6in]{geometry}
+
+\documentclass[10pt]{article}
+\usepackage[landscape,margin=0.55in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{booktabs}
-\usepackage{hyperref}
-
-\hypersetup{
-  colorlinks=true,
-  linkcolor=black,
-  urlcolor=blue
-}
-
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\newcommand{\code}[1]{\texttt{#1}}
-
 \begin{document}
-
 \begin{center}
-{\LARGE \textbf{Phase Weight Rationale}}\\[0.5em]
-{\large How the configured initial reward weights are chosen by phase}\\[0.75em]
+{\LARGE \textbf{Phase Weight Rationale}}\\[0.75em]
 \end{center}
-
-\noindent\textbf{Key point.}
-The configured initial weights are manual curriculum defaults from the phase config, not values derived from the previous checkpoint or from a metric optimizer.
-Each phase starts from hand-set weights aligned to that phase's goal, then the controller may adjust them after checkpoint evaluation.
-
-\vspace{0.5em}
-\noindent\textbf{Weight order:}
-\code{(corr, parse, fmt, finish, brev, tol)}
-
-\vspace{0.4em}
-\renewcommand{\arraystretch}{1.12}
-\setlength{\tabcolsep}{4pt}
+\noindent\textbf{Weight order:} \texttt{(corr, fmt, parse, finish, tol, brev)}. This matches the reward expression order: correctness, formatting, parseability, finished, tolerance, brevity. These are phase initial weights; the controller may update them after checkpoint evaluation.
+\vspace{0.45em}
+\renewcommand{\arraystretch}{1.13}
+\setlength{\tabcolsep}{3pt}
 \scriptsize
-\begin{center}
-\begin{tabular}{L{0.07\textwidth} L{0.22\textwidth} L{0.17\textwidth} L{0.43\textwidth}}
+\begin{longtable}{L{0.07\textwidth} L{0.18\textwidth} L{0.19\textwidth} L{0.16\textwidth} L{0.34\textwidth}}
 \toprule
-\textbf{Phase} &
-\textbf{Stated Goal} &
-\textbf{Initial Weights} &
-\textbf{Weight-Setting Rationale} \\
+\textbf{Phase} & \textbf{Configured Goal} & \textbf{Stage Mix} & \textbf{Initial Weights} & \textbf{Rationale} \\
 \midrule
-\code{phase\_a} &
+\endfirsthead
+\toprule
+\textbf{Phase} & \textbf{Configured Goal} & \textbf{Stage Mix} & \textbf{Initial Weights} & \textbf{Rationale} \\
+\midrule
+\endhead
+\texttt{phase\_a} &
 Structure stabilization on Stage 1. &
-\code{(2.0, 1.0, 1.0, 1.5, 0.25, 0.0)} &
-Bias training toward parseable, well-tagged, completed outputs before pushing hard on exact-match accuracy. High structure weights and elevated \code{finished} reflect early concern about malformed or truncated answers. \\
-
-\code{phase\_b} &
+stage1\_easy\_numeric: 100\% &
+\texttt{(2, 1, 1, 1.5, 0, 0.25)} &
+Structure-first start: formatting, parseability, and completion weights are high enough to make tagged, parseable, completed answers the early objective before stronger correctness pressure. \\
+\midrule
+\texttt{phase\_b} &
 Correctness strengthening with Stage 1/2 mix. &
-\code{(4.0, 0.75, 0.75, 1.0, 0.20, 0.0)} &
-Assumes Phase A has mostly stabilized structure, so correctness becomes the main emphasis. Structure weights stay active but are seeded lower because they now act more like guard rails than the primary objective. \\
-
-\code{phase\_c} &
+stage1\_easy\_numeric: 70\%, stage2\_float\_numeric: 30\% &
+\texttt{(4, 0.75, 0.75, 1, 0, 0.2)} &
+Moves pressure toward correctness after Phase A; formatting and parseability remain active as guard rails while Stage 2 enters the mix. \\
+\midrule
+\texttt{phase\_c} &
 Precision and harder reasoning with Stage 2/3 mix. &
-\code{(5.0, 0.50, 0.50, 0.75, 0.20, 1.0)} &
-Harder numeric tasks get stronger correctness pressure and active \code{tolerance} reward for near-miss numeric answers. Structure starts lower because it is expected to be maintained by guards rather than heavily seeded upfront. \\
-
-\code{phase\_d} &
-Hard Stage 3 strengthening with longer completions allowed. &
-\code{(5.0, 0.50, 0.50, 0.75, 0.30, 1.0)} &
-Keeps Phase C's high correctness and tolerance emphasis for the hardest numeric subset. \code{brevity} rises slightly to preserve some length discipline even though the max completion length is expanded. \\
-
-\code{phase\_e} &
-Scaffolded multi-choice branch. &
-\code{(4.0, 0.75, 0.75, 1.0, 0.20, 0.0)} &
-Returns to a more conservative, structure-supported starting point similar to Phase B. The branch is configured separately from the numeric free-form curriculum and does not enable tolerance reward. \\
+stage2\_float\_numeric: 60\%, stage3\_hard\_numeric: 40\% &
+\texttt{(5, 0.5, 0.5, 0.75, 1, 0.2)} &
+Raises correctness for harder numeric reasoning and enables tolerance reward for near-miss numeric answers; structure weights are lower because controller guards maintain formatting. \\
 \bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.4em}
-\noindent\textbf{Interpretation.}
-The exact numbers appear to be hand-tuned heuristics chosen to match the curriculum intent and stage mix of each phase.
-I do not see code that computes these values from prior checkpoints, alias selection, or metric search.
-
-\vspace{0.4em}
-\noindent\textbf{Source logic}\\
-\code{staged\_rl/config.py}: phase descriptions and \code{reward\_components=\_reward\_components(...)}\\
-\code{staged\_rl/trainer\_runtime.py}: reads \code{component.initial\_weight} at phase start
-
+\end{longtable}
+\vspace{0.35em}
+\noindent\textbf{Component bounds:} correctness 1.0--8.0; format and parseable 0.25--2.0; finished 0.5--2.0; tolerance 0.0--2.0; brevity 0.0--1.0.
 \end{document}

@@ -1,20 +1,14 @@
 # Controller Rule Reference
 
-Rule names below match the audit labels used in `controller_rule_audit`.
-
-| Audit reference | Rule key | Rule type | Description | In your 7? |
-| --- | --- | --- | --- | --- |
-| `Phase Reset` |  | `phase defaults` | Not a controller trigger. When a new phase or run starts, weights reset to that phase's configured initial values. A first checkpoint in a phase can therefore show both `Phase Reset` and guard-driven deltas in the same row. | No |
-| `Parseable Guard Fired` | `parseable_guard` | `update rule` | Fires when `parseable_answer_rate < 0.85`; sets `after = max(before, 0.75)` for `parseable_reward`. This is a floor lift, not a fixed increment, so `0.50 -> 0.75` appears as `d_parse = +0.25`. | Yes, item 1 |
-| `Format Guard Fired` | `format_guard` | `update rule` | Fires when `solution_tag_compliance < 0.90` or `reasoning_tag_compliance < 0.88` or `malformed_answer_rate > 0.10`; sets `after = max(before, 0.75)` for `format_reward`. This is a floor lift, not a fixed increment, so `0.50 -> 0.75` appears as `d_fmt = +0.25`. | Yes, item 2 |
-| `Finish Guard Fired` | `finish_guard` | `update rule` | Fires when `truncation_rate > 0.15` or `average_completion_tokens > 0.85 * max_completion_length`; adds `+0.25` to `finished_reward`. | Yes, item 3 |
-| `Stable Structure` | `stable_structure` | `helper condition` | True when `parseable >= 0.92` and `solution >= 0.95` and `reasoning >= 0.93` and `malformed <= 0.05` and `truncation <= 0.08`. | Yes, item 5 |
-| `Stable Window Ready` | `stable_window_ready` | `helper condition` | True only after at least `2` eval checkpoints exist in the same phase history. Plateau is not checked until this is true. | No |
-| `Correctness Plateau` | `correctness_plateau` | `helper condition` | True when `current_exact - previous_exact < 0.02`. Because the test is `< 0.02`, regressions also satisfy it. | Mostly item 6, but incomplete without `Stable Window Ready` |
-| `Correctness Rule Fired` | `correctness_escalation` | `update rule` | Fires only when `stable_structure and stable_window_ready and correctness_plateau`; adds `+0.50` to `correctness_reward`. | Yes, item 4, but missing `Stable Window Ready` |
-| `Clamped Components` | `clamped_components` | `post-update constraint record` | Not a trigger rule. After updates, any weight outside its component bounds is clamped to min or max and recorded here. | Mostly item 7 |
-
-Source logic:
-
-- `staged_rl/controller.py`
-- `staged_rl/config.py`
+| Audit Reference | Rule Key | Type | Trigger / Condition | Controller Action | Source Values |
+|---|---|---|---|---|---|
+| Phase initialization / reset | phase_initialization | initialization | New active phase uses that phase configured reward component initial weights. | No metric trigger. Initializes weights from PhaseConfig.reward_components. | Per-phase values in phase_weight_rationale. |
+| Parseable Guard Fired | parseable_guard | guard update | parseable_answer_rate < 0.85. | Sets parseable_reward = max(current, 0.75). | floor threshold 0.85; guard target 0.75. |
+| Format Guard Fired | format_guard | guard update | solution_tag_compliance < 0.9 OR reasoning_tag_compliance < 0.88 OR malformed_answer_rate > 0.1. | Sets format_reward = max(current, 0.75). | solution floor 0.9; reasoning floor 0.88; malformed ceiling 0.1; guard target 0.75. |
+| Finish Guard Fired | finish_guard | guard update | truncation_rate > 0.15 OR average_completion_tokens > 0.85 * max_completion_length. | Adds +0.25 to finished_reward before bounds/floors are applied. | truncation ceiling 0.15; token fraction 0.85; finish step 0.25. |
+| Stable Structure | stable_structure | helper condition | parseable >= 0.92 AND solution >= 0.95 AND reasoning >= 0.93 AND malformed <= 0.05 AND truncation <= 0.08. | Does not change weights by itself; required for correctness escalation. | Stable thresholds from RewardGateConfig. |
+| Stable Window Ready | stable_window_ready | helper condition | At least 2 prior/current checkpoint metric entries exist in phase history. | Enables exact-match plateau check. | stable_window = 2. |
+| Correctness Plateau | correctness_plateau | helper condition | current normalized_exact_match minus previous window exact match < 0.02. | Does not change weights by itself; required for correctness escalation. | exact_match_plateau_delta = 0.02. |
+| Correctness Rule Fired | correctness_escalation | update rule | stable_structure AND stable_window_ready AND correctness_plateau. | Adds +0.5 to correctness_reward before bounds/floors are applied. | correctness_step = 0.5. |
+| Post-update Floors | component_floors | post-update constraint | Always applied after rule updates. | Ensures format_reward >= 0.25, parseable_reward >= 0.25, finished_reward >= 0.5. | format_floor 0.25; parseable_floor 0.25; finish_floor 0.5. |
+| Component Bounds Clamp | clamped_components | post-update constraint record | Any reward weight falls outside its RewardComponentConfig min/max bound. | Clamps to component min/max and records the changed component. | Bounds: correctness 1.0-8.0, format and parseable 0.25-2.0, finished 0.5-2.0, tolerance 0.0-2.0, brevity 0.0-1.0. |

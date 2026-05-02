@@ -12,7 +12,6 @@
 \usepackage{enumitem}
 \usepackage{array}
 \usepackage{fancyvrb}
-\usepackage{xcolor}
 
 \hypersetup{
   colorlinks=true,
@@ -23,7 +22,7 @@
 
 \iclrfinalcopy
 
-\title{Supplementary Material for\\A Case Study of Staged Metric-Gated GRPO for Visual Numeric Reasoning}
+\title{Supplementary Material for\\Staged Metric-Gated GRPO Fine-Tuning Pipeline for Visual Numeric Reasoning}
 \author{Kunal Ghosh\\
 Purdue University\\
 West Lafayette, Indiana, USA\\
@@ -42,11 +41,12 @@ West Lafayette, Indiana, USA\\
 
 \section{Purpose of the Supplement}
 
-This supplement expands the main paper in four directions:
+This supplement expands the main paper in five directions:
 \begin{enumerate}[leftmargin=1.2em]
 \item the exact reward and evaluation formulas used by the method,
 \item the controller rules and checkpoint-selection logic,
-\item the low-memory runtime profile used by the reported runs, and
+\item the runtime profile used by the reported runs,
+\item the final full-evaluation protocol, and
 \item the continuation semantics used for same-phase resume versus cross-phase warm start.
 \end{enumerate}
 All statements below are grounded in the following implementation modules:
@@ -57,9 +57,10 @@ All statements below are grounded in the following implementation modules:
 \item \texttt{staged\_rl/controller.py}
 \item \texttt{staged\_rl/checkpointing.py}
 \item \texttt{staged\_rl/trainer\_runtime.py}
+\item \texttt{rl\_gspo\_qwen2\_5vlm\_eval.py}
 \end{itemize}
 
-\section{Background: GRPO Versus the Contribution of This Paper}
+\section{GRPO Versus the Contribution of This Paper}
 
 Our implementation uses TRL's \texttt{GRPOTrainer} as its optimization backend. The methodological contribution analyzed in the main paper is the fine-tuning pipeline built around that backend rather than a new GRPO objective:
 \begin{itemize}[leftmargin=1.2em]
@@ -68,7 +69,7 @@ Our implementation uses TRL's \texttt{GRPOTrainer} as its optimization backend. 
 \item metric-gated reward reweighting after checkpoint evaluation, and
 \item alias-based checkpoint selection for continuation.
 \end{itemize}
-GRPO itself provides the policy-optimization backbone: the trainer samples multiple completions for a prompt, evaluates them under a reward function, and updates the policy from relative within-group performance rather than from PPO-style clipped ratios. The contribution in this work is the fine-tuning pipeline built around that optimizer: filtered curricula, metric-gated reward adaptation, checkpoint-aware continuation, and auditable transfer semantics. This distinction is important because the optimization objective remains standard TRL GRPO, while the staged controller and continuation logic determine how the pipeline prioritizes structure, correctness, and checkpoint selection over time.
+GRPO provides the policy-optimization backbone: the trainer samples multiple completions for a prompt, evaluates them under a reward function, and updates the policy from relative within-group performance rather than from PPO-style clipped ratios. The contribution in this work is the training system built around that optimizer: filtered curricula, metric-gated reward adaptation, checkpoint-aware continuation, and auditable transfer semantics.
 
 \section{Full Reward Specification}
 
@@ -104,8 +105,8 @@ The implementation uses:
 \paragraph{Reward components.}
 The six reward components are:
 \begin{align}
-R_{\mathrm{format}}(c,m) &= \mathrm{ReasoningTag}(c) + \mathrm{SolutionTag}(c) \nonumber\\
-&\quad - 0.5\,\mathrm{Malformed}(c,m),\\
+R_{\mathrm{format}}(c,m) &= \mathrm{ReasoningTag}(c) + \mathrm{SolutionTag}(c)
+- 0.5\,\mathrm{Malformed}(c,m),\\
 R_{\mathrm{parseable}}(c,m) &=
 \begin{cases}
 \mathbf{1}[\text{numeric parsing succeeds}], & m=\mathrm{num},\\
@@ -134,10 +135,10 @@ R_{\mathrm{tolerance}}(c,g,m) &=
 \end{cases}
 \end{align}
 
-Tolerance reward is active only in Phases C and D. Exact match suppresses tolerance reward, so the tolerance component acts strictly as a denser near-miss signal rather than an additional bonus for already-correct answers.
+Tolerance reward is active in Phase C. Exact match suppresses tolerance reward, so the tolerance component acts strictly as a denser near-miss signal rather than an additional bonus for already-correct answers.
 
 \paragraph{Phase-initialized weights.}
-The configured initial weights are manual curriculum defaults rather than values learned by a meta-optimizer:
+The configured initial weights for the reported training phases are manual curriculum defaults rather than values learned by a meta-optimizer:
 \begin{center}
 \small
 \begin{tabular}{lcccccc}
@@ -147,14 +148,13 @@ Phase & Format & Parseable & Finished & Correctness & Brevity & Tolerance \\
 A & 1.0 & 1.0 & 1.5 & 2.0 & 0.25 & 0.0 \\
 B & 0.75 & 0.75 & 1.0 & 4.0 & 0.20 & 0.0 \\
 C & 0.50 & 0.50 & 0.75 & 5.0 & 0.20 & 1.0 \\
-D & 0.50 & 0.50 & 0.75 & 5.0 & 0.30 & 1.0 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \section{Evaluation Metrics and Checkpoint Scores}
 
-For each prompt $i$, the evaluator samples one or more completions $c_{i,j}$. It computes:
+For each prompt $i$, the evaluator samples one or more completions $c_{i,j}$. The final reported evaluation uses one completion per prompt. The evaluator computes:
 \begin{align}
 \mathrm{EM} &= \frac{1}{N}\sum_{i=1}^N \mathbf{1}[\text{first sampled completion matches exactly}],\\
 \mathrm{TolAcc} &= \frac{1}{N}\sum_{i=1}^N \mathbf{1}[\text{first sampled completion is correct under tolerance}],\\
@@ -166,13 +166,14 @@ It also computes tag-compliance rates, completion-token averages, repetition rat
 
 The checkpoint registry then defines three scores:
 \begin{align}
-S_{\mathrm{struct}} &= 0.35\,\mathrm{ParseRate} + 0.20\,\mathrm{SolutionTag} \nonumber\\
-&\quad + 0.20\,\mathrm{ReasoningTag} - 0.15\,\mathrm{MalfRate} \nonumber\\
-&\quad - 0.10\,\mathrm{TruncRate},\\
+S_{\mathrm{struct}} &= 0.35\,\mathrm{ParseRate} + 0.20\,\mathrm{SolutionTag}
++ 0.20\,\mathrm{ReasoningTag} \nonumber\\
+&\quad - 0.15\,\mathrm{MalfRate} - 0.10\,\mathrm{TruncRate},\\
 S_{\mathrm{corr}} &= 0.70\,\mathrm{EM} + 0.20\,\mathrm{TolAcc} + 0.10\,\mathrm{ParseRate},\\
-S_{\mathrm{comp}} &= 0.45\,\mathrm{EM} + 0.15\,\mathrm{TolAcc} + 0.15\,\mathrm{ParseRate} \nonumber\\
-&\quad + 0.10\,\mathrm{SolutionTag} + 0.05\,\mathrm{ReasoningTag} \nonumber\\
-&\quad - 0.05\,\mathrm{MalfRate} - 0.05\,\mathrm{TruncRate}.
+S_{\mathrm{comp}} &= 0.45\,\mathrm{EM} + 0.15\,\mathrm{TolAcc} + 0.15\,\mathrm{ParseRate}
++ 0.10\,\mathrm{SolutionTag} \nonumber\\
+&\quad + 0.05\,\mathrm{ReasoningTag}
+- 0.05\,\mathrm{MalfRate} - 0.05\,\mathrm{TruncRate}.
 \end{align}
 These scores back the aliases \texttt{best\_structure}, \texttt{best\_correctness}, and \texttt{best\_composite}. The \texttt{latest} alias is purely chronological.
 
@@ -188,40 +189,31 @@ These scores back the aliases \texttt{best\_structure}, \texttt{best\_correctnes
 Rule & Trigger & Action \\
 \midrule
 Parseable guard & parseable answer rate $< 0.85$ & Raise parseable reward to at least $0.75$ \\
-Format guard & solution tag $< 0.90$ or\\ reasoning tag $< 0.88$ or\\ malformed rate $> 0.10$ & Raise format reward to at least $0.75$ \\
-Finish guard & truncation rate $> 0.15$ or\\ average completion tokens exceed $0.85L$ & Add $0.25$ to finished reward \\
-Stable structure test & parseable $\ge 0.92$,\\ solution $\ge 0.95$,\\ reasoning $\ge 0.93$,\\ malformed $\le 0.05$,\\ truncation $\le 0.08$ & Enable plateau-based correctness escalation once enough history exists \\
+Format guard & solution tag $< 0.90$ or reasoning tag $< 0.88$ or malformed rate $> 0.10$ & Raise format reward to at least $0.75$ \\
+Finish guard & truncation rate $> 0.15$ or average completion tokens exceed $0.85L$ & Add $0.25$ to finished reward \\
+Stable structure test & parseable $\ge 0.92$, solution $\ge 0.95$, reasoning $\ge 0.93$, malformed $\le 0.05$, truncation $\le 0.08$ & Enable plateau-based correctness escalation once enough history exists \\
 Correctness escalation & Stable structure holds over a two-checkpoint window and exact-match gain is below $0.02$ & Add $0.50$ to correctness reward \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The controller audit covers 26 evaluated checkpoints. Across those checkpoints:
+The controller rules are intentionally concise and inspectable. The main paper does not rely on a fixed count of controller firings because the final primary comparison is based on selected checkpoints reevaluated on the full numeric evaluation subset.
+
+\section{Runtime Profile and Final Evaluation Protocol}
+
+The reported training and final evaluation share the same memory-constrained adapter and generation budget:
 \begin{itemize}[leftmargin=1.2em]
-\item parseability guard fires 2 times,
-\item formatting guard fires 2 times,
-\item finish guard fires 2 times,
-\item correctness escalation fires 12 times, and
-\item 6 correctness escalations occur when exact match has regressed rather than merely plateaued.
+\item max sequence length $1280$,
+\item image size $336$,
+\item LoRA rank $8$ with LoRA alpha $8$,
+\item max prompt length $320$,
+\item max completion length $64$,
+\item two sampled generations per prompt during GRPO fine-tuning,
+\item one sampled completion per prompt during final evaluation, and
+\item full final evaluation with no per-subset example cap.
 \end{itemize}
-This behavior is consistent with the code: once the system judges structure to be stable, it reacts to weak exact-match progress by raising correctness pressure even if the immediate trend is negative.
 
-\section{Runtime Profile and Resource-Constrained Operation}
-
-The successful runs share the same low-memory profile:
-\begin{itemize}[leftmargin=1.2em]
-\item max sequence length reduced from $16384$ to $1280$,
-\item image size reduced from $512$ to $336$,
-\item LoRA rank reduced from $16$ to $8$,
-\item sampled generations reduced from $4$ to $2$,
-\item max prompt length reduced from $1024$ to $320$,
-\item max completion length reduced from $256$ to $64$ in the default Kaggle profile,
-\item max completion length increased to $96$ only for Phase D,
-\item evaluation reduced to one sample per prompt and at most two examples per subset.
-\end{itemize}
-We interpret these changes as runtime stabilizers rather than task simplifiers. They reduce per-step VRAM pressure and evaluation overhead, but they also reduce reasoning budget, visual detail, and generation diversity.
-
-\paragraph{Runtime configuration in code form.}
+\paragraph{Runtime configuration.}
 The same runtime profile can be read directly in the style of the code paths that consume these settings:
 
 \begin{Verbatim}[fontsize=\scriptsize,frame=single,framesep=3mm]
@@ -248,12 +240,12 @@ FastVisionModel.get_peft_model(
 \end{Verbatim}
 
 \begin{Verbatim}[fontsize=\scriptsize,frame=single,framesep=3mm]
-# Trainer / evaluation profile
+# Trainer / final evaluation profile
 GRPOConfig(
     gradient_accumulation_steps=4,
     num_generations=2,
     max_prompt_length=320,
-    max_completion_length=64,  # Phase D override: 96
+    max_completion_length=64,
     importance_sampling_level="sequence",
     loss_type="dr_grpo",
 )
@@ -261,34 +253,95 @@ GRPOConfig(
 SamplingParams(
     temperature=1.0,
     top_k=50,
-    max_tokens=64,  # Phase D override: 96
+    max_tokens=64,
     n=1,
 )
 
 EvalConfig(
     num_samples_per_prompt=1,
-    max_eval_examples_per_subset=2,
+    max_eval_examples_per_subset=None,
 )
 \end{Verbatim}
 
+\paragraph{Final evaluation target set.}
+The final comparison evaluates four targets:
+\begin{center}
+\small
+\begin{tabular}{ll}
+\toprule
+Label & Checkpoint \\
+\midrule
+Baseline & \texttt{baseline\_rank8} \\
+Phase A & \texttt{phase\_a/checkpoint-237} \\
+Phase B & \texttt{phase\_b/checkpoint-180} \\
+Phase C & \texttt{phase\_c/checkpoint-240} \\
+\bottomrule
+\end{tabular}
+\end{center}
+The primary subset is \texttt{eval\_overall\_numeric} from MathVista \texttt{testmini}. Its size is $456$ examples. The diagnostic stage subsets contain $195$ Stage 1 examples, $287$ Stage 2 examples, and $119$ Stage 3 examples.
+
+\section{Full Evaluation Results}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Final primary evaluation on the full \texttt{eval\_overall\_numeric} subset.}
+\label{tab:supp-headline}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Phase & Checkpoint & Exact & Tol & Parse & AvgR & Struct & Corr & Comp \\
+\midrule
+Baseline & \texttt{baseline\_rank8} & 0.1798 & 0.1820 & 0.2544 & -0.0880 & 0.0285 & 0.1877 & 0.1163 \\
+Phase A & \texttt{checkpoint-237} & 0.4803 & 0.4868 & 0.9890 & 6.3857 & 0.7421 & 0.5325 & 0.5859 \\
+Phase B & \texttt{checkpoint-180} & 0.4978 & 0.5066 & 0.9781 & 5.8754 & 0.7371 & 0.5476 & 0.5946 \\
+Phase C & \texttt{checkpoint-240} & 0.4737 & 0.4846 & 0.9890 & 6.0361 & 0.7436 & 0.5274 & 0.5833 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Full stage-wise diagnostic results on MathVista \texttt{testmini}.}
+\label{tab:supp-stage}
+\begin{tabular}{llrrrrrr}
+\toprule
+Phase & Eval subset & Exact & Tol & Parse & Malf & Trunc & AvgR \\
+\midrule
+Baseline & Stage 1 & 0.1641 & 0.1641 & 0.2872 & 0.7128 & 0.6923 & 0.1981 \\
+Baseline & Stage 2 & 0.1220 & 0.1220 & 0.1672 & 0.8328 & 0.8293 & -0.7321 \\
+Baseline & Stage 3 & 0.0924 & 0.0924 & 0.1681 & 0.8319 & 0.8151 & -0.8057 \\
+Phase A & Stage 1 & 0.4615 & 0.4615 & 0.9897 & 0.0103 & 0.0051 & 6.3417 \\
+Phase A & Stage 2 & 0.4321 & 0.4460 & 0.9895 & 0.0105 & 0.0000 & 6.2666 \\
+Phase A & Stage 3 & 0.3950 & 0.4034 & 0.9832 & 0.0168 & 0.0084 & 6.1261 \\
+Phase B & Stage 1 & 0.4718 & 0.4718 & 0.9846 & 0.0154 & 0.0000 & 5.7786 \\
+Phase B & Stage 2 & 0.4774 & 0.4983 & 0.9721 & 0.0279 & 0.0035 & 5.7652 \\
+Phase B & Stage 3 & 0.3866 & 0.4118 & 0.9664 & 0.0336 & 0.0000 & 5.3517 \\
+Phase C & Stage 1 & 0.4564 & 0.4564 & 0.9692 & 0.0308 & 0.0000 & 5.8790 \\
+Phase C & Stage 2 & 0.4321 & 0.4530 & 0.9861 & 0.0139 & 0.0000 & 5.8103 \\
+Phase C & Stage 3 & 0.4202 & 0.4286 & 0.9832 & 0.0168 & 0.0000 & 5.7294 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Transfer and Continuation Semantics}
 
-The code distinguishes three different mechanisms that can be conflated in informal descriptions:
+The code distinguishes three mechanisms that can be conflated in informal descriptions:
 \begin{enumerate}[leftmargin=1.2em]
-\item \textbf{Cross-notebook transfer.} A checkpoint directory is physically moved through a Kaggle dataset attachment or another external bundle.
+\item \textbf{Artifact transfer.} A checkpoint directory is made available to a later run as an input artifact.
 \item \textbf{Warm start.} A fresh base model is loaded, a fresh LoRA adapter is attached, and adapter weights are copied from the selected checkpoint into that new adapter.
 \item \textbf{Same-phase resume.} Full trainer state is restored from a checkpoint, including optimizer state, scheduler state, trainer progress, and controller state.
 \end{enumerate}
 
-This distinction is important for the claims in the paper. Cross-phase continuation often uses alias-based warm start rather than exact trainer resume. Same-phase restarts can use exact trainer resume if the selected checkpoint belongs to the current phase.
+This distinction is important for interpreting the reported checkpoints. Cross-phase continuation uses selected adapter weights as a warm start. Same-phase restarts can use exact trainer resume if the selected checkpoint belongs to the current phase and the full trainer state is available.
 
-\section{Additional Notes on Scope}
+\section{Additional Scope Notes}
 
-The implementation contains scaffolding for a multi-choice branch and an optional robustness stage, but neither path provides the main evidence used in the paper. Similarly, the runner logs when multiple GPUs are visible but does not automatically switch to DDP or tensor parallelism. The strongest claims are therefore:
+The implementation contains preliminary support for a multi-choice branch and an optional robustness stage, but neither path provides the main evidence used in the paper. Similarly, the runner logs when multiple GPUs are visible but does not automatically switch to DDP or tensor parallelism. The primary claims are therefore:
 \begin{itemize}[leftmargin=1.2em]
 \item about staged GRPO fine-tuning pipeline dynamics for numeric visual reasoning,
 \item about metric-gated control under non-monotonic checkpoint trajectories, and
-\item about making a single-GPU GRPO fine-tuning pipeline more auditable and reproducible.
+\item about making a memory-constrained GRPO fine-tuning pipeline more auditable and reproducible.
 \end{itemize}
 
 \end{document}

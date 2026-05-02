@@ -24,8 +24,6 @@
 
 \title{Staged Metric-Gated GRPO Fine-Tuning Pipeline for Visual Numeric Reasoning}
 
-% Keep the real author block in source; the ICLR style will hide it in review mode
-% until \iclrfinalcopy is restored.
 \author{Kunal Ghosh\\
 Purdue University\\
 West Lafayette, Indiana, USA\\
@@ -43,9 +41,9 @@ West Lafayette, Indiana, USA\\
 \rhead{}
 
 \begin{abstract}
-We study a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning. The method combines a phase-wise curriculum over filtered MathVista subsets, a strict \texttt{<REASONING>} / \texttt{<SOLUTION>} response contract, metric-gated reward adaptation based on checkpoint evaluation, and alias-based checkpoint selection for non-monotonic training trajectories. In resource-constrained runs, early small-scale phases stabilize parseability and output structure, and subsequent larger-split continuation improves correctness. Under the evaluation protocol used for continuation, the best Phase C and Phase D checkpoints reach exact-match and tolerance accuracy of 0.75, compared with 0.375 for the baseline, while maintaining parseability 1.0 and zero truncation on the monitored subset. These results suggest that curriculum staging, metric-gated reward control, and checkpoint-aware continuation can improve the stability of RL fine-tuning for multimodal numeric question answering.
+We study a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning. The method combines a phase-wise curriculum over filtered MathVista subsets, a strict \texttt{<REASONING>} / \texttt{<SOLUTION>} response contract, metric-gated reward adaptation based on checkpoint evaluation, and alias-based checkpoint selection for non-monotonic training trajectories. We evaluate a rank-8 LoRA adaptation of \texttt{Qwen2.5-VL-7B-Instruct} under a fixed memory-constrained runtime profile. On the full \texttt{eval\_overall\_numeric} subset of MathVista \texttt{testmini} ($456$ examples), the best Phase B checkpoint improves exact match from $17.98\%$ to $49.78\%$, tolerance accuracy from $18.20\%$ to $50.66\%$, parseability from $25.44\%$ to $97.81\%$, and composite score from $11.63\%$ to $59.46\%$ relative to the baseline adapter evaluated under the same decoding protocol. These results suggest that curriculum staging, metric-gated reward control, and checkpoint-aware continuation can substantially improve the stability of RL fine-tuning for multimodal numeric question answering.
 
-\textbf{Code:} \url{https://github.com/kgaero/RL_GSPO_Qwen2.5VLM}
+\textbf{Code:} \url{https://github.com/kgaero/RL_GSPO_Qwen2.5_7B}
 \end{abstract}
 
 \section{Introduction}
@@ -54,7 +52,7 @@ Reinforcement-learning fine-tuning for language and vision-language models is of
 
 This paper investigates a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning using \texttt{Qwen2.5-VL-7B-Instruct} as the base VLM. The pipeline leaves the GRPO objective unchanged and augments fine-tuning with filtered curriculum stages, a strict response contract, rule-based reward adaptation keyed to checkpoint metrics, and checkpoint aliases that allow continuation from the best structural or composite checkpoint rather than always from the most recent one. We analyze how this fine-tuning pipeline produces a structure-first and correctness-later trajectory for multimodal numeric question answering.
 
-The implementation is designed to be auditable: controller states are saved, checkpoint aliases are explicit, reward weights are persisted, and the main milestones are recoverable from checkpoint-side evaluation logs. This instrumentation is valuable in constrained-compute RL settings, where structural failures dominate early training and continuation decisions materially affect outcomes.
+The implementation is designed to be auditable: controller states are saved, checkpoint aliases are explicit, reward weights are persisted, and evaluation artifacts contain both aggregate and sample-level records. This instrumentation is valuable in constrained-compute RL settings, where structural failures dominate early training and continuation decisions materially affect outcomes.
 
 Figure~\ref{fig:pipeline} summarizes the loop. A base VLM is prepared with LoRA adapters, fine-tuned on a stage-filtered phase mixture, evaluated checkpoint by checkpoint, and then fed back into a controller that updates reward weights after each checkpoint evaluation. Table~\ref{tab:stage-matrix} shows that the curriculum is implemented as overlapping filtered views over the same MathVista split rather than as disjoint datasets.
 
@@ -62,7 +60,7 @@ Figure~\ref{fig:pipeline} summarizes the loop. A base VLM is prepared with LoRA 
 \begin{enumerate}[leftmargin=1.2em]
 \item We document a staged GRPO fine-tuning pipeline for visual numeric reasoning that explicitly prioritizes structure stabilization before the main correctness gains.
 \item We formalize the metric-gated reward controller and checkpoint aliasing logic so they can be read as an auditable algorithm rather than as scattered implementation details.
-\item We characterize the checkpoint-side training trajectory used for continuation decisions, including the 0.75 exact-match milestone reached by the best large Phase C and dedicated Phase D checkpoints.
+\item We report a controlled full-evaluation comparison across Baseline, Phase A, Phase B, and Phase C checkpoints on the same numeric \texttt{testmini} evaluation subset, with the highest primary score obtained by Phase B.
 \end{enumerate}
 
 \begin{figure}[t]
@@ -96,7 +94,7 @@ The central question is therefore not only how to optimize correctness, but also
 
 The implementation makes three concrete design choices.
 \begin{itemize}[leftmargin=1.2em]
-\item \textbf{Easy-to-hard data staging.} The policy first sees easier integer-valued numeric problems before harder float and geometry-heavy subsets are emphasized.
+\item \textbf{Increasing-difficulty data staging.} The policy first sees easier integer-valued numeric problems before harder float and geometry-heavy subsets are emphasized.
 \item \textbf{Metric-gated rewards.} Reward weights change only after checkpoint evaluation, using measured failure modes rather than a fixed epoch schedule.
 \item \textbf{Alias-based continuation.} Checkpoint continuation is based on structure, correctness, or composite aliases rather than assuming the latest checkpoint is best.
 \end{itemize}
@@ -112,12 +110,12 @@ The code targets MathVista-style visual question answering in which the answer i
 <REASONING> ... </REASONING>\\
 <SOLUTION> single numeric answer </SOLUTION>
 \end{quote}
-This contract matters because both the reward functions and the evaluator depend on extracting a unique solution string from the completion. The pipeline also contains a separate multi-choice scaffold, but that branch is disabled by default and is not part of the main evidence.
+This contract is important because both the reward functions and the evaluator depend on extracting a unique solution string from the completion. The pipeline also contains a separate multi-choice scaffold, but that branch is disabled by default and is not part of the main evidence.
 
-The curriculum is organized into stages and phases. Stages are filtered subsets over the same dataset. In the default configuration:
+The curriculum is organized into stages and phases. Stages are filtered subsets over the same dataset. In the configuration used for the main training path:
 \begin{itemize}[leftmargin=1.2em]
 \item \textbf{Stage 1} restricts to easier English free-form integer questions on synthetic scenes, tables, and natural images.
-\item \textbf{Stage 2} broadens to integer and float answers, adding tables, charts, plots, and scientific figures.
+\item \textbf{Stage 2} broadens to integer and float answers, adding tables, charts, plots, scientific figures, and natural images.
 \item \textbf{Stage 3} emphasizes harder geometry, scientific-figure, plot, and abstract-scene problems.
 \end{itemize}
 Phases then mix these stages with different reward emphases:
@@ -125,7 +123,6 @@ Phases then mix these stages with different reward emphases:
 \item \textbf{Phase A}: Stage 1 only, structure stabilization.
 \item \textbf{Phase B}: $0.7$ Stage 1 + $0.3$ Stage 2, early correctness strengthening.
 \item \textbf{Phase C}: $0.6$ Stage 2 + $0.4$ Stage 3, harder reasoning and tolerance reward.
-\item \textbf{Phase D}: Stage 3 only, hard-subset specialization with a longer completion budget.
 \end{itemize}
 
 \begin{table}[t]
@@ -154,8 +151,6 @@ Context families & \mcell{\texttt{synthetic scene}\\\texttt{table}\\\texttt{natu
 Skills (any) & \mcell{\texttt{arithmetic reasoning}\\\texttt{statistical reasoning}\\\texttt{numeric commonsense}} & \mcell{\texttt{arithmetic reasoning}\\\texttt{statistical reasoning}\\\texttt{scientific reasoning}\\\texttt{numeric commonsense}} & \mcell{\texttt{geometry reasoning}\\\texttt{algebraic reasoning}\\\texttt{scientific reasoning}\\\texttt{arithmetic reasoning}\\\texttt{statistical reasoning}} \\
 \hline
 Hard only & False & False & True \\
-\hline
-Priority bias & \mcell{ctx: synthetic scene\\ctx: table\\skills: arithmetic reasoning\\skills: statistical reasoning\\skills: numeric commonsense\\grades: elementary school\\grades: daily life} & \mcell{ctx: table\\ctx: chart\\ctx: plot\\ctx: scientific figure\\skills: statistical reasoning\\skills: scientific reasoning\\skills: arithmetic reasoning} & \mcell{ctx: geometry diagram\\ctx: scientific figure\\ctx: plot\\skills: geometry reasoning\\skills: algebraic reasoning\\skills: scientific reasoning\\grades: high school\\grades: college} \\
 \hline
 \end{tabular}
 \caption{Code-derived filter definitions for the three numeric curriculum stages used in the main training path. The stages overlap and are implemented as filtered views over the same MathVista split, not as fixed disjoint datasets.}
@@ -190,7 +185,7 @@ for a two-checkpoint window. If that condition holds and exact-match improvement
 
 \subsection{Checkpoint-side evaluation and alias-based selection}
 
-Instead of treating the most recent checkpoint as the default continuation point, the pipeline evaluates every saved checkpoint and computes three aggregate scores:
+Instead of treating the most recent checkpoint as the default continuation point, the pipeline evaluates saved checkpoints and computes three aggregate scores:
 \begin{align}
 S_{\text{struct}} &= 0.35\,p + 0.20\,s + 0.20\,r - 0.15\,m - 0.10\,t, \\
 S_{\text{corr}} &= 0.70\,e + 0.20\,a_{\text{tol}} + 0.10\,p, \\
@@ -200,171 +195,163 @@ where $a_{\text{tol}}$ is tolerance accuracy. These scores back four aliases: \t
 
 \section{Experimental Setting and Evaluation Protocol}
 
-\paragraph{Dataset and model.}
-We use the Hugging Face release of MathVista\footnote{\url{https://huggingface.co/datasets/AI4Math/MathVista}} and load \texttt{Qwen2.5-VL-7B-Instruct}\footnote{\url{https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct}} as the base VLM. For context we cite the MathVista benchmark paper \citep{lu2024mathvista} and the Qwen2.5-VL technical report \citep{bai2025qwen25vl}.
+\paragraph{Dataset and model.} We use the Hugging Face release of MathVista, \texttt{AI4Math/MathVista} \citep{mathvista_hf,lu2024mathvista}, and load \texttt{unsloth/Qwen2.5-VL-7B-Instruct} as the base VLM \citep{unsloth_qwen25vl_hf,bai2025qwen25vl}.
+
+\paragraph{Training protocol.}
+The reported training trajectory uses the MathVista \texttt{test} split for Phase A--C fine-tuning. Phase A trains on Stage 1, Phase B trains on the configured Stage 1/2 mixture, and Phase C trains on the configured Stage 2/3 mixture. The selected checkpoints for final evaluation are \texttt{phase\_a/checkpoint-237}, \texttt{phase\_b/checkpoint-180}, and \texttt{phase\_c/checkpoint-240}.
 
 \paragraph{Runtime profile.}
-The main reported runs use the conservative \texttt{kaggle\_t4} profile: 4-bit loading, LoRA rank $8$, max sequence length $1280$, image size $336$, gradient accumulation $4$, two sampled generations per prompt during RL fine-tuning, max prompt length $320$, and max completion length $64$ (or $96$ in Phase D). The trainer uses TRL's \texttt{GRPOTrainer} with sequence-level importance sampling and \texttt{dr\_grpo} loss.
+The main reported runs use the memory-constrained \texttt{kaggle\_t4} profile: 4-bit loading, LoRA rank $8$, max sequence length $1280$, image size $336$, gradient accumulation $4$, two sampled generations per prompt during RL fine-tuning, max prompt length $320$, and max completion length $64$. The trainer uses TRL's \texttt{GRPOTrainer} with sequence-level importance sampling and \texttt{dr\_grpo} loss.
 
 \begin{table}[t]
 \centering
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
 \scriptsize
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}}
 \hline
-\textbf{Parameter} & \textbf{Default} & \textbf{New Value} & \textbf{Function Name} & \textbf{Phase} \\
+\textbf{Setting} & \textbf{Value} & \textbf{Used for} \\
 \hline
-\mcell{\texttt{max\_seq\_length}} & 16384 & 1280 & \mcell{\texttt{FastVisionModel.}\\\texttt{from\_pretrained}} & all \\
+LoRA rank / alpha / max rank & $8$ / $8$ / $8$ & all reported adapters and final evaluations \\
 \hline
-\mcell{\texttt{image\_size}} & 512 & 336 & \mcell{\texttt{build\_stage\_dataset}} & all \\
+Model loading & 4-bit, max sequence length $1280$, image size $336$ & memory-constrained VLM loading \\
 \hline
-\mcell{\texttt{gpu\_memory\_}\\\texttt{utilization}} & 0.8 & 0.65 & \mcell{\texttt{FastVisionModel.}\\\texttt{from\_pretrained}} & all \\
+Training generation budget & max prompt length $320$, max completion length $64$ & Phase A--C GRPO fine-tuning \\
 \hline
-\mcell{LoRA config\\(\texttt{lora\_rank} / \texttt{max\_lora\_rank} /\\ \texttt{lora\_alpha})} & 16 / None / 16 & 8 / 8 / 8 & \mcell{\texttt{FastVisionModel.}\\\texttt{get\_peft\_model}} & all \\
+Training sampling & two generations per prompt & GRPO group-relative updates \\
 \hline
-\mcell{\texttt{compilation\_}\\\texttt{config}} & unset & \mcell{level 3\\PIECEWISE} & \mcell{\texttt{FastVisionModel.}\\\texttt{from\_pretrained}} & all \\
+Final evaluation sampling & one completion per prompt & primary comparison protocol except for generation sampling randomness \\
 \hline
-\mcell{Training budget\\(\texttt{gradient\_accumulation\_}\\\texttt{steps} /\\ \texttt{num\_generations})} & 2 / 4 & 4 / 2 & \mcell{\texttt{GRPOConfig}} & all \\
+Final evaluation cap & no subset cap & full selected evaluation subsets \\
 \hline
-\mcell{Prompt budget\\(\texttt{max\_prompt\_length} /\\ \texttt{max\_completion\_length})} & 1024 / 256 & 320 / 64 & \mcell{\texttt{GRPOConfig}} & A--C, E \\
-\hline
-\mcell{Eval sampling\\(\texttt{num\_samples\_per\_prompt} /\\ \texttt{max\_eval\_examples\_}\\\texttt{per\_subset})} & 4 / None & 1 / 2 & \mcell{\texttt{SamplingParams}} & all \\
-\hline
-\mcell{Phase D completion budget\\(\texttt{max\_completion\_length})} & 320 & 96 & \mcell{\texttt{GRPOConfig} /\\\texttt{SamplingParams}} & D only \\
+Primary subset & \texttt{eval\_overall\_numeric}, $456$ examples & main Baseline/A/B/C comparison \\
 \hline
 \end{tabular}
-\caption{Code-derived implementation summary of the low-memory profile used by the successful runs. The \textbf{Function Name} column lists the concrete runtime method or config class that consumes the setting, rather than the config-builder that defines its default. The smoke experiments and the larger continuation therefore share the same Kaggle T4-safe operating regime.}
+\caption{Runtime and evaluation settings used for the reported final comparison. The memory-constrained hardware profile contains a small evaluation cap by default, but the final evaluation explicitly clears that cap and evaluates the full selected subsets.}
 \label{tab:t4-profile}
 \end{table}
 
-\paragraph{Checkpoint-side evaluation protocol.}
-All quantitative values reported in this paper come from checkpoint-side metrics generated by the code during training and continuation. In the smoke phases, the pipeline trains on \texttt{testmini} and also evaluates on \texttt{testmini} in order to diagnose and correct structural failures efficiently. In the larger continuation, the pipeline trains on \texttt{test} and evaluates on \texttt{testmini}; the headline 0.75 results come from this larger continuation regime and the dedicated Phase D continuation that follows it. Under the Kaggle profile, evaluation uses one sampled completion per prompt and caps each subset at two examples, matching the runtime-constrained operating regime used for the reported runs.
+\paragraph{Final evaluation protocol.}
+The primary comparison evaluates Baseline, Phase A, Phase B, and Phase C on the same MathVista \texttt{testmini} subset, \texttt{eval\_overall\_numeric}. The final evaluation uses one sampled completion per prompt, max completion length $64$, and no cap on the number of examples per subset. Stage-wise diagnostic evaluations are also computed on \texttt{stage1\_easy\_numeric}, \texttt{stage2\_float\_numeric}, and \texttt{stage3\_hard\_numeric}, but those diagnostics are not the primary metric.
 
 \paragraph{Reproducibility.}
-The implementation saves checkpoint-side artifacts including metrics, subset metrics, reward weights, controller state, controller decision logs, prompt-level records, and sample-level JSONL traces. It also includes 28 unit tests covering configuration, data filtering, parsing, checkpointing, evaluation aggregation, controller behavior, and runtime compatibility.
+The implementation saves metrics, subset metrics, reward weights, controller state, controller decision logs, prompt-level records, and sample-level JSONL traces. The final evaluation artifacts include the primary-result CSV, stage-wise diagnostic CSV, subset-size JSON, and full JSON summary used to construct the tables below.
+
+\section{Results}
+
+\subsection{Full primary evaluation}
+
+Table~\ref{tab:headline} reports the primary controlled comparison. The baseline adapter is evaluated with the same model runtime, LoRA shape, prompt contract, decoding budget, split, and evaluation subset as the trained adapters. Phase A produces the largest structural transition: parseability rises from $25.44\%$ to $98.90\%$ and composite score rises from $11.63\%$ to $58.59\%$. Phase B obtains the highest final exact match, tolerance accuracy, correctness score, and composite score. Phase C remains above baseline but does not improve over Phase B on the primary evaluation subset.
 
 \begin{table}[t]
 \centering
 \small
-\caption{Milestone checkpoints under the checkpoint-side evaluation protocol used by our runs. These are the recorded metrics used by the continuation logic.}
-\label{tab:milestones}
-\begin{tabular}{lcccccc}
+\caption{Final full evaluation on \texttt{eval\_overall\_numeric} from MathVista \texttt{testmini} ($456$ examples).}
+\label{tab:headline}
+\begin{tabular}{llrrrrrrr}
 \toprule
-Checkpoint & EM & Tol & Parse & Malf. & Trunc. & Comp. \\
+Phase & Checkpoint & Exact & Tol & Parse & AvgR & Struct & Corr & Comp \\
 \midrule
-Pre-refactor baseline & 0.375 & 0.375 & 0.641 & 0.359 & 0.242 & 0.405 \\
-Smoke Phase A best & 0.500 & 0.500 & 0.500 & 0.500 & 0.500 & 0.400 \\
-Smoke Phase B best & 0.500 & 0.500 & 1.000 & 0.000 & 0.000 & 0.600 \\
-Smoke Phase C best & 0.500 & 0.500 & 1.000 & 0.000 & 0.000 & 0.600 \\
-Large Phase C best & \textbf{0.750} & \textbf{0.750} & \textbf{1.000} & \textbf{0.000} & \textbf{0.000} & \textbf{0.750} \\
-Dedicated Phase D best & \textbf{0.750} & \textbf{0.750} & \textbf{1.000} & \textbf{0.000} & \textbf{0.000} & \textbf{0.750} \\
+Baseline & \texttt{baseline\_rank8} & 0.1798 & 0.1820 & 0.2544 & -0.0880 & 0.0285 & 0.1877 & 0.1163 \\
+Phase A & \texttt{checkpoint-237} & 0.4803 & 0.4868 & \textbf{0.9890} & \textbf{6.3857} & 0.7421 & 0.5325 & 0.5859 \\
+Phase B & \texttt{checkpoint-180} & \textbf{0.4978} & \textbf{0.5066} & 0.9781 & 5.8754 & 0.7371 & \textbf{0.5476} & \textbf{0.5946} \\
+Phase C & \texttt{checkpoint-240} & 0.4737 & 0.4846 & \textbf{0.9890} & 6.0361 & \textbf{0.7436} & 0.5274 & 0.5833 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\section{Results}
+\subsection{Improvement over baseline}
 
-\subsection{Structure improves before correctness in the training trajectory}
+Table~\ref{tab:base-final} summarizes the highest-scoring primary checkpoint against the baseline. We report percentage-point gains rather than only relative gains because the baseline scores are low and relative changes can overstate the practical interpretation. The main result is a $31.80$ percentage-point exact-match gain and a $32.46$ percentage-point tolerance-accuracy gain at Phase B.
 
-Table~\ref{tab:milestones} shows the progression most clearly in the checkpoint-side metrics. The pre-refactor baseline reaches only $0.641$ parseability with $0.359$ malformed rate and $0.242$ truncation. Smoke Phase A shortens outputs, but structure remains unstable. A substantial structural transition appears in Smoke Phase B: parseability, reasoning-tag compliance, and solution-tag compliance all reach $1.0$, while malformed outputs and truncation both fall to zero. Exact match, however, remains at $0.5$. These results indicate that the smoke phases on \texttt{testmini} primarily stabilize structure, whereas the larger-split Phase C run on \texttt{test} delivers the main correctness improvement.
-
-\begin{figure*}[p]
+\begin{table}[t]
 \centering
-\includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{evolution_panels_notebook_paper.pdf}
-\caption{Training evolution across milestone checkpoints. The main qualitative pattern is structure first, correctness later: structural metrics stabilize by the smoke Phase B / Phase C regime, while the 0.75 exact-match milestone appears only after larger continuation.}
-\label{fig:evolution}
-\end{figure*}
+\small
+\caption{Baseline versus the highest-scoring primary checkpoint, Phase B \texttt{checkpoint-180}.}
+\label{tab:base-final}
+\begin{tabular}{lrrr}
+\toprule
+Metric & Baseline & Phase B & Absolute Gain \\
+\midrule
+Exact match & 17.98\% & 49.78\% & +31.80 pp \\
+Tolerance accuracy & 18.20\% & 50.66\% & +32.46 pp \\
+Parseable rate & 25.44\% & 97.81\% & +72.37 pp \\
+Average reward & -0.0880 & 5.8754 & +5.9634 \\
+Structure score & 2.85\% & 73.71\% & +70.86 pp \\
+Correctness score & 18.77\% & 54.76\% & +35.99 pp \\
+Composite score & 11.63\% & 59.46\% & +47.83 pp \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-Figure~\ref{fig:evolution} visualizes this transition. Once structural metrics saturate, subsequent progress shifts from improving output validity to improving the correctness of already valid outputs. This interpretation is consistent with the controller design: early checkpoints allocate reward mass to formatting, parseability, and clean completion, whereas later checkpoints inherit those gains and receive greater correctness pressure.
+\subsection{Reward trajectory during training}
 
-\subsection{The 0.75 milestone appears in larger continuation}
+Figure~\ref{fig:reward-vs-step} shows the mean training reward logged by the trainer across the selected Phase A, Phase B, and Phase C runs. The phase boundaries are aligned by cumulative training step. Because each phase uses different reward weights, the plot should be interpreted as a within-pipeline training diagnostic rather than as a direct evaluation metric. The main pattern is that Phase A rapidly reaches high structure-oriented reward, whereas Phases B and C operate under larger correctness pressure and therefore have lower absolute logged reward despite stronger downstream evaluation metrics.
 
-The strongest checkpoints in our runs are the large-split Phase C model at checkpoint 120 and the dedicated Phase D model at checkpoint 130. Relative to the pre-refactor baseline snapshot, the large Phase C checkpoint moves exact match from $0.375$ to $0.75$, tolerance accuracy from $0.375$ to $0.75$, parseability from $0.641$ to $1.0$, and average completion length from $196.3$ to $25.0$ tokens. Table~\ref{tab:base-final} summarizes that before-versus-after comparison.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\linewidth]{reward_vs_step_phase_abc.pdf}
+\caption{Training reward across the selected Phase A--C runs. Faint lines show raw per-step logged reward values from \texttt{trainer\_state.json}; thick lines show 21-step centered moving averages.}
+\label{fig:reward-vs-step}
+\end{figure}
+
+\subsection{Stage-wise diagnostics}
+
+The primary evaluation subset is identical for all four targets. Stage-wise subsets are used as diagnostics to understand where each checkpoint gains or loses behavior. Table~\ref{tab:stage-diagnostics} shows that all trained phases improve over baseline on every diagnostic subset. Phase B obtains the highest Stage 1 and Stage 2 exact match, while Phase C obtains the highest Stage 3 exact match. This pattern is consistent with the curriculum: Phase C emphasizes the Stage 2/3 mixture, but that specialization does not translate into the highest aggregate primary score.
 
 \begin{table}[t]
 \centering
 \scriptsize
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.04}
-\caption{Comparison between the pre-refactor baseline snapshot and the best large Phase C checkpoint.}
-\label{tab:base-final}
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} p{0.50\linewidth} r r r @{}}
+\caption{Stage-wise diagnostic evaluation on full \texttt{testmini} stage filters. These diagnostics are separate from the primary \texttt{eval\_overall\_numeric} comparison.}
+\label{tab:stage-diagnostics}
+\begin{tabular}{llrrrr}
 \toprule
-\multicolumn{4}{@{}l@{}}{\textbf{Core Accuracy}} \\
-\cmidrule(lr){1-4}
-\textbf{Eval} & \textbf{Base} & \textbf{Trained} & \textbf{\% Improvement} \\
+Phase & Eval subset & Exact & Tol & Parse & Trunc \\
 \midrule
-\textbf{Exact Match} & \textbf{37.5\%} & \textbf{75.0\%} & \textcolor{green!50!black}{\textbf{+100.0\%}} \\
-Tolerance Accuracy & 37.5\% & 75.0\% & \textcolor{green!50!black}{\textbf{+100.0\%}} \\
-\midrule
-\multicolumn{4}{@{}l@{}}{\textbf{Structure / Completion}} \\
-\cmidrule(lr){1-4}
-\textbf{Eval} & \textbf{Base} & \textbf{Trained} & \textbf{\% Improvement} \\
-\midrule
-Parseable Rate & 64.1\% & 100.0\% & \textcolor{green!50!black}{\textbf{+56.1\%}} \\
-\textbf{Reasoning Tag Compliance} & \textbf{77.3\%} & \textbf{100.0\%} & \textcolor{green!50!black}{\textbf{+29.3\%}} \\
-\textbf{Solution Tag Compliance} & \textbf{75.8\%} & \textbf{100.0\%} & \textcolor{green!50!black}{\textbf{+32.0\%}} \\
-Well-Formed Rate & 64.1\% & 100.0\% & \textcolor{green!50!black}{\textbf{+56.1\%}} \\
-\mcell{Malformed Rate\\(lower better)} & 35.9\% & 0.0\% & \textcolor{green!50!black}{\textbf{+100.0\%}} \\
-Completion Success Rate & 75.8\% & 100.0\% & \textcolor{green!50!black}{\textbf{+32.0\%}} \\
-\mcell{Truncation Rate\\(lower better)} & 24.2\% & 0.0\% & \textcolor{green!50!black}{\textbf{+100.0\%}} \\
-\midrule
-\multicolumn{4}{@{}l@{}}{\textbf{Generation}} \\
-\cmidrule(lr){1-4}
-\textbf{Eval} & \textbf{Base} & \textbf{Trained} & \textbf{\% Improvement} \\
-\midrule
-\mcell{Average Completion Tokens\\(lower better)} & 196.3 & 25.0 & \textcolor{green!50!black}{\textbf{+87.3\%}} \\
-\mcell{Repetition Rate\\(lower better)} & 10.6\% & 0.0\% & \textcolor{green!50!black}{\textbf{+100.0\%}} \\
-Sample Diversity & 32.0\% & 100.0\% & \textcolor{green!50!black}{\textbf{+212.2\%}} \\
-\midrule
-\multicolumn{4}{@{}l@{}}{\textbf{Scores / Reward}} \\
-\cmidrule(lr){1-4}
-\textbf{Eval} & \textbf{Base} & \textbf{Trained} & \textbf{\% Improvement} \\
-\midrule
-Average Total Reward & 3.98 & 6.2 & \textcolor{green!50!black}{\textbf{+55.7\%}} \\
-Structure Score & 45.2\% & 75.0\% & \textcolor{green!50!black}{\textbf{+65.8\%}} \\
-Correctness Score & 40.2\% & 77.5\% & \textcolor{green!50!black}{\textbf{+93.0\%}} \\
-Composite Score & 40.5\% & 75.0\% & \textcolor{green!50!black}{\textbf{+85.0\%}} \\
+Baseline & Stage 1 & 0.1641 & 0.1641 & 0.2872 & 0.6923 \\
+Baseline & Stage 2 & 0.1220 & 0.1220 & 0.1672 & 0.8293 \\
+Baseline & Stage 3 & 0.0924 & 0.0924 & 0.1681 & 0.8151 \\
+Phase A & Stage 1 & 0.4615 & 0.4615 & \textbf{0.9897} & 0.0051 \\
+Phase A & Stage 2 & 0.4321 & 0.4460 & \textbf{0.9895} & 0.0000 \\
+Phase A & Stage 3 & 0.3950 & 0.4034 & 0.9832 & 0.0084 \\
+Phase B & Stage 1 & \textbf{0.4718} & \textbf{0.4718} & 0.9846 & 0.0000 \\
+Phase B & Stage 2 & \textbf{0.4774} & \textbf{0.4983} & 0.9721 & 0.0035 \\
+Phase B & Stage 3 & 0.3866 & 0.4118 & 0.9664 & 0.0000 \\
+Phase C & Stage 1 & 0.4564 & 0.4564 & 0.9692 & 0.0000 \\
+Phase C & Stage 2 & 0.4321 & 0.4530 & 0.9861 & 0.0000 \\
+Phase C & Stage 3 & \textbf{0.4202} & \textbf{0.4286} & 0.9832 & 0.0000 \\
 \bottomrule
-\end{tabular*}
-
-\vspace{0.3em}
-{\scriptsize\emph{Source:} Pre-Refactor Baseline (\texttt{base}) vs Large Phase C checkpoint-120 (\texttt{lgc:c:120}) from the checkpoint tables generated by the fine-tuning pipeline.}
+\end{tabular}
 \end{table}
 
-The dedicated Phase D run matches, rather than exceeds, the best Phase C score. This indicates that hard-subset specialization is a viable continuation path, while the mixed Stage 2/3 continuation remains the strongest route to the 0.75 milestone within the reported runs.
+\subsection{Structure improves before correctness}
 
-\subsection{Checkpoint-side results motivate alias-based selection}
+The full evaluation supports the intended structure-first interpretation. The baseline produces many unparseable and truncated outputs, which makes correctness reward difficult to interpret. Phase A largely mitigates this failure mode: parseability becomes nearly saturated and average reward becomes strongly positive. Phase B then provides the highest correctness and composite scores. Phase C improves the hardest diagnostic subset but slightly reduces the aggregate primary metrics relative to Phase B.
 
-The checkpoint-side results also clarify the role of alias-based checkpoint selection. In Smoke Phase B, the best composite checkpoint reaches exact match $0.5$ with perfect structure, while the latest checkpoint regresses to exact match $0.0$ despite retaining parseability and tag compliance at $1.0$. In the same-notebook Phase D branch, the best checkpoint reaches $0.75$ exact match but the latest checkpoint ends at $0.5$. This non-monotonicity in the checkpoint lineage explains why explicit aliases are preferable to always resuming from \texttt{latest}.
+This behavior is consistent with the controller design. Early reward pressure gives the model a stable response format and parseable final answer. Once that behavior is reliable, correctness and tolerance rewards become more informative. The non-monotonic Phase B to Phase C change also motivates alias-based checkpoint selection: later continuation is not guaranteed to dominate an earlier selected checkpoint on every evaluation view.
 
-\subsection{The controller audit is consistent with the intended policy}
-
-The saved controller audit covers 26 evaluated checkpoints across seven phase resets. Its main descriptive result is that the rules fire in the intended order. Parseability, formatting, and finish guards fire only twice each, concentrated in the structurally weak part of the trajectory. Correctness escalation fires 12 times, but only after structure is already stable. Notably, six of those correctness escalations occur on checkpoints where exact match has regressed rather than merely plateaued. This behavior makes the controller's operating bias explicit: once structure is considered stable, the system responds to weak accuracy progress by increasing correctness pressure rather than by re-raising structure rewards.
-
-Figure~\ref{fig:evolution} places that audit trail back into the checkpoint lineage.
-
-\subsection{The 0.75 milestone is obtained under the same low-memory profile}
-
-Table~\ref{tab:t4-profile} and the runtime-tuning tables show that the large continuation does not coincide with a more permissive hardware regime. The successful smoke and large-split runs share the same Kaggle T4 profile: sequence length $1280$ instead of $16384$, image size $336$ instead of $512$, LoRA rank $8$ instead of $16$, and two sampled generations instead of four. The trade-off is a shorter reasoning budget and lower generation diversity. The benefit is a stable single-GPU operating regime that supports both early curriculum validation and later continuation without changing the underlying VRAM regime.
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{evolution_panels_notebook_paper.png}
+\caption{Training evolution across checkpoint-side milestones. The reported primary result uses the full evaluation in Table~\ref{tab:headline}; this figure is retained as a qualitative view of the structure-first, correctness-later trajectory observed during training.}
+\label{fig:evolution}
+\end{figure*}
 
 \section{Limitations and Reproducibility}
 
 \begin{itemize}[leftmargin=1.2em]
-\item This study was developed and run in a resource-constrained Kaggle T4 environment, and larger-scale experiments are required to determine how far the same curriculum-based RL fine-tuning pipeline stabilizes under longer runs, larger evaluation budgets, and broader hardware regimes.
-\item The monitored evaluation subset is tiny in the Kaggle profile, so the quantitative results should be interpreted within that runtime-constrained operating regime.
-\item The split protocol is phase-dependent: smoke phases use \texttt{testmini} to rapidly diagnose and stabilize structure, while the main correctness result comes from larger-split Phase C fine-tuning on \texttt{test} with evaluation on \texttt{testmini}.
-\item The codebase studies one base model family and one principal hardware profile, and it does not yet include the seed sweeps or controlled ablations needed to validate each component of the fine-tuning pipeline in isolation.
-\item The multi-choice branch (Phase E) and multilingual robustness stage are scaffolded but are not part of the main evidence.
-\item Even with these limits, the observed structure-first and correctness-later trajectory suggests that curriculum-based staged RL fine-tuning pipelines are a promising research direction for multimodal numeric reasoning and merit further scale-up.
+\item The final primary evaluation uses the full numeric \texttt{testmini} subset, but it is still a single evaluation split with one sampled completion per prompt.
+\item The reported runs use one base model family, one LoRA rank, one memory-constrained runtime profile, and no seed sweep.
+\item Training uses the MathVista \texttt{test} split and evaluation uses \texttt{testmini}; broader held-out evaluation would be needed before making benchmark-level generalization claims.
+\item Checkpoint selection is guided by checkpoint-side diagnostics, so future work should separate checkpoint selection and final reporting with an additional held-out validation split when compute permits.
+\item The multi-choice branch and optional robustness stage have preliminary implementation support but are not part of the main evidence.
 \end{itemize}
 
-The study remains comparatively reproducible. It logs controller decisions at every evaluated checkpoint, persists multiple checkpoint-selection aliases, saves sample-level traces, and includes unit tests for the most failure-prone logic. The supplement expands this record with explicit reward equations, evaluation formulas, controller thresholds, and transfer semantics.
+The study remains comparatively reproducible. It logs controller decisions at evaluated checkpoints, persists multiple checkpoint-selection aliases, saves sample-level traces, and includes unit tests for the most failure-prone logic. The supplement expands this record with explicit reward equations, evaluation formulas, controller thresholds, runtime settings, and transfer semantics.
 
 \section{Conclusion}
 
-We presented a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning in a resource-constrained setting. The checkpoint-side results indicate a consistent progression: structural validity must become reliable before correctness reward becomes consistently informative. A phase-wise curriculum, metric-gated reward controller, and alias-based checkpoint selection transform a malformed, long-output baseline into checkpoints that reach exact match 0.75 while preserving parseability 1.0 and zero truncation on the monitored subset. Smoke-phase runs stabilize structure on \texttt{testmini}, and larger-split Phase C fine-tuning on \texttt{test} delivers the principal correctness improvement. These findings support staged curriculum-based RL fine-tuning pipelines as a promising direction for multimodal numeric reasoning under practical compute constraints.
+We presented a staged metric-gated GRPO fine-tuning pipeline for visual numeric reasoning in a resource-constrained setting. The final full evaluation shows a substantial improvement over the baseline adapter: Phase B raises exact match from $17.98\%$ to $49.78\%$, tolerance accuracy from $18.20\%$ to $50.66\%$, parseability from $25.44\%$ to $97.81\%$, and composite score from $11.63\%$ to $59.46\%$ on the same $456$-example numeric \texttt{testmini} subset. The trajectory is structure-first and correctness-later: Phase A stabilizes output validity, Phase B gives the highest primary correctness, and Phase C improves the hardest diagnostic subset without improving the aggregate primary score. These findings support staged curriculum-based RL fine-tuning pipelines as a practical direction for multimodal numeric reasoning under constrained compute.
 
 \bibliographystyle{iclr2026_conference}
 \bibliography{references}
