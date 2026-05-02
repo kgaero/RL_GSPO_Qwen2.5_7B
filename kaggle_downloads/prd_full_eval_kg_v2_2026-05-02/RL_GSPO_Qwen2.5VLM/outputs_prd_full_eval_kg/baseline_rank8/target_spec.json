@@ -1,0 +1,7 @@
+{
+  "label": "baseline_rank8",
+  "phase": "phase_a",
+  "checkpoint": "/kaggle/working/RL_GSPO_Qwen2.5VLM/baseline_rank8",
+  "max_completion_length": 64,
+  "reward_weights_json": null
+}

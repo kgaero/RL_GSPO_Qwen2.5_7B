@@ -1,0 +1,26 @@
+Phase: phase_b
+Global step: 180
+Checkpoint: /kaggle/working/RL_GSPO_Qwen2.5VLM/prd_final_eval_inputs_kg/selected_checkpoints/phase_b_ckpt_180
+
+Metrics:
+  normalized_exact_match: 0.4978
+  tolerance_accuracy: 0.5066
+  parseable_answer_rate: 0.9781
+  solution_tag_compliance: 0.9912
+  reasoning_tag_compliance: 1.0000
+  malformed_answer_rate: 0.0219
+  truncation_rate: 0.0022
+  average_completion_tokens: 26.68
+
+Scores:
+  structure_score: 0.7371
+  correctness_score: 0.5476
+  composite_score: 0.5946
+
+Reward weights:
+  format_reward: 0.7500
+  parseable_reward: 0.7500
+  finished_reward: 1.2500
+  correctness_reward: 4.5000
+  brevity_reward: 0.2000
+  tolerance_reward: 0.0000

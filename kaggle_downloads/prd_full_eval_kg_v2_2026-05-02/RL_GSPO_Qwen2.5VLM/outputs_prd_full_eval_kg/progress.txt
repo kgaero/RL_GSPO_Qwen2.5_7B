@@ -1,0 +1,11 @@
+2026-05-01T13:26:18.640538 PRD full eval notebook start
+2026-05-01T13:26:18.677405 Extracted embedded evaluation code
+2026-05-01T13:26:22.873922 Resolved model path: /kaggle/input/qwen2-5-vl-7b-unsloth-bnb4-cache-hf
+2026-05-01T13:26:22.875092 Resolved selected checkpoint input: /kaggle/input/rl-gspo-prd-final-eval-inputs-kg/prd_final_eval_inputs_kg
+2026-05-01T13:26:22.888553 Installing uv and creating eval venv
+2026-05-01T13:33:16.175662 Finished eval venv package installs
+2026-05-01T13:33:38.851503 Compatibility import check completed
+2026-05-01T13:33:41.120528 Prepared baseline rank8 zero adapter
+2026-05-01T13:33:41.152008 Wrote selected target manifest; eval order is Baseline, Phase A, Phase B, Phase C
+2026-05-01T13:33:41.184333 Starting PRD full reevaluation subprocess
+2026-05-01T20:07:36.401779 PRD full reevaluation completed successfully

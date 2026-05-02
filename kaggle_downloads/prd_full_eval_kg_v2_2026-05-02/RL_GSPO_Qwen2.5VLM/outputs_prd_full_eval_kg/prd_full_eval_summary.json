@@ -1,0 +1,198 @@
+{
+  "settings": {
+    "headline_eval_subset": "eval_overall_numeric",
+    "eval_split": "testmini",
+    "max_eval_examples_per_subset": null,
+    "num_samples_per_prompt": 1,
+    "max_completion_length": 64,
+    "hardware_profile": "kaggle_t4",
+    "lora_rank": 8,
+    "kaggle_account": "KG / kgaero",
+    "target_eval_order": [
+      "Baseline",
+      "Phase A",
+      "Phase B",
+      "Phase C"
+    ]
+  },
+  "headline_rows": [
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Exact": 0.17982456140350878,
+      "Tol": 0.18201754385964913,
+      "Parseable": 0.2543859649122807,
+      "Avg Reward": -0.08799342105263158,
+      "Structure": 0.028508771929824567,
+      "Correctness": 0.18771929824561404,
+      "Composite": 0.1163377192982456
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Exact": 0.48026315789473684,
+      "Tol": 0.4868421052631579,
+      "Parseable": 0.9890350877192983,
+      "Avg Reward": 6.385690789473684,
+      "Structure": 0.7421052631578946,
+      "Correctness": 0.5324561403508772,
+      "Composite": 0.5858552631578947
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Exact": 0.49780701754385964,
+      "Tol": 0.506578947368421,
+      "Parseable": 0.9780701754385965,
+      "Avg Reward": 5.875438596491228,
+      "Structure": 0.7370614035087719,
+      "Correctness": 0.5475877192982456,
+      "Composite": 0.5946271929824561
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Exact": 0.47368421052631576,
+      "Tol": 0.48464912280701755,
+      "Parseable": 0.9890350877192983,
+      "Avg Reward": 6.036129385964912,
+      "Structure": 0.7436403508771929,
+      "Correctness": 0.5274122807017544,
+      "Composite": 0.5833333333333334
+    }
+  ],
+  "stage_wise_rows": [
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.1641025641025641,
+      "Tol": 0.1641025641025641,
+      "Parseable": 0.28717948717948716,
+      "Malformed": 0.7128205128205128,
+      "Truncation": 0.6923076923076923,
+      "Avg Reward": 0.19807692307692307
+    },
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.12195121951219512,
+      "Tol": 0.12195121951219512,
+      "Parseable": 0.1672473867595819,
+      "Malformed": 0.8327526132404182,
+      "Truncation": 0.8292682926829268,
+      "Avg Reward": -0.7321428571428571
+    },
+    {
+      "Phase": "Baseline",
+      "Checkpoint": "baseline_rank8",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.09243697478991597,
+      "Tol": 0.09243697478991597,
+      "Parseable": 0.16806722689075632,
+      "Malformed": 0.8319327731092437,
+      "Truncation": 0.8151260504201681,
+      "Avg Reward": -0.805672268907563
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.46153846153846156,
+      "Tol": 0.46153846153846156,
+      "Parseable": 0.9897435897435898,
+      "Malformed": 0.010256410256410256,
+      "Truncation": 0.005128205128205128,
+      "Avg Reward": 6.341666666666667
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.43205574912891986,
+      "Tol": 0.445993031358885,
+      "Parseable": 0.9895470383275261,
+      "Malformed": 0.010452961672473868,
+      "Truncation": 0.0,
+      "Avg Reward": 6.2665505226480835
+    },
+    {
+      "Phase": "Phase A",
+      "Checkpoint": "phase_a/checkpoint-237",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.3949579831932773,
+      "Tol": 0.40336134453781514,
+      "Parseable": 0.9831932773109243,
+      "Malformed": 0.01680672268907563,
+      "Truncation": 0.008403361344537815,
+      "Avg Reward": 6.126050420168068
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.4717948717948718,
+      "Tol": 0.4717948717948718,
+      "Parseable": 0.9846153846153847,
+      "Malformed": 0.015384615384615385,
+      "Truncation": 0.0,
+      "Avg Reward": 5.778589743589744
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.47735191637630664,
+      "Tol": 0.49825783972125437,
+      "Parseable": 0.9721254355400697,
+      "Malformed": 0.027874564459930314,
+      "Truncation": 0.003484320557491289,
+      "Avg Reward": 5.765156794425087
+    },
+    {
+      "Phase": "Phase B",
+      "Checkpoint": "phase_b/checkpoint-180",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.3865546218487395,
+      "Tol": 0.4117647058823529,
+      "Parseable": 0.9663865546218487,
+      "Malformed": 0.03361344537815126,
+      "Truncation": 0.0,
+      "Avg Reward": 5.351680672268907
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Eval Subset": "stage1_easy_numeric",
+      "Exact": 0.4564102564102564,
+      "Tol": 0.4564102564102564,
+      "Parseable": 0.9692307692307692,
+      "Malformed": 0.03076923076923077,
+      "Truncation": 0.0,
+      "Avg Reward": 5.878974358974359
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Eval Subset": "stage2_float_numeric",
+      "Exact": 0.43205574912891986,
+      "Tol": 0.4529616724738676,
+      "Parseable": 0.9860627177700348,
+      "Malformed": 0.013937282229965157,
+      "Truncation": 0.0,
+      "Avg Reward": 5.810278745644599
+    },
+    {
+      "Phase": "Phase C",
+      "Checkpoint": "phase_c/checkpoint-240",
+      "Eval Subset": "stage3_hard_numeric",
+      "Exact": 0.42016806722689076,
+      "Tol": 0.42857142857142855,
+      "Parseable": 0.9831932773109243,
+      "Malformed": 0.01680672268907563,
+      "Truncation": 0.0,
+      "Avg Reward": 5.729411764705882
+    }
+  ]
+}

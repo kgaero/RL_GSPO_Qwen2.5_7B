@@ -1,0 +1,42 @@
+{
+  "checkpoint_path": "/kaggle/working/RL_GSPO_Qwen2.5VLM/prd_final_eval_inputs_kg/selected_checkpoints/phase_a_ckpt_237",
+  "global_step": 237,
+  "phase_name": "phase_a",
+  "selector_phase_name": "phase_a",
+  "source_phase_name": "phase_a",
+  "label": "phase_a_ckpt_237",
+  "eval_split": "testmini",
+  "eval_mode": "default",
+  "max_completion_length": 64,
+  "metrics": {
+    "normalized_exact_match": 0.48026315789473684,
+    "tolerance_accuracy": 0.4868421052631579,
+    "best_of_k_accuracy": 0.48026315789473684,
+    "best_of_k_tolerance_accuracy": 0.4868421052631579,
+    "parseable_answer_rate": 0.9890350877192983,
+    "malformed_answer_rate": 0.010964912280701754,
+    "reasoning_tag_compliance": 0.9978070175438597,
+    "solution_tag_compliance": 0.9912280701754386,
+    "truncation_rate": 0.0021929824561403508,
+    "average_completion_tokens": 27.69517543859649,
+    "repetition_rate": 7.309941520467836e-05,
+    "sampled_answer_diversity": 0.9890350877192983,
+    "sample_level_normalized_exact_match": 0.48026315789473684,
+    "sample_level_tolerance_accuracy": 0.4868421052631579,
+    "average_total_reward": 6.385690789473684,
+    "reward_component/brevity_reward_mean": 0.9550438596491229,
+    "reward_component/correctness_reward_mean": 0.48026315789473684,
+    "reward_component/finished_reward_mean": 0.9868421052631579,
+    "reward_component/format_reward_mean": 1.9835526315789473,
+    "reward_component/parseable_reward_mean": 0.9890350877192983,
+    "reward_component/tolerance_reward_mean": 0.0,
+    "structure_score": 0.7421052631578946,
+    "correctness_score": 0.5324561403508772,
+    "composite_score": 0.5858552631578947
+  },
+  "scores": {
+    "structure_score": 0.7421052631578946,
+    "correctness_score": 0.5324561403508772,
+    "composite_score": 0.5858552631578947
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "label": "phase_a_ckpt_237",
+  "phase": "phase_a",
+  "checkpoint": "/kaggle/working/RL_GSPO_Qwen2.5VLM/prd_final_eval_inputs_kg/selected_checkpoints/phase_a_ckpt_237",
+  "max_completion_length": 64,
+  "reward_weights_json": "/kaggle/working/RL_GSPO_Qwen2.5VLM/prd_final_eval_inputs_kg/selected_checkpoints/phase_a_ckpt_237/reward_weights.json"
+}
