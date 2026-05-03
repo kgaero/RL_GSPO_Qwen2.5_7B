@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Staged Metric-Gated GRPO Fine-Tuning Pipeline for Visual Numeric Reasoning</title>
+<style>
+  :root { color-scheme: light; --text: #242424; --muted: #6b6b6b; --rule: #e6e6e6; --code-bg: #f6f6f6; --accent: #1a8917; }
+  body { margin: 0; background: #fff; color: var(--text); font-family: Georgia, Cambria, "Times New Roman", Times, serif; line-height: 1.58; }
+  .toolbar { position: sticky; top: 0; z-index: 10; display: flex; gap: 12px; align-items: center; justify-content: center; padding: 12px 18px; border-bottom: 1px solid var(--rule); background: rgba(255,255,255,0.96); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; }
+  .toolbar button { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 650; cursor: pointer; }
+  .toolbar .hint { color: var(--muted); }
+  article { max-width: 760px; margin: 56px auto 96px; padding: 0 24px; }
+  h1, h2, h3 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; line-height: 1.14; color: #111; }
+  h1 { font-size: 44px; margin: 0 0 28px; }
+  h2 { font-size: 28px; margin: 52px 0 18px; }
+  h3 { font-size: 22px; margin: 36px 0 14px; }
+  p, li { font-size: 21px; }
+  p { margin: 0 0 28px; }
+  ul, ol { margin: 0 0 30px 28px; padding: 0; }
+  li { margin: 6px 0; }
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  strong { font-weight: 700; }
+  em { color: var(--muted); }
+  img { display: block; max-width: 100%; height: auto; margin: 44px auto 10px; }
+  img + p em { display: block; color: var(--muted); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.45; text-align: center; margin-top: -4px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 0.82em; background: var(--code-bg); border-radius: 4px; padding: 0.12em 0.28em; }
+  pre { background: var(--code-bg); border: 1px solid var(--rule); border-radius: 8px; overflow-x: auto; padding: 18px 20px; margin: 0 0 32px; }
+  pre code { background: transparent; border-radius: 0; padding: 0; font-size: 15px; line-height: 1.5; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 34px; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.35; }
+  th, td { border-bottom: 1px solid var(--rule); padding: 9px 8px; text-align: left; vertical-align: top; }
+  th { font-weight: 700; color: #111; }
+  td:last-child, th:last-child { padding-right: 0; }
+  blockquote { border-left: 3px solid #111; margin: 0 0 32px; padding-left: 18px; color: #333; }
+  .copied { color: var(--accent); font-weight: 650; }
+  @media print { .toolbar { display: none; } article { margin-top: 0; } }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <button id="copyArticle" type="button">Copy rendered article</button>
+    <span id="copyStatus" class="hint">Paste into Medium, then upload images manually if Medium skips them.</span>
+  </div>
+  <article id="article">
+<h1>Staged Metric-Gated GRPO Fine-Tuning Pipeline for Visual Numeric Reasoning</h1>
+<p>Visual-language models have become surprisingly capable at reading charts, diagrams, scientific figures, tables, and natural images. But when the answer is numeric, the problem changes. A model does not only need to &quot;understand&quot; the image. It needs to produce a final answer that is extractable, parseable, non-truncated, and numerically correct.</p>
+<p>That distinction matters for reinforcement learning.</p>
+<p>In many RL fine-tuning stories, reward design is treated as the center of gravity: define a reward, optimize the model, measure improvement. Visual numeric reasoning is less forgiving. If the model fails to follow the output format, or if the answer cannot be parsed, then a correctness reward becomes noisy. A wrong answer and an uncheckable answer look similar to the evaluator, even though they are different failures.</p>
+<p>The paper <strong>Staged Metric-Gated GRPO Fine-Tuning Pipeline for Visual Numeric Reasoning</strong> studies this problem using a rank-8 LoRA adaptation of <code>Qwen2.5-VL-7B-Instruct</code> on MathVista-style numeric visual question answering.</p>
+<p>The central idea is simple:</p>
+<p><strong>Do not push hardest on correctness before the model reliably produces checkable answers.</strong></p>
+<p>Instead, the pipeline first stabilizes response structure, then gradually increases correctness pressure through staged data mixtures and metric-gated reward updates.</p>
+<p>Paper: <a href="https://github.com/kgaero/RL_GSPO_Qwen2.5_7B/blob/main/paper/staged_metric_gated_grpo.pdf">staged_metric_gated_grpo.pdf</a><br>Code: <a href="https://github.com/kgaero/RL_GSPO_Qwen2.5_7B">github.com/kgaero/RL_GSPO_Qwen2.5_7B</a></p>
+<p><img src="images/figure_01_staged_metric_gated_grpo_loop.png" alt="Overview of the staged metric-gated GRPO loop."></p>
+<p><em>Figure 1. The staged metric-gated GRPO loop couples phase-specific data curation, GRPO fine-tuning, checkpoint-side evaluation, reward-weight adaptation, and alias-based continuation.</em></p>
+<h2>The Problem: Numeric Reasoning Is Not Just Accuracy</h2>
+<p>For visual numeric question answering, the target behavior has several prerequisites:</p>
+<ol>
+<li>The model must look at the image and question.</li>
+<li>It must reason about the relevant visual quantity.</li>
+<li>It must emit a final numeric answer.</li>
+<li>That answer must appear in a predictable location.</li>
+<li>The evaluator must be able to parse it.</li>
+<li>Only then can exact-match or tolerance-based correctness be measured cleanly.</li>
+</ol>
+<p>The paper uses a strict response contract:</p>
+<pre><code class="language-text">&lt;REASONING&gt; ... &lt;/REASONING&gt;
+&lt;SOLUTION&gt; single numeric answer &lt;/SOLUTION&gt;
+</code></pre>
+<p>This is not just formatting preference. It is part of the learning system. If the answer cannot be extracted from <code>&lt;SOLUTION&gt;</code>, then a verifiable numeric reward cannot do its job.</p>
+<p>This is why the method treats success as a sequence of preconditions rather than one scalar metric. Early training asks: can the model consistently produce structured, parseable answers? Later training asks: can those answers become more correct?</p>
+<h2>A Short GRPO Refresher</h2>
+<p>GRPO, or Group Relative Policy Optimization, is an RL fine-tuning method popularized in mathematical reasoning work. At a high level, it samples multiple completions for the same prompt, scores them with a reward function, and updates the model toward completions that score better relative to the group.</p>
+<p>The useful intuition is:</p>
+<p><strong>The model does not need an external value model to estimate whether an answer was good. It can compare several candidate answers for the same question using verifiable rewards.</strong></p>
+<p>For numeric visual QA, that is attractive because reward can be computed from measurable properties:</p>
+<ul>
+<li>Did the answer use the required tags?</li>
+<li>Was the final numeric answer parseable?</li>
+<li>Did generation finish without truncation?</li>
+<li>Did the extracted answer match the gold answer?</li>
+<li>Was the answer within numeric tolerance?</li>
+<li>Was the response concise enough?</li>
+</ul>
+<p>The work does not introduce a new GRPO loss. The contribution is the fine-tuning pipeline around GRPO: staged data, metric-gated rewards, checkpoint evaluation, and checkpoint-aware continuation.</p>
+<h2>The Staged Curriculum</h2>
+<p>The method divides MathVista-style numeric tasks into three curriculum stages. These are filtered views over the same dataset family, not fixed disjoint datasets.</p>
+<p><strong>Stage 1: Easy numeric stabilization</strong><br>Easier English free-form integer questions over synthetic scenes, tables, and natural images.</p>
+<p><strong>Stage 2: Medium and float numeric reasoning</strong><br>Integer and floating-point answers over tables, charts, plots, scientific figures, and natural images.</p>
+<p><strong>Stage 3: Hard numeric reasoning</strong><br>Harder geometry, scientific-figure, plot, and abstract-scene problems that require more complex visual-mathematical reasoning.</p>
+<p>Training then proceeds through phases:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th align="right">Data mixture</th>
+<th>Main role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phase A</td>
+<td align="right">Stage 1 only</td>
+<td>Structure stabilization</td>
+</tr>
+<tr>
+<td>Phase B</td>
+<td align="right">0.7 Stage 1 + 0.3 Stage 2</td>
+<td>Early correctness strengthening</td>
+</tr>
+<tr>
+<td>Phase C</td>
+<td align="right">0.6 Stage 2 + 0.4 Stage 3</td>
+<td>Harder reasoning and tolerance pressure</td>
+</tr>
+</tbody></table>
+<p><img src="images/figure_02_curriculum_and_eval_subsets.png" alt="A/B/C curriculum and evaluation subsets."></p>
+<p><em>Figure 2. The A/B/C curriculum mixes stage-filtered subsets during training while comparing checkpoints on the same primary numeric evaluation subset.</em></p>
+<p>This staging matters because the model is not asked to solve the hardest visual numeric cases before it has learned how to answer in a stable, checkable form.</p>
+<h2>Metric-Gated Rewards</h2>
+<p>The reward design sits inside the GRPO update. For each prompt, the policy samples a small group of candidate completions. Each completion receives a scalar reward, and GRPO converts those group-level rewards into relative advantages. In simple terms, a completion is reinforced when it scores better than the other completions sampled for the same prompt, while a KL term discourages the policy from drifting too far from the reference model.</p>
+<p><img src="images/figure_06_grpo_loss_and_advantage.png" alt="GRPO loss and reward-based advantage computation."></p>
+<p><em>Figure 6. GRPO uses group-relative rewards to compute advantages. In this pipeline, the scalar reward is a weighted combination of correctness, formatting, parseability, completion, tolerance, and brevity terms.</em></p>
+<p>The important design question is therefore not only &quot;what is the GRPO loss?&quot; It is also &quot;what scalar reward enters the advantage calculation?&quot;</p>
+<p>Here, the reward is a weighted sum of six components:</p>
+<pre><code class="language-text">total reward =
+  correctness_weight * correctness_reward
++ formatting_weight  * formatting_reward
++ parseability_weight * parseability_reward
++ finished_weight    * finished_reward
++ tolerance_weight   * tolerance_reward
++ brevity_weight     * brevity_reward
+</code></pre>
+<p>Each term protects a different part of the behavior. Correctness rewards the right numeric answer. Formatting rewards the required <code>&lt;REASONING&gt;</code> and <code>&lt;SOLUTION&gt;</code> structure. Parseability rewards a machine-readable final answer. Finished rewards non-truncated completions. Tolerance rewards numerically close answers when exact match is too strict. Brevity discourages rambling completions that waste the limited generation budget.</p>
+<p><img src="images/figure_07_reward_types.png" alt="Reward type reference."></p>
+<p><em>Figure 7. Reward components used by the verifier. The reward is not only about correctness; it also protects the structural conditions that make correctness measurable.</em></p>
+<p>This decomposition is what makes the staged pipeline possible. Early training can emphasize structure without turning correctness off. Later training can increase correctness pressure while still keeping format, parseability, and completion constraints active.</p>
+<p>At the start of each phase, the controller initializes the reward weights according to the phase goal:</p>
+<ul>
+<li>Phase A is structure-first: it gives high pressure to correctness, formatting, parseability, and completion, while tolerance is inactive.</li>
+<li>Phase B raises correctness pressure after Phase A has stabilized the answer format.</li>
+<li>Phase C raises correctness again and activates tolerance reward for harder numeric examples where near misses are informative.</li>
+</ul>
+<p><img src="images/figure_08_phase_initial_reward_weights.png" alt="Initial reward weights at phase start."></p>
+<p><em>Figure 8. Initial reward weights for each phase. The order is correctness, formatting, parseability, finished, tolerance, and brevity.</em></p>
+<p>The key design choice is that these weights are not treated as a single fixed schedule. They can be adjusted after checkpoint evaluation.</p>
+<p>For example:</p>
+<ul>
+<li>If parseability is too low, the controller protects or raises parseability reward.</li>
+<li>If tag compliance drops, it protects formatting reward.</li>
+<li>If truncation rises, it increases pressure to finish properly.</li>
+<li>Correctness pressure increases only after structure has become stable.</li>
+</ul>
+<p>The controller implements this with explicit metric gates. A parseability guard fires when the parseable-answer rate falls below the configured threshold. A format guard fires when solution-tag compliance, reasoning-tag compliance, or malformed-answer rate crosses a failure threshold. A finish guard fires when truncation or completion length becomes risky. Correctness escalation is more conservative: it requires stable structure, enough checkpoint history, and a plateau in exact-match improvement.</p>
+<p><img src="images/figure_09_metric_gated_controller_rules.png" alt="Metric-gated reward controller rules."></p>
+<p><em>Figure 9. Controller rule reference. Reward weights are updated only after checkpoint-side metrics show which failure mode currently dominates.</em></p>
+<p>This is the &quot;metric-gated&quot; part of the method. The training system looks at actual checkpoint behavior before changing reward pressure.</p>
+<p>That is a practical difference from a hand-written epoch schedule. A fixed schedule says, &quot;after N steps, increase correctness.&quot; A metric-gated schedule says, &quot;increase correctness only once the model is producing outputs that make correctness meaningful.&quot;</p>
+<h2>Checkpoint Aliases: The Latest Checkpoint Is Not Always the Best One</h2>
+<p>RL fine-tuning is often non-monotonic. The latest checkpoint may not be the best checkpoint for structure, correctness, or a combined score.</p>
+<p>The pipeline therefore evaluates checkpoints and assigns aliases such as:</p>
+<ul>
+<li><code>latest</code></li>
+<li><code>best_structure</code></li>
+<li><code>best_correctness</code></li>
+<li><code>best_composite</code></li>
+</ul>
+<p>These aliases are not cosmetic. They control continuation decisions. A later phase can resume from a checkpoint that best satisfies the next phase&#39;s purpose, rather than blindly continuing from the most recent checkpoint.</p>
+<p>This is especially important in a staged setting. Phase A is primarily about structure. Phase B is where correctness rises. Phase C emphasizes harder subsets. A single &quot;latest is best&quot; rule does not capture those shifts.</p>
+<h2>Experimental Setup</h2>
+<p>The reported experiments use:</p>
+<ul>
+<li>Base model: <code>unsloth/Qwen2.5-VL-7B-Instruct</code></li>
+<li>Adaptation: rank-8 LoRA, alpha 8</li>
+<li>Loading: 4-bit, memory-constrained runtime profile</li>
+<li>Dataset: MathVista from <code>AI4Math/MathVista</code></li>
+<li>Training split: MathVista <code>test</code> in the project setup</li>
+<li>Final reporting split: MathVista <code>testmini</code></li>
+<li>Primary evaluation subset: <code>eval_overall_numeric</code></li>
+<li>Primary evaluation size: 456 examples</li>
+<li>Final evaluation sampling: one completion per prompt</li>
+<li>Final evaluation cap: none</li>
+</ul>
+<p>The final comparison evaluates the baseline adapter and the selected Phase A, Phase B, and Phase C checkpoints under the same evaluation protocol.</p>
+<h2>Results: Structure First, Correctness Later</h2>
+<p>The strongest primary result comes from Phase B, checkpoint 180.</p>
+<p>On the full <code>eval_overall_numeric</code> subset of MathVista <code>testmini</code>, Phase B improves exact match from <strong>17.98%</strong> to <strong>49.78%</strong> and tolerance accuracy from <strong>18.20%</strong> to <strong>50.66%</strong>.</p>
+<p>The structural improvement is even more dramatic: parseability rises from <strong>25.44%</strong> to <strong>97.81%</strong>.</p>
+<p><img src="images/figure_03_headline_results_table.png" alt="Headline evaluation table from the slide deck."></p>
+<p><em>Figure 3. Final full evaluation on <code>eval_overall_numeric</code> from MathVista <code>testmini</code>, with Phase B obtaining the highest primary exact match, tolerance accuracy, correctness score, and composite score.</em></p>
+<p>The main benchmark table is:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Checkpoint</th>
+<th align="right">Exact</th>
+<th align="right">Tol</th>
+<th align="right">Parse</th>
+<th align="right">AvgR</th>
+<th align="right">Struct</th>
+<th align="right">Corr</th>
+<th align="right">Comp</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Baseline</td>
+<td><code>baseline_rank8</code></td>
+<td align="right">0.1798</td>
+<td align="right">0.1820</td>
+<td align="right">0.2544</td>
+<td align="right">-0.0880</td>
+<td align="right">0.0285</td>
+<td align="right">0.1877</td>
+<td align="right">0.1163</td>
+</tr>
+<tr>
+<td>Phase A</td>
+<td><code>checkpoint-237</code></td>
+<td align="right">0.4803</td>
+<td align="right">0.4868</td>
+<td align="right"><strong>0.9890</strong></td>
+<td align="right"><strong>6.3857</strong></td>
+<td align="right">0.7421</td>
+<td align="right">0.5325</td>
+<td align="right">0.5859</td>
+</tr>
+<tr>
+<td>Phase B</td>
+<td><code>checkpoint-180</code></td>
+<td align="right"><strong>0.4978</strong></td>
+<td align="right"><strong>0.5066</strong></td>
+<td align="right">0.9781</td>
+<td align="right">5.8754</td>
+<td align="right">0.7371</td>
+<td align="right"><strong>0.5476</strong></td>
+<td align="right"><strong>0.5946</strong></td>
+</tr>
+<tr>
+<td>Phase C</td>
+<td><code>checkpoint-240</code></td>
+<td align="right">0.4737</td>
+<td align="right">0.4846</td>
+<td align="right"><strong>0.9890</strong></td>
+<td align="right">6.0361</td>
+<td align="right"><strong>0.7436</strong></td>
+<td align="right">0.5274</td>
+<td align="right">0.5833</td>
+</tr>
+</tbody></table>
+<p>Compared with the baseline, the best Phase B checkpoint gives:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th align="right">Baseline</th>
+<th align="right">Phase B</th>
+<th align="right">Absolute gain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Exact match</td>
+<td align="right">17.98%</td>
+<td align="right">49.78%</td>
+<td align="right">+31.80 pp</td>
+</tr>
+<tr>
+<td>Tolerance accuracy</td>
+<td align="right">18.20%</td>
+<td align="right">50.66%</td>
+<td align="right">+32.46 pp</td>
+</tr>
+<tr>
+<td>Parseable rate</td>
+<td align="right">25.44%</td>
+<td align="right">97.81%</td>
+<td align="right">+72.37 pp</td>
+</tr>
+<tr>
+<td>Average reward</td>
+<td align="right">-0.0880</td>
+<td align="right">5.8754</td>
+<td align="right">+5.9634</td>
+</tr>
+<tr>
+<td>Structure score</td>
+<td align="right">2.85%</td>
+<td align="right">73.71%</td>
+<td align="right">+70.86 pp</td>
+</tr>
+<tr>
+<td>Correctness score</td>
+<td align="right">18.77%</td>
+<td align="right">54.76%</td>
+<td align="right">+35.99 pp</td>
+</tr>
+<tr>
+<td>Composite score</td>
+<td align="right">11.63%</td>
+<td align="right">59.46%</td>
+<td align="right">+47.83 pp</td>
+</tr>
+</tbody></table>
+<p>The pattern is the important part.</p>
+<p>Phase A produces the biggest structural transition. It makes outputs parseable and well-formed. Phase B then gives the highest correctness and composite scores. Phase C improves the hardest diagnostic subset, but does not beat Phase B on the aggregate primary numeric subset.</p>
+<p>That is a useful result because it shows why checkpoint-aware continuation matters. More training on harder data is not guaranteed to dominate a previous checkpoint on every metric.</p>
+<h2>Training Reward Is a Diagnostic, Not the Final Score</h2>
+<p>The reward plot shows a tempting but important caveat: logged reward across phases should not be read as a single comparable metric.</p>
+<p>Each phase uses different reward weights. Phase A reaches high reward quickly because structure rewards are easier to satisfy once the model learns the contract. Phases B and C operate under stronger correctness pressure, so their absolute logged reward can be lower even while downstream evaluation improves.</p>
+<p><img src="images/figure_04_training_reward_by_phase.png" alt="Training reward by phase."></p>
+<p><em>Figure 4. Training reward across selected Phase A-C runs. Faint lines show raw per-step reward values; thick lines show centered moving averages.</em></p>
+<p>The figure is best read as a within-pipeline diagnostic: it shows the transition from structure stabilization to correctness pressure.</p>
+<h2>Stage-Wise Diagnostics</h2>
+<p>The paper also reports diagnostic evaluations on the stage-specific subsets. These are not the headline metric, but they help explain where behavior changes.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Eval subset</th>
+<th align="right">Exact</th>
+<th align="right">Tol</th>
+<th align="right">Parse</th>
+<th align="right">Trunc</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Baseline</td>
+<td>Stage 1</td>
+<td align="right">0.1641</td>
+<td align="right">0.1641</td>
+<td align="right">0.2872</td>
+<td align="right">0.6923</td>
+</tr>
+<tr>
+<td>Baseline</td>
+<td>Stage 2</td>
+<td align="right">0.1220</td>
+<td align="right">0.1220</td>
+<td align="right">0.1672</td>
+<td align="right">0.8293</td>
+</tr>
+<tr>
+<td>Baseline</td>
+<td>Stage 3</td>
+<td align="right">0.0924</td>
+<td align="right">0.0924</td>
+<td align="right">0.1681</td>
+<td align="right">0.8151</td>
+</tr>
+<tr>
+<td>Phase A</td>
+<td>Stage 1</td>
+<td align="right">0.4615</td>
+<td align="right">0.4615</td>
+<td align="right"><strong>0.9897</strong></td>
+<td align="right">0.0051</td>
+</tr>
+<tr>
+<td>Phase A</td>
+<td>Stage 2</td>
+<td align="right">0.4321</td>
+<td align="right">0.4460</td>
+<td align="right"><strong>0.9895</strong></td>
+<td align="right">0.0000</td>
+</tr>
+<tr>
+<td>Phase A</td>
+<td>Stage 3</td>
+<td align="right">0.3950</td>
+<td align="right">0.4034</td>
+<td align="right">0.9832</td>
+<td align="right">0.0084</td>
+</tr>
+<tr>
+<td>Phase B</td>
+<td>Stage 1</td>
+<td align="right"><strong>0.4718</strong></td>
+<td align="right"><strong>0.4718</strong></td>
+<td align="right">0.9846</td>
+<td align="right">0.0000</td>
+</tr>
+<tr>
+<td>Phase B</td>
+<td>Stage 2</td>
+<td align="right"><strong>0.4774</strong></td>
+<td align="right"><strong>0.4983</strong></td>
+<td align="right">0.9721</td>
+<td align="right">0.0035</td>
+</tr>
+<tr>
+<td>Phase B</td>
+<td>Stage 3</td>
+<td align="right">0.3866</td>
+<td align="right">0.4118</td>
+<td align="right">0.9664</td>
+<td align="right">0.0000</td>
+</tr>
+<tr>
+<td>Phase C</td>
+<td>Stage 1</td>
+<td align="right">0.4564</td>
+<td align="right">0.4564</td>
+<td align="right">0.9692</td>
+<td align="right">0.0000</td>
+</tr>
+<tr>
+<td>Phase C</td>
+<td>Stage 2</td>
+<td align="right">0.4321</td>
+<td align="right">0.4530</td>
+<td align="right">0.9861</td>
+<td align="right">0.0000</td>
+</tr>
+<tr>
+<td>Phase C</td>
+<td>Stage 3</td>
+<td align="right"><strong>0.4202</strong></td>
+<td align="right"><strong>0.4286</strong></td>
+<td align="right">0.9832</td>
+<td align="right">0.0000</td>
+</tr>
+</tbody></table>
+<p>All trained phases improve over baseline on every diagnostic subset. Phase B is strongest on Stage 1 and Stage 2 exact match. Phase C is strongest on Stage 3 exact match.</p>
+<p>This supports the curriculum interpretation: Phase C does specialize toward harder diagnostic examples, but that specialization does not produce the best overall primary score.</p>
+<p><img src="images/figure_05_training_evolution_panels.png" alt="Training evolution across checkpoint-side milestones."></p>
+<p><em>Figure 5. Training evolution across checkpoint-side milestones. The panel view helps diagnose the structure-first, correctness-later trajectory and the cross-phase checkpoint handoffs.</em></p>
+<h2>Why This Matters</h2>
+<p>The most interesting part of the work is not that one checkpoint beats another. It is the training-system lesson:</p>
+<p><strong>In verifiable multimodal RL, correctness reward is only as useful as the model&#39;s ability to produce verifiable outputs.</strong></p>
+<p>For numeric visual reasoning, early RL can be wasted if the model frequently emits malformed, unparseable, or truncated answers. In that regime, a correctness failure is ambiguous. The model may not have reasoned incorrectly; it may simply have failed to produce an answer the evaluator can read.</p>
+<p>The staged metric-gated pipeline addresses this by making structural reliability an explicit training target before turning up correctness pressure.</p>
+<p>This is a practical engineering pattern:</p>
+<ul>
+<li>Start with the easiest tasks that teach the response contract.</li>
+<li>Keep structure rewards active even after correctness becomes the main goal.</li>
+<li>Use checkpoint metrics to decide when reward weights should change.</li>
+<li>Track multiple checkpoint aliases because optimization is non-monotonic.</li>
+<li>Evaluate final checkpoints under the same fixed protocol.</li>
+</ul>
+<p>These choices are not glamorous, but they are the difference between a reward function that looks good on paper and an RL system that can be audited.</p>
+<h2>Limitations and Future Work</h2>
+<p>The result is encouraging, but it should be read with the paper&#39;s constraints in mind.</p>
+<p>First, the final primary evaluation uses the full numeric <code>testmini</code> subset, but it is still one evaluation split with one sampled completion per prompt. A broader evaluation would need more held-out data, more sampling analysis, and ideally additional benchmark families.</p>
+<p>Second, the reported runs use one base model family, one LoRA rank, one constrained runtime profile, and no seed sweep. The results show that the staged metric-gated design works in this setting; they do not prove that the same exact phase schedule is optimal across models or hardware regimes.</p>
+<p>Third, training uses the MathVista <code>test</code> split in the project setup and final reporting uses <code>testmini</code>. That makes the reported comparison controlled within the project, but broader benchmark-level claims would require a more conventional held-out validation and test separation.</p>
+<p>Fourth, checkpoint selection is guided by checkpoint-side diagnostics. Future work should separate checkpoint selection from final reporting with an additional validation split when compute permits.</p>
+<p>Finally, the implementation includes preliminary support for multi-choice handling and an optional robustness stage, but those are not part of the main evidence in the paper.</p>
+<p>The natural next step is to test whether the same structure-first, metric-gated pattern transfers to other VLMs, other visual reasoning benchmarks, and larger training runs.</p>
+<h2>Closing</h2>
+<p>Staged Metric-Gated GRPO is not a new RL objective. It is a training pipeline that treats visual numeric reasoning as a staged systems problem.</p>
+<p>The strongest Phase B checkpoint improves exact match from <strong>17.98%</strong> to <strong>49.78%</strong>, tolerance accuracy from <strong>18.20%</strong> to <strong>50.66%</strong>, parseability from <strong>25.44%</strong> to <strong>97.81%</strong>, and composite score from <strong>11.63%</strong> to <strong>59.46%</strong> on the same 456-example numeric <code>testmini</code> subset.</p>
+<p>The broader lesson is that RL fine-tuning for multimodal numeric reasoning should not rush toward correctness before the model can produce checkable outputs. Stabilize the contract first. Then make the model smarter within that contract.</p>
+<p>That is the core idea behind the staged metric-gated pipeline.</p>
+
+  </article>
+<script>
+const button = document.getElementById('copyArticle');
+const status = document.getElementById('copyStatus');
+button.addEventListener('click', async () => {
+  const article = document.getElementById('article');
+  const html = article.innerHTML;
+  const text = article.innerText;
+  try {
+    if (navigator.clipboard && window.ClipboardItem) {
+      await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) })]);
+      status.textContent = 'Copied rendered HTML. Paste into Medium now.';
+      status.className = 'copied';
+    } else { throw new Error('ClipboardItem unavailable'); }
+  } catch (err) {
+    const range = document.createRange();
+    range.selectNodeContents(article);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    status.textContent = 'Browser blocked direct copy. Press Ctrl+C, then paste into Medium.';
+    status.className = 'copied';
+  }
+});
+</script>
+</body>
+</html>
